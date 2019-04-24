@@ -15,12 +15,18 @@ public class test_ha02 {
         release2.setName("ST19");
 
         Unit sprint1 = new Unit();
+        sprint1.setName("Sprint1");
+        sprint1.setType("Sprint");
         sprint1.withChildren(new Feature(8), new Feature(8), new Feature(8));
 
         Unit sprint2 = new Unit();
+        sprint2.setName("Sprint2");
+        sprint2.setType("Sprint");
         sprint2.withChildren(new Feature(8), new Feature(8), new Feature(8));
 
         Unit sprint3 = new Unit();
+        sprint3.setName("Sprint3");
+        sprint3.setType("Sprint");
         sprint3.withChildren(new Feature(8), new Feature(8), new Feature(8));
 
         Unit sprint4 = new Unit();
@@ -48,6 +54,8 @@ public class test_ha02 {
 
         //d
         Unit epic = new Unit();
+        epic.setType("Epic");
+        epic.setName("Epic");
         epic.withChildren(release1, release2);
 
         storyPointCounter.resetCounter();
