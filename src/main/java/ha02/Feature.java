@@ -8,6 +8,7 @@ public class Feature extends Unit {
         this.storyPoints=storyPoints;
     }
 
+    @Override
     public void accept(Visitor visitor){
         visitor.visit(this);
     }

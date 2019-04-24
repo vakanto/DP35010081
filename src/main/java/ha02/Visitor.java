@@ -1,7 +1,5 @@
 package ha02;
 
-import java.util.HashSet;
-
 public class Visitor {
 
     public void visit(Unit unit){

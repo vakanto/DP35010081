@@ -6,10 +6,13 @@ public class Task extends Unit {
 
     @Override
     public int getStoryPoints() {
+
         return storyPoint;
     }
 
+    @Override
     public void accept(Visitor visitor){
+
         visitor.visit(this);
     }
 }

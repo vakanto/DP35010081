@@ -1,7 +1,6 @@
 package ha02;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class Unit {
 
