@@ -30,21 +30,29 @@ public class test_ha02 {
         sprint3.withChildren(new Feature(8), new Feature(8), new Feature(8));
 
         Unit sprint4 = new Unit();
+        sprint4.setName("Sprint4");
+        sprint4.setType("Sprint");
         sprint4.withChildren(new Feature(8), new Feature(8), new Feature(8));
 
         Unit sprint5 = new Unit();
+        sprint5.setName("Sprint5");
+        sprint5.setType("Sprint");
         sprint5.withChildren(new Feature(8), new Feature(8), new Feature(8));
 
         Unit sprint6 = new Unit();
+        sprint6.setName("Sprint3");
+        sprint6.setType("Sprint");
         sprint6.withChildren(new Feature(8), new Feature(8), new Feature(8));
 
         StoryPointCounter storyPointCounter = new StoryPointCounter();
+
         int storyPoints=0;
 
         release1.withChildren(sprint1,sprint2,sprint3);
         release2.withChildren(sprint4,sprint5,sprint6);
-        storyPointCounter.visit(release1);
-        storyPointCounter.visit(release2);
+
+        release1.accept(storyPointCounter);
+        release2.accept(storyPointCounter);
         storyPoints+=storyPointCounter.getCounter();
 
 
@@ -59,7 +67,7 @@ public class test_ha02 {
         epic.withChildren(release1, release2);
 
         storyPointCounter.resetCounter();
-        storyPointCounter.visit(epic);
+        epic.accept(storyPointCounter);
 
         System.out.println("Aufgabe d " + storyPointCounter.getCounter());
 
@@ -84,7 +92,7 @@ public class test_ha02 {
         feature.withChildren(task1,task2,task3,task4);
 
         storyPointCounter.resetCounter();
-        storyPointCounter.visit(epic);
+        epic.accept(storyPointCounter);
         System.out.println("Aufgabe e " +storyPointCounter.getCounter());
 
         //f
@@ -95,9 +103,8 @@ public class test_ha02 {
         epic.withChildren(docu);
 
         storyPointCounter.resetCounter();
-        storyPointCounter.visit(epic);
+        epic.accept(storyPointCounter);
         System.out.println("Aufgabe f " + storyPointCounter.getCounter());
-
     }
 
 }
