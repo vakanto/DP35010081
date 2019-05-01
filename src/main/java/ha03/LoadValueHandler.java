@@ -1,4 +1,4 @@
-package ha03.src;
+package ha03;
 
 import ha03.Assembler;
 import ha03.CommandHandler;

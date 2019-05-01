@@ -1,6 +1,5 @@
 package ha03;
 
-import ha03.src.LoadValueHandler;
 import org.junit.Assert;
 import org.junit.Test;
 
