@@ -17,9 +17,9 @@ public class Assembler {
         //Init stack
         valueStack = new Stack<>();
         variables = new HashMap<String, Integer>();
-        variables.put("x",0);
+        /**variables.put("x",0);
         variables.put("y",0);
-        variables.put("z",0);
+        variables.put("z",0);**/
         this.handlers = handler;
         instance=this;
 

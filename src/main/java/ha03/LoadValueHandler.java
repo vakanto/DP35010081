@@ -16,6 +16,6 @@ public class LoadValueHandler implements CommandHandler {
 
         valueStack.push(variables.get(variable));
 
-        return false;
+        return true;
     }
 }

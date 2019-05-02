@@ -10,10 +10,10 @@ public class StoreHandler implements CommandHandler {
 
         try {
             Assembler assembler = Assembler.getInstance();
-            Stack valueStack = assembler.getValueStack();
+            Stack <Integer> valueStack = assembler.getValueStack();
             HashMap<String, Integer> variables = assembler.getVariables();
 
-            variables.replace("x", (Integer) valueStack.pop());
+            variables.put(variable, (Integer) valueStack.pop());
 
             return true;
         } catch (Exception e) {

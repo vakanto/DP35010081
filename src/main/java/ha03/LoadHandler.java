@@ -7,7 +7,7 @@ public class LoadHandler implements CommandHandler {
     public boolean command(String command, int number, String variable){
 
         Assembler assembler = Assembler.getInstance();
-        Stack valueStack = assembler.getValueStack();
+        Stack <Integer> valueStack = assembler.getValueStack();
 
         if(valueStack==null){
             System.out.println("One or more parameters are empty or contain a null value.");
