@@ -2,6 +2,9 @@ package ha02;
 
 import org.junit.Test;
 
+// HA02: 07/10
+// -3 Kein junit test es fehlen assertions
+
 public class test_ha02 {
 
     @Test
