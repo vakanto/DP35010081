@@ -3,6 +3,9 @@ package ha01;
 import ha01.*;
 import org.junit.Test;
 
+// HA01: 07/10
+// -1 Das ist kein Test es fehlen Assertions
+// -2 Kein gitignore
 public class test_ha01 {
     @Test
     public void test(){
