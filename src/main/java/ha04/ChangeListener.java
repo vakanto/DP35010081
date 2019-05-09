@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import org.json.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -40,7 +42,7 @@ public class ChangeListener {
         }
     }
 
-    public void propertyChange(Unit unit, String attribute, Object oldVal, Object newVal)
+    public void propertyChange(UUID uuid, Unit unit, String attribute, Object oldVal, Object newVal)
     {
         JSONObject jsonObject = new JSONObject();
         if(oldVal instanceof List<?> && newVal instanceof List<?>){
@@ -54,24 +56,24 @@ public class ChangeListener {
                     newUnits.add(u);
                 }
                 jsonObject.put("Object", unit);
+                jsonObject.put("UUID", uuid);
                 jsonObject.put("ObjectClass", unit.getName());
-                jsonObject.put("JavaClass", unit.getClass());
+                jsonObject.put("JavaClass", unit.getClass().getCanonicalName());
                 jsonObject.put("Timestamp", System.nanoTime());
                 jsonObject.put("attribute", attribute);
                 jsonObject.put("oldVal", oldUnits);
                 jsonObject.put("newVal", newUnits);
                 printJson(jsonObject);
-               // this.jsonObject.put("Change " + changeCounter, jsonObject);
         }
         else{
                 jsonObject.put("Object", unit);
+                jsonObject.put("UUID", uuid);
                 jsonObject.put("ObjectClass", unit.getName());
                 jsonObject.put("JavaClass",  unit.getClass().getCanonicalName());
                 jsonObject.put("Timestamp", System.nanoTime());
                 jsonObject.put("attribute", attribute);
                 jsonObject.put("oldVal", oldVal);
                 jsonObject.put("newVal", newVal);
-                //this.jsonObject.put("Change " + changeCounter, jsonObject);
                 printJson(jsonObject);
         }
         changeCounter++;

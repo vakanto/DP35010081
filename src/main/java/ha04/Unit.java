@@ -1,6 +1,7 @@
 package ha04;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Unit {
 
@@ -10,7 +11,11 @@ public class Unit {
     private ArrayList<Unit> children = new ArrayList<>();
     private ChangeListener listener;
     private Unit parent;
+    private UUID uuid;
 
+    Unit(){
+        uuid = UUID.randomUUID();
+    }
 
     public void accept(Visitor visitor){
         visitor.visit(this);
@@ -89,7 +94,7 @@ public class Unit {
     }
 
     public void firePropertyChange(String attribute, Object oldVal, Object newVal){
-        listener.propertyChange(this, attribute, oldVal, newVal);
+        listener.propertyChange(this.uuid, this, attribute, oldVal, newVal);
     }
 
     public void subscribe(ChangeListener listener)
