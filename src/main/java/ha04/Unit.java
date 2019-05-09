@@ -1,6 +1,7 @@
 package ha04;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Unit {
 
@@ -9,6 +10,7 @@ public class Unit {
     private int storyPoints;
     private ArrayList<Unit> children = new ArrayList<>();
     private ChangeListener listener;
+    private Unit parent;
 
 
     public void accept(Visitor visitor){
@@ -24,7 +26,9 @@ public class Unit {
     }
 
     public void setType(String type) {
-        firePropertyChange("type", this.type, type);
+        if(this.type!=null){
+            firePropertyChange("type", this.type, type);
+        }
         this.type = type;
     }
 
@@ -33,21 +37,28 @@ public class Unit {
     }
 
     public void setName(String name) {
-        firePropertyChange("name", this.name, name);
+        if(this.name!=null) {
+            firePropertyChange("name", this.name, name);
+        }
         this.name = name;
     }
 
     public void withChildren(Unit... units){
-
-        for(Unit unit : units){
-            children.add(unit);
-            firePropertyChange("units", units, unit);
-        }
+            ArrayList<Unit> tempUnits = new ArrayList<>();
+            tempUnits.addAll(children);
+            children.addAll(Arrays.asList(units));
+            if(!tempUnits.isEmpty() && !children.isEmpty()) {
+                firePropertyChange("units", tempUnits, children);
+            }
     }
 
     public ArrayList<Unit> getChildren(){
 
         return children;
+    }
+
+    public Unit getParent() {
+        return parent;
     }
 
     public void firePropertyChange(String attribute, Object oldVal, Object newVal){
@@ -57,5 +68,10 @@ public class Unit {
     public void subscribe(ChangeListener listener)
     {
         this.listener = listener;
+    }
+
+    public void setParent(Unit parent) {
+        firePropertyChange("parent", this.parent, parent);
+        this.parent = parent;
     }
 }
