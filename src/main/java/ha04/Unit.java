@@ -1,7 +1,6 @@
 package ha04;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Unit {
 
@@ -46,10 +45,29 @@ public class Unit {
     public void withChildren(Unit... units){
             ArrayList<Unit> tempUnits = new ArrayList<>();
             tempUnits.addAll(children);
-            for(Unit u : units){
-              children.add(u);
-              u.setParent(this);
+            //Get listener from children
+            for(Unit u: units){
+                if(u.getListener()!=null){
+                    this.subscribe(u.getListener());
+                }
             }
+
+            for(Unit u : units){
+                if(u.getListener()==null){
+                    u.subscribe(this.listener);
+                }
+                    children.add(u);
+                    u.setParent(this);
+            }
+            /**Expand listener to children
+            if(this.listener!=null){
+                for(Unit c : children){
+                    if(c.getListener()==null) {
+                        c.subscribe(this.listener);
+                    }
+                }
+            }**/
+
             if(tempUnits.isEmpty()) {
                 firePropertyChange("units", new ArrayList<Unit>(), children);
                 return;
@@ -71,9 +89,6 @@ public class Unit {
     }
 
     public void firePropertyChange(String attribute, Object oldVal, Object newVal){
-        if(listener==null){
-            this.listener=ChangeListener.getInstance();
-        }
         listener.propertyChange(this, attribute, oldVal, newVal);
     }
 
@@ -83,7 +98,14 @@ public class Unit {
     }
 
     public void setParent(Unit parent) {
+        if(parent.getListener()!=null){
+            this.subscribe(parent.getListener());
+        }
         firePropertyChange("parent", this.parent, parent);
         this.parent = parent;
+    }
+
+    public ChangeListener getListener() {
+        return this.listener;
     }
 }
