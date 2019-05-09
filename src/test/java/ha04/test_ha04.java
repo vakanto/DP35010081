@@ -126,6 +126,8 @@ public class test_ha04 {
         storyPointCounter.resetCounter();
         epic.accept(storyPointCounter);
         System.out.println("Aufgabe f " + storyPointCounter.getCounter());
+
+        changeListener.printJson();
     }
 
 }

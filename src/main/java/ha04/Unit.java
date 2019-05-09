@@ -46,10 +46,19 @@ public class Unit {
     public void withChildren(Unit... units){
             ArrayList<Unit> tempUnits = new ArrayList<>();
             tempUnits.addAll(children);
-            children.addAll(Arrays.asList(units));
-            if(!tempUnits.isEmpty() && !children.isEmpty()) {
-                firePropertyChange("units", tempUnits, children);
+            for(Unit u : units){
+              children.add(u);
+              u.setParent(this);
             }
+            if(tempUnits.isEmpty()) {
+                firePropertyChange("units", new ArrayList<Unit>(), children);
+                return;
+            }
+            if(children.isEmpty()){
+                firePropertyChange("units", tempUnits, new ArrayList<Unit>());
+                return;
+            }
+            firePropertyChange("units", tempUnits, children);
     }
 
     public ArrayList<Unit> getChildren(){
@@ -62,6 +71,9 @@ public class Unit {
     }
 
     public void firePropertyChange(String attribute, Object oldVal, Object newVal){
+        if(listener==null){
+            this.listener=ChangeListener.getInstance();
+        }
         listener.propertyChange(this, attribute, oldVal, newVal);
     }
 
