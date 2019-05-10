@@ -50,10 +50,10 @@ public class ChangeListener {
             JSONArray newUnits = new JSONArray();
 
                 for(Unit u : (ArrayList<Unit>)oldVal){
-                    oldUnits.add(u);
+                    oldUnits.add(u.getUuid());
                 }
                 for(Unit u : (ArrayList<Unit>)newVal){
-                    newUnits.add(u);
+                    newUnits.add(u.getUuid());
                 }
                 jsonObject.put("Object", unit);
                 jsonObject.put("UUID", uuid);

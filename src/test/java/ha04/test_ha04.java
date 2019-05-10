@@ -109,6 +109,12 @@ public class test_ha04 {
 
     @Test
     public void testPropagationThrowMultipleScenarios() {
+        File file = new File("src/main/java/ha04/files/changeLog.json");
+
+        if(file.exists()) {
+            file.delete();
+        }
+
         ChangeListener changeListener = new ChangeListener();
 
         Unit release1 = new Unit();

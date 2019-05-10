@@ -74,11 +74,11 @@ public class Unit {
             }**/
 
             if(tempUnits.isEmpty()) {
-                firePropertyChange("units", new ArrayList<Unit>(), children);
+                firePropertyChange("children", new ArrayList<Unit>(), children);
                 return;
             }
             if(children.isEmpty()){
-                firePropertyChange("units", tempUnits, new ArrayList<Unit>());
+                firePropertyChange("children", tempUnits, new ArrayList<Unit>());
                 return;
             }
             firePropertyChange("units", tempUnits, children);
@@ -110,7 +110,13 @@ public class Unit {
         if(parent.getListener()!=null){
             this.subscribe(parent.getListener());
         }
-        firePropertyChange("parent", this.parent, parent);
+        if(this.parent==null){
+
+            firePropertyChange("parent", null, parent.getUuid());
+        }
+        else {
+            firePropertyChange("parent", this.parent.getUuid(), parent.getUuid());
+        }
         this.parent = parent;
     }
 
