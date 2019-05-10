@@ -97,6 +97,10 @@ public class Unit {
         listener.propertyChange(this.uuid, this, attribute, oldVal, newVal);
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
     public void subscribe(ChangeListener listener)
     {
         this.listener = listener;

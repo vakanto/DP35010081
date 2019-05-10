@@ -57,7 +57,7 @@ public class ChangeListener {
                 }
                 jsonObject.put("Object", unit);
                 jsonObject.put("UUID", uuid);
-                jsonObject.put("ObjectClass", unit.getName());
+                jsonObject.put("ObjectClass", unit.getType());
                 jsonObject.put("JavaClass", unit.getClass().getCanonicalName());
                 jsonObject.put("Timestamp", System.nanoTime());
                 jsonObject.put("attribute", attribute);
@@ -68,7 +68,7 @@ public class ChangeListener {
         else{
                 jsonObject.put("Object", unit);
                 jsonObject.put("UUID", uuid);
-                jsonObject.put("ObjectClass", unit.getName());
+                jsonObject.put("ObjectClass", unit.getType());
                 jsonObject.put("JavaClass",  unit.getClass().getCanonicalName());
                 jsonObject.put("Timestamp", System.nanoTime());
                 jsonObject.put("attribute", attribute);
