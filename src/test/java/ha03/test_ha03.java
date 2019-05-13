@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+// HA03: 10/10
 public class test_ha03 {
     @Test
     public void test(){
