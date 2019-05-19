@@ -10,7 +10,7 @@
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
          <children>
-            <Button fx:id="submitOrder" layoutX="268.0" layoutY="297.0" mnemonicParsing="false" onMouseClicked="#submitButtonPressed" text="Submit" />
+            <Button fx:id="submitButton" layoutX="268.0" layoutY="297.0" mnemonicParsing="false" onMouseClicked="#submitButtonPressed" text="Submit" />
             <TextField id="From_Text" layoutX="359.0" layoutY="119.0" />
             <TextField id="To_Text" layoutX="359.0" layoutY="193.0" />
             <Label layoutX="428.0" layoutY="90.0" text="From" />

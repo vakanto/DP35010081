@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,34 +19,25 @@ public class Customer_Client extends Application {
     private final String START_SCREEN = "Taxi_Client_Order.fxml";
     private final String OFFER_SCREEN = "Taxi_Client_Offer.fxml";
 
-    @FXML
-    private Button submitOrder;
-
     private Parent root;
-    private Stage primaryStage;
+    private Stage stage;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-
-
-        this.primaryStage=primaryStage;
+    public void start(Stage stage) throws Exception{
+        this.stage=stage;
         root=loadFXML(START_SCREEN);
-        this.primaryStage.setTitle("Taxi-Client");
-        this.primaryStage.setScene(new Scene(root, 800,500));
-
-        /**submitOrder.setOnAction(e -> {
-            Offer_Screen offer_screen = new Offer_Screen();
-            primaryStage.getScene().setRoot(offer_screen.getPane());
-        });**/
-        this.primaryStage.show();
+        this.stage.setTitle("Taxi-Client");
+        this.stage.setScene(new Scene(root, 800,500));
+        this.stage.show();
+        System.out.println(this.stage);
     }
 
     public void submitButtonPressed(Event event) throws Exception{
-        Button submit = (Button) event.getSource();
-        //Parent parent = loadFXML(OFFER_SCREEN);
-        Offer_Screen offer_screen = new Offer_Screen();
-        primaryStage.setScene(new Scene( offer_screen.getPane(),800, 500));
-        primaryStage.show();
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        root=loadFXML(OFFER_SCREEN);
+        stage.setScene( new Scene(root,800, 500));
+        stage.show();
     }
 
     private Parent loadFXML(String path) throws Exception{
