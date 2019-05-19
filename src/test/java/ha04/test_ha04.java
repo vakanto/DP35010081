@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-
+// HA04: 10/10
 public class test_ha04 {
 
     @Test
