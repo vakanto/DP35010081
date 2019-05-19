@@ -10,7 +10,7 @@ public class CommunicationProxy {
     private MqttClient client;
 
 
-    CommunicationProxy(){
+    public CommunicationProxy(){
         try {
             client =  new MqttClient("tcp://127.0.0.1:2000", MqttClient.generateClientId());
         } catch (MqttException e) {
