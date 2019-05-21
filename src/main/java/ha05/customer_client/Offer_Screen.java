@@ -60,11 +60,12 @@ public class Offer_Screen extends Application {
             String name = message.getString("name");
             String price = message.getString("price");
             String time = message.getString("time");
-            messageText="Name: " + name + "\n" + "Preis: " + price + "Zeitpunkt: " + time;
+            messageText="Name: " + name + "\n" + "Preis: " + price + "\n" + "Zeitpunkt: " + time;
+            System.out.println(messageText);
+            offerText.setText(name);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         offerText.setText(messageText);
-
     }
 }
