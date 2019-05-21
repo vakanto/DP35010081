@@ -1,8 +1,12 @@
-package ha05;
+package ha05.customer_client;
 
 import ha05.customer_client.CommunicationProxy;
 import ha05.customer_client.Customer_Client;
-import ha05.customer_client.MqttCallBack;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.stage.Stage;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.json.JSONException;
@@ -10,13 +14,13 @@ import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
+import org.testfx.framework.junit.ApplicationTest;
 
-public class test_ha05 {
+
+public class test_ha05 extends ApplicationTest {
 
 
     @Test
@@ -43,9 +47,8 @@ public class test_ha05 {
             Process r=null;
             try {
                 MqttClient client =  new MqttClient("tcp://127.0.0.1:2000", MqttClient.generateClientId());
-                MqttCallBack mqttCallBack= new MqttCallBack();
 
-                client.setCallback(mqttCallBack);
+                client.setCallback(proxy);
                 client.connect();
                 client.subscribe("test");
 
@@ -55,7 +58,7 @@ public class test_ha05 {
 
                 TimeUnit.SECONDS.sleep(1);
 
-                Assert.assertEquals(jsonObject.toString(), mqttCallBack.getLastMessage());
+                Assert.assertEquals(jsonObject.toString(),proxy.getLastMessage().toString());
 
             } catch (MqttException e) {
                 e.printStackTrace();
@@ -69,4 +72,30 @@ public class test_ha05 {
             e.printStackTrace();
         }
     }
+
+    private Customer_Client customer_client;
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        customer_client = new Customer_Client();
+        customer_client.start(stage);
+
+    }
+    @Test
+    public void checkOfferArrival(){
+        TextField when = (TextField) lookup("#when").query();
+        TextField from= (TextField) lookup("#from").query();
+        TextField to = (TextField) lookup("#to").query();
+        TextField who = (TextField) lookup("#who").query();
+        Button submitButton = (Button) lookup("#submitButton").query();
+
+
+        clickOn(when).write("12:00");
+        //clickOn("#when").write("12:00");
+        clickOn(from).write("Wilhelmshöher Allee 73, Kassel");
+        clickOn(to).write("DEZ Kassel");
+        clickOn(who).write("Carla");
+        clickOn(submitButton).clickOn(MouseButton.PRIMARY);
+    }
+
 }

@@ -6,8 +6,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.time.OffsetDateTime;
 
 public class Offer_Screen extends Application {
     @FXML
@@ -16,10 +21,16 @@ public class Offer_Screen extends Application {
     @FXML
     Button acceptOfferButton;
 
+    @FXML
+    Label offerText;
+
+    private static Offer_Screen instance;
+
     private final String START_SCREEN = "Taxi_Client_Offer.fxml";
 
     private Stage primaryStage;
     private Parent root;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -39,5 +50,21 @@ public class Offer_Screen extends Application {
         loader.setLocation(getClass().getResource(path));
         parent=loader.load();
         return parent;
+    }
+
+    @FXML
+    public void messageArrived(JSONObject message){
+        System.out.println("message arrived");
+        String messageText=null;
+        try {
+            String name = message.getString("name");
+            String price = message.getString("price");
+            String time = message.getString("time");
+            messageText="Name: " + name + "\n" + "Preis: " + price + "Zeitpunkt: " + time;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        offerText.setText(messageText);
+
     }
 }

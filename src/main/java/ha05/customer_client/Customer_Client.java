@@ -14,20 +14,21 @@ import org.json.JSONObject;
 
 public class Customer_Client extends Application {
 
-    private final String START_SCREEN = "Taxi_Client_Order.fxml";
-    private final String OFFER_SCREEN = "Taxi_Client_Offer.fxml";
+    private final String START_SCREEN = "Customer_Client_Order.fxml";
+    private final String OFFER_SCREEN = "Customer_Client_Offer.fxml";
+    private static Customer_Client instance;
 
     private Parent root;
     private Stage stage;
 
     @FXML
-    private TextField Who;
+    private TextField who;
     @FXML
-    private TextField From;
+    private TextField from;
     @FXML
-    private TextField When;
+    private TextField when;
     @FXML
-    private TextField To;
+    private TextField to;
 
     @Override
     public void start(Stage stage) throws Exception{
@@ -57,10 +58,10 @@ public class Customer_Client extends Application {
     private JSONObject generateJson() {
         JSONObject object = new JSONObject();
         try {
-            object.put("Who",  Who.getText());
-            object.put("To", To.getText());
-            object.put("From", From.getText());
-            object.put("When", When.getText());
+            object.put("Who",  who.getText());
+            object.put("To", to.getText());
+            object.put("From", from.getText());
+            object.put("When", when.getText());
             object.put("Receiver", "toTransporter");
         } catch (JSONException e) {
             e.printStackTrace();
