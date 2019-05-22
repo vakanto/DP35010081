@@ -22,14 +22,17 @@ public class test_ha05 extends ApplicationTest {
 
     private Customer_Client customer_client;
     private Taxi_Client taxi_client;
+    private Stage client;
+    private Stage taxi;
 
     @Override
     public void start(Stage stage) throws Exception {
+        client=stage;
+        taxi=new Stage();
         customer_client = new Customer_Client();
         customer_client.start(stage);
         taxi_client = new Taxi_Client();
-        Stage newStage = new Stage();
-        taxi_client.start(new Stage());
+        taxi_client.start(taxi);
     }
     @Test
     public void checkOfferArrival() throws IOException {
@@ -66,12 +69,20 @@ public class test_ha05 extends ApplicationTest {
 
     @Test
     public void testClients() throws IOException {
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                taxi.toBack();
+            }
+        });
         Process p = Runtime.getRuntime().exec("mosquitto -c " + "src/main/resources/mosquitto.conf");
         TextField when = (TextField) lookup("#when").query();
         TextField from= (TextField) lookup("#from").query();
         TextField to = (TextField) lookup("#to").query();
         TextField who = (TextField) lookup("#who").query();
         Button submitButton = (Button) lookup("#submitButton").query();
+
 
         TextField howMuch = (TextField) lookup("#howMuch").query();
         TextField acceptTime = (TextField) lookup("#offerAcceptTime").query();
@@ -83,11 +94,24 @@ public class test_ha05 extends ApplicationTest {
         clickOn(to).write("DEZ Kassel");
         clickOn(who).write("Carla");
         clickOn(submitButton).clickOn(MouseButton.PRIMARY);
-
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                client.toBack();
+                taxi.toFront();
+            }
+        });
         clickOn(howMuch).write("12");
         clickOn(acceptTime).write("12:07 Uhr");
         clickOn(acceptButton).clickOn(MouseButton.PRIMARY);
 
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                taxi.toBack();
+                client.toFront();
+            }
+        });
     }
 }
 

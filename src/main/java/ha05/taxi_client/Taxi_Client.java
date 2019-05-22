@@ -19,35 +19,38 @@ import org.json.JSONObject;
 public class Taxi_Client extends Application {
 
     @FXML
-    TextField howMuch;
+    private TextField howMuch;
 
     @FXML
-    TextField offerAcceptTime;
+    private TextField offerAcceptTime;
 
     @FXML
-    TextField pickUpTime;
+    private TextField pickUpTime;
 
     @FXML
-    TextField dropTime;
+    private TextField dropTime;
 
     @FXML
-    Button acceptButton;
+    private Button acceptButton;
 
     @FXML
-    Button dropButton;
+    private Button dropButton;
 
     @FXML
-    Button pickUpButton;
+    private Button pickUpButton;
 
     @FXML
-    ListView statusList;
+    private ListView eventList;
+
     private Stage stage;
     private Parent root;
-
+    private Taxi_Proxy taxi_proxy;
     private final String START_SCREEN = "Taxi_Client.fxml";
 
     @Override
     public void start(Stage stage) throws Exception{
+        System.out.println(offerAcceptTime);
+        taxi_proxy = new Taxi_Proxy(null,null,this);
         this.stage=stage;
         root=loadFXML(START_SCREEN);
         this.stage.setTitle("Taxi-Client");
@@ -67,21 +70,23 @@ public class Taxi_Client extends Application {
         return parent;
     }
 
-
+    @FXML
     public void messageArrived(JSONObject message) {
-        System.out.println("message arrived");
+        System.out.println("message arrived at Taxi-Client");
+        System.out.println(eventList);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 try {
                     String messageText=null;
-                    String who = message.getString("who");
-                    String when = message.getString("when");
-                    String from = message.getString("from");
-                    String to = message.getString("to");
+                    String who = message.getString("Who");
+                    String when = message.getString("When");
+                    String from = message.getString("From");
+                    String to = message.getString("To");
                     messageText="Wer: " + who + "\n" + "Wann: " + when + "\n" + "Von: " + from + "Nach: " + to;
                     System.out.println(messageText);
-                    statusList.getItems().add(messageText);
+                    System.out.println(eventList);
+                    eventList.getItems().add(messageText);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -90,23 +95,32 @@ public class Taxi_Client extends Application {
     }
 
     public void onAcceptButtonClicked(Event event){
-        Taxi_Proxy proxy = new Taxi_Proxy(null,null, this);
-        JSONObject jsonObject = generateAcceptJson();
-        System.out.println(jsonObject);
-        statusList.getItems().add("Send: " + jsonObject.toString());
-        statusList.refresh();
-        proxy.sendMessage(jsonObject);
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject jsonObject = generateAcceptJson();
+                System.out.println(jsonObject);
+                eventList.getItems().add("Send: " + jsonObject.toString());
+                eventList.refresh();
+                taxi_proxy.sendMessage(jsonObject);
+            }
+        });
     }
 
     @FXML
     private JSONObject generateAcceptJson() {
+        System.out.println("Generate Answer");
         JSONObject object = new JSONObject();
         try {
+            object.put("name", "Thea");
             object.put("when", offerAcceptTime.getText());
+            System.out.println(offerAcceptTime.getText());
             object.put("costs", howMuch.getText());
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        System.out.println(object.toString());
         return object;
     }
 }

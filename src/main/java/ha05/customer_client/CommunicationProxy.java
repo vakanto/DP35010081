@@ -64,7 +64,7 @@ public class CommunicationProxy implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        System.out.println("Message arrived at Proxy.");
+        System.out.println("Message arrived at Client Proxy.");
         JSONObject jsonObject = new JSONObject(message.toString());
         messages.add(jsonObject);
         customer_client.messageArrived(jsonObject);

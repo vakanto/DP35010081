@@ -18,7 +18,6 @@ public class Customer_Client extends Application {
 
     private final String START_SCREEN = "Customer_Client_Order.fxml";
     private final String OFFER_SCREEN = "Customer_Client_Offer.fxml";
-    private static Customer_Client instance;
 
     private Parent root;
     private Stage stage;
@@ -46,6 +45,7 @@ public class Customer_Client extends Application {
         this.stage.setResizable(false);
         this.stage.show();
         System.out.println(this.stage);
+        System.out.println(root.lookup("statusList"));
     }
 
     public void submitButtonPressed(Event event) throws Exception{
@@ -64,6 +64,7 @@ public class Customer_Client extends Application {
     @FXML
     private JSONObject generateJson() {
         JSONObject object = new JSONObject();
+        System.out.println(who.getText());
         try {
             object.put("Who",  who.getText());
             object.put("To", to.getText());
@@ -93,8 +94,8 @@ public class Customer_Client extends Application {
                 try {
                     String messageText=null;
                     String name = message.getString("name");
-                    String price = message.getString("price");
-                    String time = message.getString("time");
+                    String price = message.getString("costs");
+                    String time = message.getString("when");
                     messageText="Name: " + name + "\n" + "Preis: " + price + "\n" + "Zeitpunkt: " + time;
                     System.out.println(messageText);
                     statusList.getItems().add(messageText);

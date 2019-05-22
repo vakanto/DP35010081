@@ -1,5 +1,6 @@
 package ha05.customer_client;
 
+import ha05.taxi_client.Taxi_Proxy;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.json.JSONException;
@@ -30,6 +31,7 @@ public class test_ha05_no_ui {
                 e.printStackTrace();
             }
             CommunicationProxy proxy = new CommunicationProxy(null, null, null);
+            //Taxi_Proxy taxi_proxy = new Taxi_Proxy(null, null, null);
             //Process q = Runtime.getRuntime().exec("mosquitto_pub -t test -p 2000 -m test");
             JSONObject jsonObject = null;
             try {
