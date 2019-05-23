@@ -45,6 +45,8 @@ public class Customer_Client_Controller {
     }
 
 
+
+
     @FXML
     public void messageArrived(JSONObject message){
         System.out.println("message arrived");

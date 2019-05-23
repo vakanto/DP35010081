@@ -12,7 +12,7 @@
          <children>
             <ListView fx:id="myList" layoutX="13.0" layoutY="17.0" prefHeight="328.0" prefWidth="371.0" />
             <Button fx:id="acceptButton" layoutX="445.0" layoutY="108.0" mnemonicParsing="false" onMouseClicked="#onAcceptButtonClicked" prefHeight="48.0" prefWidth="105.0" text="Accept" />
-            <Button fx:id="pickUpButton" layoutX="445.0" layoutY="216.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="105.0" text="PickUp" />
+            <Button fx:id="pickUpButton" layoutX="445.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#pickUpButtonClicked" prefHeight="48.0" prefWidth="105.0" text="PickUp" />
             <TextField fx:id="pickUpTime" layoutX="406.0" layoutY="177.0" promptText="When" />
             <TextField fx:id="dropTime" layoutX="406.0" layoutY="274.0" promptText="When" />
             <Button fx:id="dropButton" layoutX="445.0" layoutY="311.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="105.0" text="Drop" />

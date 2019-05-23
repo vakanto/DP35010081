@@ -60,6 +60,20 @@ public class Taxi_client_controller implements Initializable {
         });
     }
 
+    public void pickUpButtonClicked(Event event){
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject jsonObject = generatePickUpJson();
+                System.out.println(jsonObject);
+                myList.getItems().add("Send: " + jsonObject.toString());
+                myList.refresh();
+                taxi_proxy.sendMessage(jsonObject);
+            }
+        });
+    }
+
     @FXML
     private JSONObject generateAcceptJson() {
         System.out.println("Generate Answer");
@@ -75,6 +89,23 @@ public class Taxi_client_controller implements Initializable {
         System.out.println(object.toString());
         return object;
     }
+
+    @FXML
+    private JSONObject generatePickUpJson() {
+        System.out.println("Generate Answer");
+        JSONObject object = new JSONObject();
+        try {
+            object.put("name", "PickUp");
+            object.put("when", pickUpTime.getText());
+            object.put("costs", "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        System.out.println(object.toString());
+        return object;
+    }
+
+
 
     @FXML
     public synchronized void messageArrived(JSONObject message) {

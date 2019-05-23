@@ -87,14 +87,15 @@ public class test_ha05 extends ApplicationTest {
         TextField howMuch = (TextField) lookup("#howMuch").query();
         TextField acceptTime = (TextField) lookup("#offerAcceptTime").query();
         Button acceptButton = (Button) lookup("#acceptButton").query();
-
+        TextField pickUpTime = (TextField) lookup("#pickUpTime").query();
+        Button pickUpButton = (Button) lookup("#pickUpButton").query();
 
         clickOn(when).write("12:00");
         clickOn(from).write("Wilhelmshöher Allee 73, Kassel");
         clickOn(to).write("DEZ Kassel");
         clickOn(who).write("Carla");
         clickOn(submitButton).clickOn(MouseButton.PRIMARY);
-        sleep(5000);
+        sleep(2000);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -105,7 +106,7 @@ public class test_ha05 extends ApplicationTest {
         clickOn(howMuch).write("12");
         clickOn(acceptTime).write("12:07 Uhr");
         clickOn(acceptButton).clickOn(MouseButton.PRIMARY);
-        sleep(5000);
+        sleep(2000);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -114,7 +115,23 @@ public class test_ha05 extends ApplicationTest {
             }
         });
 
-        sleep(5000);
+        sleep(2000);
+
+        clickOn(acceptButton).clickOn(MouseButton.PRIMARY);
+
+        sleep(2000);
+
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                client.toBack();
+                taxi.toFront();
+            }
+        });
+
+        clickOn(pickUpTime).write("12:11");
+        clickOn(pickUpButton);
     }
 }
 
