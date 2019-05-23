@@ -1,7 +1,8 @@
 package ha05.taxi_client;
 
-import ha05.taxi_client.Taxi_Client;
+import javafx.application.Platform;
 import org.eclipse.paho.client.mqttv3.*;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
@@ -12,17 +13,17 @@ public class Taxi_Proxy implements MqttCallback {
     private  String RECEIVE_CHANNEL= "toTransport";
     private MqttClient client;
     private LinkedList<JSONObject> messages;
-    private Taxi_Client taxi_client;
+    private Taxi_client_controller taxi_client_controller;
 
 
-    public Taxi_Proxy(String receiveChannel, String sendingChannel, Taxi_Client taxi_client){
+    public Taxi_Proxy(String receiveChannel, String sendingChannel, Taxi_client_controller taxi_client_controller){
         try {
-            this.taxi_client=taxi_client;
+            this.taxi_client_controller=taxi_client_controller;
             client =  new MqttClient("tcp://127.0.0.1:2000", MqttClient.generateClientId());
             client.setCallback(this);
             client.connect();
             client.subscribe(RECEIVE_CHANNEL);
-            System.out.println("Client is connected: " + client.isConnected());
+            System.out.println("Taxi Client is connected: " + client.isConnected());
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -61,14 +62,23 @@ public class Taxi_Proxy implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        System.out.println("HUHU" + message.toString());
-        System.out.println("Message arrived at Taxi Proxy.");
-        JSONObject jsonObject = new JSONObject(message.toString());
-        System.out.println("JSOn OBJECT" + jsonObject);
-        messages.add(jsonObject);
-        System.out.println(messages.toString());
-        System.out.println(taxi_client.toString());
-        taxi_client.messageArrived(jsonObject);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("HUHU" + message.toString());
+                System.out.println("Message arrived at Taxi Proxy.");
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(message.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("JSOn OBJECT" + jsonObject);
+                messages.add(jsonObject);
+                System.out.println(messages.toString());
+                taxi_client_controller.messageArrived(jsonObject);
+            }
+        });
     }
 
     @Override

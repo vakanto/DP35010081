@@ -6,11 +6,11 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Taxi Client" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ha05.taxi_client.Taxi_Client">
+<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Taxi Client" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ha05.taxi_client.Taxi_client_controller">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
          <children>
-            <ListView fx:id="eventList" layoutX="13.0" layoutY="17.0" prefHeight="328.0" prefWidth="371.0" />
+            <ListView fx:id="myList" layoutX="13.0" layoutY="17.0" prefHeight="328.0" prefWidth="371.0" />
             <Button fx:id="acceptButton" layoutX="445.0" layoutY="108.0" mnemonicParsing="false" onMouseClicked="#onAcceptButtonClicked" prefHeight="48.0" prefWidth="105.0" text="Accept" />
             <Button fx:id="pickUpButton" layoutX="445.0" layoutY="216.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="105.0" text="PickUp" />
             <TextField fx:id="pickUpTime" layoutX="406.0" layoutY="177.0" promptText="When" />

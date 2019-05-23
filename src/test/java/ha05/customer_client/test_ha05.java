@@ -94,6 +94,7 @@ public class test_ha05 extends ApplicationTest {
         clickOn(to).write("DEZ Kassel");
         clickOn(who).write("Carla");
         clickOn(submitButton).clickOn(MouseButton.PRIMARY);
+        sleep(5000);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -104,7 +105,7 @@ public class test_ha05 extends ApplicationTest {
         clickOn(howMuch).write("12");
         clickOn(acceptTime).write("12:07 Uhr");
         clickOn(acceptButton).clickOn(MouseButton.PRIMARY);
-
+        sleep(5000);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -112,6 +113,8 @@ public class test_ha05 extends ApplicationTest {
                 client.toFront();
             }
         });
+
+        sleep(5000);
     }
 }
 

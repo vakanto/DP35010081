@@ -22,17 +22,9 @@ public class Customer_Client extends Application {
     private Parent root;
     private Stage stage;
 
-    @FXML
-    private ListView statusList;
+    public Customer_Client(){
 
-    @FXML
-    private TextField who;
-    @FXML
-    private TextField from;
-    @FXML
-    private TextField when;
-    @FXML
-    private TextField to;
+    }
 
     @Override
     public void start(Stage stage) throws Exception{
@@ -48,35 +40,6 @@ public class Customer_Client extends Application {
         System.out.println(root.lookup("statusList"));
     }
 
-    public void submitButtonPressed(Event event) throws Exception{
-        CommunicationProxy proxy = new CommunicationProxy(null,null, this);
-        JSONObject jsonObject = generateJson();
-        Node node = (Node) event.getSource();
-        //Stage stage = (Stage) node.getScene().getWindow();
-        //root=loadFXML(OFFER_SCREEN);
-        //stage.setScene( new Scene(root,800, 500));
-        System.out.println(jsonObject);
-        //stage.show();
-        statusList.getItems().add("Send: " + jsonObject.toString());
-        statusList.refresh();
-        proxy.sendMessage(jsonObject);
-    }
-    @FXML
-    private JSONObject generateJson() {
-        JSONObject object = new JSONObject();
-        System.out.println(who.getText());
-        try {
-            object.put("Who",  who.getText());
-            object.put("To", to.getText());
-            object.put("From", from.getText());
-            object.put("When", when.getText());
-            object.put("Receiver", "toTransporter");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return object;
-    }
-
     private Parent loadFXML(String path) throws Exception{
         Parent parent;
         FXMLLoader loader = new FXMLLoader();
@@ -84,27 +47,6 @@ public class Customer_Client extends Application {
         parent=loader.load();
         return parent;
     }
-
-    @FXML
-    public void messageArrived(JSONObject message){
-        System.out.println("message arrived");
-            Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String messageText=null;
-                    String name = message.getString("name");
-                    String price = message.getString("costs");
-                    String time = message.getString("when");
-                    messageText="Name: " + name + "\n" + "Preis: " + price + "\n" + "Zeitpunkt: " + time;
-                    System.out.println(messageText);
-                    statusList.getItems().add(messageText);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            });
-        }
         public void acceptOffer(){
 
         }

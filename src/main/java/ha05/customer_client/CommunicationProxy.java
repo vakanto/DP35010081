@@ -13,12 +13,12 @@ public class CommunicationProxy implements MqttCallback {
 
     private MqttClient client;
     private LinkedList<JSONObject> messages;
-    private Customer_Client customer_client;
+    private Customer_Client_Controller customer_client_controller;
 
 
-    public CommunicationProxy(String receiveChannel, String sendingChannel, Customer_Client customer_client){
+    public CommunicationProxy(String receiveChannel, String sendingChannel, Customer_Client_Controller customer_client){
         try {
-            this.customer_client=customer_client;
+            this.customer_client_controller=customer_client;
             client =  new MqttClient("tcp://127.0.0.1:2000", MqttClient.generateClientId());
             client.setCallback(this);
             client.connect();
@@ -41,19 +41,23 @@ public class CommunicationProxy implements MqttCallback {
         System.out.println("Client Proxy receives on: " + RECEIVE_CHANNEL);
     }
 
-    public boolean sendMessage(JSONObject object) {
-        MqttMessage message = new MqttMessage();
-        message.setPayload(object.toString().getBytes());
-        try {
-            if(client.isConnected()==false){
-            client.connect();
+    public synchronized boolean sendMessage(JSONObject object) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                MqttMessage message = new MqttMessage();
+                message.setPayload(object.toString().getBytes());
+                try {
+                    if(client.isConnected()==false){
+                        client.connect();
+                    }
+                    client.publish(SENDING_CHANNEL, message);
+                    System.out.println("Proxy sends on " + SENDING_CHANNEL + message);
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
             }
-            client.publish(SENDING_CHANNEL, message);
-            System.out.println("Proxy sends on " + SENDING_CHANNEL + message);
-            //client.disconnect();
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
+        });
         return false;
     }
 
@@ -67,7 +71,7 @@ public class CommunicationProxy implements MqttCallback {
         System.out.println("Message arrived at Client Proxy.");
         JSONObject jsonObject = new JSONObject(message.toString());
         messages.add(jsonObject);
-        customer_client.messageArrived(jsonObject);
+        customer_client_controller.messageArrived(jsonObject);
     }
 
     @Override

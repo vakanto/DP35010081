@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,45 +13,33 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
 public class Taxi_Client extends Application {
 
-    @FXML
-    private TextField howMuch;
-
-    @FXML
-    private TextField offerAcceptTime;
-
-    @FXML
-    private TextField pickUpTime;
-
-    @FXML
-    private TextField dropTime;
-
-    @FXML
-    private Button acceptButton;
-
-    @FXML
-    private Button dropButton;
-
-    @FXML
-    private Button pickUpButton;
-
-    @FXML
-    private ListView eventList;
-
-    private Stage stage;
     private Parent root;
-    private Taxi_Proxy taxi_proxy;
     private final String START_SCREEN = "Taxi_Client.fxml";
+    private Taxi_client_controller taxi_client_controller;
+    private Taxi_client_model taxi_client_model;
+    private  Taxi_client_view taxi_client_view;
+    private Stage stage;
+    private Taxi_Proxy taxi_proxy;
+
+    public Taxi_Client(){
+
+
+    }
 
     @Override
     public void start(Stage stage) throws Exception{
-        System.out.println(offerAcceptTime);
-        taxi_proxy = new Taxi_Proxy(null,null,this);
+        taxi_client_model = new Taxi_client_model();
+        taxi_client_view = new Taxi_client_view(taxi_client_model, stage);
         this.stage=stage;
         root=loadFXML(START_SCREEN);
         this.stage.setTitle("Taxi-Client");
@@ -68,59 +57,5 @@ public class Taxi_Client extends Application {
         loader.setLocation(getClass().getResource(path));
         parent=loader.load();
         return parent;
-    }
-
-    @FXML
-    public void messageArrived(JSONObject message) {
-        System.out.println("message arrived at Taxi-Client");
-        System.out.println(eventList);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String messageText=null;
-                    String who = message.getString("Who");
-                    String when = message.getString("When");
-                    String from = message.getString("From");
-                    String to = message.getString("To");
-                    messageText="Wer: " + who + "\n" + "Wann: " + when + "\n" + "Von: " + from + "Nach: " + to;
-                    System.out.println(messageText);
-                    System.out.println(eventList);
-                    eventList.getItems().add(messageText);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    public void onAcceptButtonClicked(Event event){
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                JSONObject jsonObject = generateAcceptJson();
-                System.out.println(jsonObject);
-                eventList.getItems().add("Send: " + jsonObject.toString());
-                eventList.refresh();
-                taxi_proxy.sendMessage(jsonObject);
-            }
-        });
-    }
-
-    @FXML
-    private JSONObject generateAcceptJson() {
-        System.out.println("Generate Answer");
-        JSONObject object = new JSONObject();
-        try {
-            object.put("name", "Thea");
-            object.put("when", offerAcceptTime.getText());
-            System.out.println(offerAcceptTime.getText());
-            object.put("costs", howMuch.getText());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        System.out.println(object.toString());
-        return object;
     }
 }
