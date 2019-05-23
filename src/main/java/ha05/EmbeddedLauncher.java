@@ -29,11 +29,11 @@ public final class EmbeddedLauncher {
             return "EmbeddedLauncherPublishListener";
         }
 
-        @Override
+    /**    @Override
         public void onPublish(InterceptPublishMessage msg) {
             final String decodedPayload = new String(msg.getPayload().array(), UTF_8);
             System.out.println("Received on topic: " + msg.getTopicName() + " content: " + decodedPayload);
-        }
+        }**/
     }
 
     public void startServer(){

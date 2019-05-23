@@ -4,16 +4,21 @@ import ha05.EmbeddedLauncher;
 import ha05.taxi_client.Taxi_Client;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import org.testfx.api.FxAssert;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.matcher.control.LabeledMatchers;
+import org.testfx.osgi.service.TestFx;
 
 
 public class test_ha05 extends ApplicationTest {
@@ -25,6 +30,10 @@ public class test_ha05 extends ApplicationTest {
 
     @Override
     public void start(Stage stage) throws Exception {
+
+        EmbeddedLauncher server = new EmbeddedLauncher();
+        server.startServer();
+        sleep(5000);
         client=stage;
         taxi=new Stage();
         customer_client = new Customer_Client();
@@ -43,8 +52,6 @@ public class test_ha05 extends ApplicationTest {
             }
         });
         //Process p = Runtime.getRuntime().exec("mosquitto -c " + "src/main/resources/mosquitto.conf");
-        EmbeddedLauncher server = new EmbeddedLauncher();
-        server.startServer();
 
         TextField when = (TextField) lookup("#when").query();
         TextField from= (TextField) lookup("#from").query();
@@ -83,7 +90,7 @@ public class test_ha05 extends ApplicationTest {
         clickOn(acceptTime).write("12:07 Uhr");
 
         Assert.assertEquals("12",howMuch.getText());
-        Assert.assertEquals( "12:07 Uhr", acceptTime.getText());
+        Assert.assertEquals( "12:07", acceptTime.getText());
 
         clickOn(acceptButton).clickOn(MouseButton.PRIMARY);
         sleep(2000);
@@ -111,6 +118,7 @@ public class test_ha05 extends ApplicationTest {
         });
 
         clickOn(pickUpTime).write("12:11");
+        Assert.assertEquals( "12:11", pickUpTime.getText());
         clickOn(pickUpButton).clickOn(MouseButton.PRIMARY);
 
         Platform.runLater(new Runnable() {
@@ -133,6 +141,7 @@ public class test_ha05 extends ApplicationTest {
             }
         });
         clickOn(dropTime).write("12:42");
+        Assert.assertEquals( "12:42 Uhr", dropTime.getText());
         clickOn(dropButton).clickOn(MouseButton.PRIMARY);
 
         sleep(2000);
@@ -148,5 +157,3 @@ public class test_ha05 extends ApplicationTest {
         sleep(2000);
     }
 }
-
-
