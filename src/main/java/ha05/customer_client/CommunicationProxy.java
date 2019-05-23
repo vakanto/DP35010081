@@ -19,7 +19,7 @@ public class CommunicationProxy implements MqttCallback {
     public CommunicationProxy(String receiveChannel, String sendingChannel, Customer_Client_Controller customer_client){
         try {
             this.customer_client_controller=customer_client;
-            client =  new MqttClient("tcp://127.0.0.1:2000", MqttClient.generateClientId());
+            client =  new MqttClient("tcp://127.0.0.1:1883", MqttClient.generateClientId());
             client.setCallback(this);
             client.connect();
             client.subscribe(RECEIVE_CHANNEL);

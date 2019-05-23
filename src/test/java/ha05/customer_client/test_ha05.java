@@ -1,5 +1,6 @@
 package ha05.customer_client;
 
+import ha05.EmbeddedLauncher;
 import ha05.taxi_client.Taxi_Client;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
@@ -7,13 +8,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+
 import org.testfx.framework.junit.ApplicationTest;
 
 
@@ -43,7 +42,10 @@ public class test_ha05 extends ApplicationTest {
                 taxi.toBack();
             }
         });
-        Process p = Runtime.getRuntime().exec("mosquitto -c " + "src/main/resources/mosquitto.conf");
+        //Process p = Runtime.getRuntime().exec("mosquitto -c " + "src/main/resources/mosquitto.conf");
+        EmbeddedLauncher server = new EmbeddedLauncher();
+        server.startServer();
+
         TextField when = (TextField) lookup("#when").query();
         TextField from= (TextField) lookup("#from").query();
         TextField to = (TextField) lookup("#to").query();
