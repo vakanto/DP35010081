@@ -15,7 +15,7 @@
             <Button fx:id="pickUpButton" layoutX="445.0" layoutY="216.0" mnemonicParsing="false" onMouseClicked="#pickUpButtonClicked" prefHeight="48.0" prefWidth="105.0" text="PickUp" />
             <TextField fx:id="pickUpTime" layoutX="406.0" layoutY="177.0" promptText="When" />
             <TextField fx:id="dropTime" layoutX="406.0" layoutY="274.0" promptText="When" />
-            <Button fx:id="dropButton" layoutX="445.0" layoutY="311.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="105.0" text="Drop" />
+            <Button fx:id="dropButton" layoutX="445.0" layoutY="311.0" mnemonicParsing="false" onMouseClicked="#dropButtonClicked" prefHeight="48.0" prefWidth="105.0" text="Drop" />
             <TextField fx:id="offerAcceptTime" layoutX="406.0" layoutY="17.0" promptText="When" />
             <TextField fx:id="howMuch" layoutX="406.0" layoutY="70.0" promptText="How much" />
          </children></AnchorPane>

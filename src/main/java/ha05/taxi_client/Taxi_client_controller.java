@@ -74,6 +74,36 @@ public class Taxi_client_controller implements Initializable {
         });
     }
 
+    public void dropButtonClicked(Event event){
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject jsonObject = generateDropJson();
+                System.out.println(jsonObject);
+                myList.getItems().add("Send: " + jsonObject.toString());
+                myList.refresh();
+                taxi_proxy.sendMessage(jsonObject);
+            }
+        });
+    }
+
+    @FXML
+    private JSONObject generateDropJson() {
+        System.out.println("Generate Answer");
+        JSONObject object = new JSONObject();
+        try {
+            object.put("name", "Drop: traffic jam");
+            object.put("when", dropTime.getText());
+            object.put("costs", "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        System.out.println(object.toString());
+        return object;
+    }
+
+
     @FXML
     private JSONObject generateAcceptJson() {
         System.out.println("Generate Answer");
