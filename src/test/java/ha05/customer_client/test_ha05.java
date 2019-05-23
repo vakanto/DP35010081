@@ -90,7 +90,7 @@ public class test_ha05 extends ApplicationTest {
         clickOn(acceptTime).write("12:07 Uhr");
 
         Assert.assertEquals("12",howMuch.getText());
-        Assert.assertEquals( "12:07", acceptTime.getText());
+        Assert.assertEquals( "12:07 Uhr", acceptTime.getText());
 
         clickOn(acceptButton).clickOn(MouseButton.PRIMARY);
         sleep(2000);
@@ -141,7 +141,7 @@ public class test_ha05 extends ApplicationTest {
             }
         });
         clickOn(dropTime).write("12:42");
-        Assert.assertEquals( "12:42 Uhr", dropTime.getText());
+        Assert.assertEquals( "12:42", dropTime.getText());
         clickOn(dropButton).clickOn(MouseButton.PRIMARY);
 
         sleep(2000);
