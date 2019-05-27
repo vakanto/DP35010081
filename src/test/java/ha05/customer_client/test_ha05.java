@@ -20,7 +20,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.matcher.control.LabeledMatchers;
 import org.testfx.osgi.service.TestFx;
 
-
+// HA05: 10/10
 public class test_ha05 extends ApplicationTest {
 
     private Customer_Client customer_client;
