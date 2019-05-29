@@ -21,6 +21,9 @@ public class EditorController implements Initializable {
 
     private EditorModel editorModel;
 
+    public EditorController(){
+
+    }
 
     public EditorController(EditorModel editorModel){
     }

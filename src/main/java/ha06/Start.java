@@ -26,13 +26,16 @@ public class Start extends Application {
     }
 
 
+
+
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         loader=new FXMLLoader();
         root=loadFXML("Editor.fxml");
         editorModel=new EditorModel();
         primaryStage.setTitle("Editor");
-        primaryStage.setScene(new Scene(root, 400, 400));
+        primaryStage.setScene(new Scene(root, 800, 400));
         primaryStage.show();
     }
 
