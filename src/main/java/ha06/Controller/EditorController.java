@@ -1,9 +1,6 @@
 package ha06.Controller;
 
-import ha06.Handler.CommandLineHandler;
-import ha06.Handler.DeleteCommandHandler;
-import ha06.Handler.DrawCommandHandler;
-import ha06.Handler.GroupCommandHandler;
+import ha06.Handler.*;
 import ha06.Model.EclideanObject;
 import ha06.Model.EditorModel;
 import javafx.application.Platform;
@@ -36,9 +33,11 @@ public class EditorController implements Initializable {
         GroupCommandHandler groupCommandHandler = new GroupCommandHandler(this);
         DrawCommandHandler drawCommandHandler = new DrawCommandHandler(this);
         DeleteCommandHandler deleteCommandHandler = new DeleteCommandHandler(this);
+        LineCommandHandler lineCommandHandler = new LineCommandHandler(this);
+
         objectMap=new HashMap<>();
         handlers=new HashMap<String, CommandLineHandler>();
-        handlers.put("line",drawCommandHandler);
+        handlers.put("line",lineCommandHandler);
         handlers.put("group",groupCommandHandler);
         handlers.put("draw",drawCommandHandler);
         handlers.put("del", deleteCommandHandler);
@@ -48,9 +47,10 @@ public class EditorController implements Initializable {
         GroupCommandHandler groupCommandHandler = new GroupCommandHandler(this);
         DrawCommandHandler drawCommandHandler = new DrawCommandHandler(this);
         DeleteCommandHandler deleteCommandHandler = new DeleteCommandHandler(this);
+        LineCommandHandler lineCommandHandler = new LineCommandHandler(this);
 
         handlers=new HashMap<String, CommandLineHandler>();
-        handlers.put("line",drawCommandHandler);
+        handlers.put("line",lineCommandHandler);
         handlers.put("group",groupCommandHandler);
         handlers.put("draw",drawCommandHandler);
         handlers.put("del", deleteCommandHandler);
