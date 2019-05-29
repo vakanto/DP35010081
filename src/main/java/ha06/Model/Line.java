@@ -2,7 +2,7 @@ package ha06.Model;
 
 import java.util.ArrayList;
 
-public class Line extends EclideanObject {
+public class Line extends EuclideanObject {
     private double startX;
     private double startY;
     private double endX;
@@ -42,12 +42,12 @@ public class Line extends EclideanObject {
     }
 
     @Override
-    public void setChildren(ArrayList<EclideanObject> children) {
+    public void setChildren(ArrayList<EuclideanObject> children) {
         return;
     }
 
     @Override
-    public ArrayList<EclideanObject> getChildren() {
+    public ArrayList<EuclideanObject> getChildren() {
         return null;
     }
 }
