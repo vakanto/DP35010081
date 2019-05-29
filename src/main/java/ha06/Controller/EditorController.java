@@ -32,11 +32,12 @@ public class EditorController implements Initializable {
     private EditorModel editorModel;
     private CommandLineHandler commandLineHandler;
     private HashMap<String, CommandLineHandler> handlers;
+    private HashMap<String, EclideanObject> objectMap;
 
     public EditorController(){
         GroupCommandHandler groupCommandHandler = new GroupCommandHandler();
         DrawCommandHandler drawCommandHandler = new DrawCommandHandler(this);
-
+        objectMap=new HashMap<>();
         handlers=new HashMap<String, CommandLineHandler>();
         handlers.put("line",drawCommandHandler);
         handlers.put("group",groupCommandHandler);
@@ -93,6 +94,10 @@ public class EditorController implements Initializable {
 
             drawLine(line);
         }
+    }
+
+    public HashMap<String, EclideanObject> getObjectMap() {
+        return objectMap;
     }
 
     public void setModel(EditorModel editorModel) {

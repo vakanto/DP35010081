@@ -19,6 +19,9 @@ public class DrawCommandHandler implements CommandLineHandler {
         lineObject.setStartY(Integer.parseInt(pieces[3]));
         lineObject.setEndX(Integer.parseInt(pieces[4]));
         lineObject.setEndY(Integer.parseInt(pieces[5]));
+
+        editorController.getObjectMap().put(pieces[0], lineObject);
+
         editorController.drawObject(lineObject);
         return false;
     }
