@@ -25,10 +25,6 @@ public class Start extends Application {
         launch(args);
     }
 
-
-
-
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         loader=new FXMLLoader();
