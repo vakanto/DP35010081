@@ -1,12 +1,12 @@
 package ha06.Controller;
 
 import ha06.Handler.CommandLineHandler;
+import ha06.Handler.DeleteCommandHandler;
 import ha06.Handler.DrawCommandHandler;
 import ha06.Handler.GroupCommandHandler;
 import ha06.Model.EclideanObject;
 import ha06.Model.EditorModel;
 import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
@@ -16,8 +16,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
@@ -35,21 +33,27 @@ public class EditorController implements Initializable {
     private HashMap<String, EclideanObject> objectMap;
 
     public EditorController(){
-        GroupCommandHandler groupCommandHandler = new GroupCommandHandler();
+        GroupCommandHandler groupCommandHandler = new GroupCommandHandler(this);
         DrawCommandHandler drawCommandHandler = new DrawCommandHandler(this);
+        DeleteCommandHandler deleteCommandHandler = new DeleteCommandHandler(this);
         objectMap=new HashMap<>();
         handlers=new HashMap<String, CommandLineHandler>();
         handlers.put("line",drawCommandHandler);
         handlers.put("group",groupCommandHandler);
+        handlers.put("draw",drawCommandHandler);
+        handlers.put("del", deleteCommandHandler);
     }
 
     public EditorController(EditorModel editorModel){
-        GroupCommandHandler groupCommandHandler = new GroupCommandHandler();
+        GroupCommandHandler groupCommandHandler = new GroupCommandHandler(this);
         DrawCommandHandler drawCommandHandler = new DrawCommandHandler(this);
+        DeleteCommandHandler deleteCommandHandler = new DeleteCommandHandler(this);
 
         handlers=new HashMap<String, CommandLineHandler>();
         handlers.put("line",drawCommandHandler);
         handlers.put("group",groupCommandHandler);
+        handlers.put("draw",drawCommandHandler);
+        handlers.put("del", deleteCommandHandler);
     }
 
     @FXML
@@ -64,6 +68,7 @@ public class EditorController implements Initializable {
         String [] stringParts = command.split(" ");
         CommandLineHandler commandLineHandler = handlers.get(stringParts[0]);
         commandLineHandler.handleCommand(stringParts);
+        commandLine.clear();
     }
 
     public void drawLine(Line line){
@@ -93,7 +98,15 @@ public class EditorController implements Initializable {
             line.setEndY(lineObject.getEndY());
 
             drawLine(line);
+            return;
         }
+        //is complex object
+        for(EclideanObject object : euclideanObject.getChildren()){
+            if(object!=null){
+                drawObject(object);
+            }
+        }
+
     }
 
     public HashMap<String, EclideanObject> getObjectMap() {
@@ -108,5 +121,9 @@ public class EditorController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println(sheet);
 
+    }
+
+    public void clearScreen() {
+        sheet.getChildren().clear();
     }
 }
