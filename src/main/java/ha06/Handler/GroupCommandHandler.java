@@ -23,9 +23,7 @@ public class GroupCommandHandler implements CommandLineHandler {
             for(int i=2; i<pieces.length;i++){
                 //Causion: Object cannot be in map
                 objectList.add(editorController.getObjectMap().get(pieces[i]));
-                System.out.println("Added");
                 editorController.getObjectMap().get(pieces[i]).setParent(group);
-                System.out.println("Added parent");
             }
 
             group.setChildren(objectList);

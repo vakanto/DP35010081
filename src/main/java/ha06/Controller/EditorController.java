@@ -30,11 +30,13 @@ public class EditorController implements Initializable {
     private HashMap<String, EuclideanObject> objectMap;
 
     public EditorController(){
+        editorModel = new EditorModel();
         GroupCommandHandler groupCommandHandler = new GroupCommandHandler(this);
         DrawCommandHandler drawCommandHandler = new DrawCommandHandler(this);
         DeleteCommandHandler deleteCommandHandler = new DeleteCommandHandler(this);
         LineCommandHandler lineCommandHandler = new LineCommandHandler(this);
         CloneCommandHandler cloneCommandHandler = new CloneCommandHandler(this);
+        UndoCommandHandler undoCommandHandler = new UndoCommandHandler(this);
 
         objectMap=new HashMap<>();
         handlers=new HashMap<String, CommandLineHandler>();
@@ -43,14 +45,17 @@ public class EditorController implements Initializable {
         handlers.put("draw",drawCommandHandler);
         handlers.put("del", deleteCommandHandler);
         handlers.put("clone", cloneCommandHandler);
+        handlers.put("undo", undoCommandHandler);
     }
 
     public EditorController(EditorModel editorModel){
+        editorModel = new EditorModel();
         GroupCommandHandler groupCommandHandler = new GroupCommandHandler(this);
         DrawCommandHandler drawCommandHandler = new DrawCommandHandler(this);
         DeleteCommandHandler deleteCommandHandler = new DeleteCommandHandler(this);
         LineCommandHandler lineCommandHandler = new LineCommandHandler(this);
         CloneCommandHandler cloneCommandHandler = new CloneCommandHandler(this);
+        UndoCommandHandler undoCommandHandler = new UndoCommandHandler(this);
 
         handlers=new HashMap<String, CommandLineHandler>();
         handlers.put("line",lineCommandHandler);
@@ -58,17 +63,32 @@ public class EditorController implements Initializable {
         handlers.put("draw",drawCommandHandler);
         handlers.put("del", deleteCommandHandler);
         handlers.put("clone", cloneCommandHandler);
+        handlers.put("undo", undoCommandHandler);
     }
 
     @FXML
     public void processCommand(KeyEvent keyEvent){
+
         if(keyEvent.getCode()!= KeyCode.ENTER){
             //System.out.println("Wrong Button pressed");
             return;
         }
+        String command;
+
         TextField textField = (TextField) keyEvent.getSource();
-        String command = textField.getText();
+        command = textField.getText();
+
+        editorModel.getCommandList().add(command);
         System.out.println(command);
+        String [] stringParts = command.split(" ");
+        CommandLineHandler commandLineHandler = handlers.get(stringParts[0]);
+        System.out.println(handlers.get(stringParts));
+        commandLineHandler.handleCommand(stringParts);
+        commandLine.clear();
+    }
+
+    @FXML
+    public void processOldCommand(String command){
         String [] stringParts = command.split(" ");
         CommandLineHandler commandLineHandler = handlers.get(stringParts[0]);
         commandLineHandler.handleCommand(stringParts);
@@ -85,7 +105,6 @@ public class EditorController implements Initializable {
     }
 
     public void drawObject(EuclideanObject euclideanObject){
-        System.out.println(euclideanObject.getChildren()==null);
         if(euclideanObject.getChildren()==null){
             //is line
             ha06.Model.Line lineObject = (ha06.Model.Line) euclideanObject;
@@ -107,6 +126,10 @@ public class EditorController implements Initializable {
 
     }
 
+    public EditorModel getEditorModel() {
+        return editorModel;
+    }
+
     public HashMap<String, EuclideanObject> getObjectMap() {
         return objectMap;
     }
@@ -121,7 +144,9 @@ public class EditorController implements Initializable {
 
     }
 
+    @FXML
     public void clearScreen() {
+        System.out.println(sheet);
         sheet.getChildren().clear();
     }
 }

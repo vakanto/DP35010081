@@ -38,7 +38,6 @@ public class EuclideanObject {
 
     public void setParent(EuclideanObject parent) {
         this.parent = parent;
-        System.out.println("parent set");
         if(parent.getChildren()==null){
            return;
         }

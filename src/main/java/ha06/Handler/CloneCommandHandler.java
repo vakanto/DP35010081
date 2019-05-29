@@ -39,7 +39,6 @@ public class CloneCommandHandler implements CommandLineHandler{
     }
 
     private ArrayList<EuclideanObject> changeObjects(ArrayList<EuclideanObject> objectList, double changeX, double changeY){
-        System.out.println(objectList.toString());
         ArrayList<EuclideanObject> newObjecList=new ArrayList<>();
         for(EuclideanObject object : objectList){
 

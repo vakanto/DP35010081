@@ -57,6 +57,20 @@ public class test_ha06 extends ApplicationTest {
         clickOn(commandLine).push(KeyCode.ENTER);
         clickOn(commandLine).write("clone g1 150 0");
         clickOn(commandLine).push(KeyCode.ENTER);
+
+
+        //clickOn(commandLine).write("del");
+        //clickOn(commandLine).push(KeyCode.ENTER);
+
+        clickOn(commandLine).write("undo");
+        clickOn(commandLine).push(KeyCode.ENTER);
+
+        //clickOn(commandLine).write("del");
+        //clickOn(commandLine).push(KeyCode.ENTER);
+
+        clickOn(commandLine).write("undo");
+        clickOn(commandLine).push(KeyCode.ENTER);
+
         sleep(5000);
 
     }
