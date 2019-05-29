@@ -43,8 +43,8 @@ public class test_ha06 extends ApplicationTest {
         clickOn(commandLine).write("line l8 110 135 60 95");
         clickOn(commandLine).push(KeyCode.ENTER);
 
-        clickOn(commandLine).write("group g1 l7 l8");
-        //clickOn(commandLine).write("group g1 l1 l2 l3 l4 l5 l6 l7 l8");
+        //clickOn(commandLine).write("group g1 l7 l8");
+        clickOn(commandLine).write("group g1 l1 l2 l3 l4 l5 l6 l7 l8");
         clickOn(commandLine).push(KeyCode.ENTER);
         clickOn(commandLine).write("del");
         clickOn(commandLine).push(KeyCode.ENTER);
@@ -53,9 +53,11 @@ public class test_ha06 extends ApplicationTest {
         clickOn(commandLine).write("draw g1");
         clickOn(commandLine).push(KeyCode.ENTER);
 
-        clickOn(commandLine).write("clone g1 50 0");
+        clickOn(commandLine).write("clone g1 150 0");
         clickOn(commandLine).push(KeyCode.ENTER);
-        sleep(2000);
+        clickOn(commandLine).write("clone g1 150 0");
+        clickOn(commandLine).push(KeyCode.ENTER);
+        sleep(5000);
 
     }
 }
