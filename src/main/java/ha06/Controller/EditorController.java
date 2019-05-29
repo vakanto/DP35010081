@@ -3,6 +3,7 @@ package ha06.Controller;
 import ha06.Handler.CommandLineHandler;
 import ha06.Handler.DrawCommandHandler;
 import ha06.Handler.GroupCommandHandler;
+import ha06.Model.EclideanObject;
 import ha06.Model.EditorModel;
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -64,20 +65,34 @@ public class EditorController implements Initializable {
         commandLineHandler.handleCommand(stringParts);
     }
 
-    public void drawLine(){
+    public void drawLine(Line line){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
 
-                Line line = new Line();
+                /**Line line = new Line();
                 line.setStartX(20);
                 line.setEndX(100);
                 line.setStartY(50);
-                line.setEndY(100);
+                line.setEndY(100);**/
 
                 sheet.getChildren().add(line);
             }
         });
+    }
+
+    public void drawObject(EclideanObject euclideanObject){
+        if(euclideanObject.getChildren()==null){
+            //is line
+            ha06.Model.Line lineObject = (ha06.Model.Line) euclideanObject;
+            Line line = new Line();
+            line.setStartX(lineObject.getStartX());
+            line.setStartY(lineObject.getStartY());
+            line.setEndX(lineObject.getEndX());
+            line.setEndY(lineObject.getEndY());
+
+            drawLine(line);
+        }
     }
 
     public void setModel(EditorModel editorModel) {
