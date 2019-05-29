@@ -4,6 +4,6 @@ import java.util.Stack;
 
 public class EditorModel {
 
-    private Stack<Command> commandStack;
-    private Stack<Command> revertedCommands;
+    /**private Stack<Command> commandStack;
+    private Stack<Command> revertedCommands;**/
 }

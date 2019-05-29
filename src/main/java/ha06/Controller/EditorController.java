@@ -1,6 +1,8 @@
 package ha06.Controller;
 
 import ha06.Handler.CommandLineHandler;
+import ha06.Handler.DrawCommandHandler;
+import ha06.Handler.GroupCommandHandler;
 import ha06.Model.EditorModel;
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -13,6 +15,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class EditorController implements Initializable {
@@ -25,13 +30,24 @@ public class EditorController implements Initializable {
 
     private EditorModel editorModel;
     private CommandLineHandler commandLineHandler;
-    public EditorController(){
-        commandLineHandler=new CommandLineHandler();
+    private HashMap<String, CommandLineHandler> handlers;
 
+    public EditorController(){
+        GroupCommandHandler groupCommandHandler = new GroupCommandHandler();
+        DrawCommandHandler drawCommandHandler = new DrawCommandHandler(this);
+
+        handlers=new HashMap<String, CommandLineHandler>();
+        handlers.put("line",drawCommandHandler);
+        handlers.put("group",groupCommandHandler);
     }
 
     public EditorController(EditorModel editorModel){
-        commandLineHandler=new CommandLineHandler();
+        GroupCommandHandler groupCommandHandler = new GroupCommandHandler();
+        DrawCommandHandler drawCommandHandler = new DrawCommandHandler(this);
+
+        handlers=new HashMap<String, CommandLineHandler>();
+        handlers.put("line",drawCommandHandler);
+        handlers.put("group",groupCommandHandler);
     }
 
     @FXML
@@ -43,6 +59,9 @@ public class EditorController implements Initializable {
         TextField textField = (TextField) keyEvent.getSource();
         String command = textField.getText();
         System.out.println(command);
+        String [] stringParts = command.split(" ");
+        CommandLineHandler commandLineHandler = handlers.get(stringParts[0]);
+        commandLineHandler.handleCommand(stringParts);
     }
 
     public void drawLine(){

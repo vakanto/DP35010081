@@ -1,4 +1,5 @@
 package ha06.Handler;
 
-public class CommandLineHandler {
+public interface CommandLineHandler {
+    public boolean handleCommand(String [] pieces);
 }
