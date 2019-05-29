@@ -31,6 +31,9 @@ public class Start extends Application {
         root=loadFXML("Editor.fxml");
         editorModel=new EditorModel();
         primaryStage.setTitle("Editor");
+        primaryStage.setHeight(400);
+        primaryStage.setWidth(800);
+        primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root, 800, 400));
         primaryStage.show();
     }

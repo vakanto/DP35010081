@@ -59,7 +59,7 @@ public class EditorController implements Initializable {
     @FXML
     public void processCommand(KeyEvent keyEvent){
         if(keyEvent.getCode()!= KeyCode.ENTER){
-            System.out.println("Wrong Button pressed");
+            //System.out.println("Wrong Button pressed");
             return;
         }
         TextField textField = (TextField) keyEvent.getSource();
@@ -75,13 +75,6 @@ public class EditorController implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-
-                /**Line line = new Line();
-                line.setStartX(20);
-                line.setEndX(100);
-                line.setStartY(50);
-                line.setEndY(100);**/
-
                 sheet.getChildren().add(line);
             }
         });
