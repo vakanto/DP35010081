@@ -78,8 +78,5 @@ public class test_ha06 extends ApplicationTest {
                 Assert.assertEquals(command, editorModel.getCommandList().getLast());
             }
         }
-
-        sleep(5000);
-
     }
 }
