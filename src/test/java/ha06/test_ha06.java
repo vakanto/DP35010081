@@ -49,7 +49,6 @@ public class test_ha06 extends ApplicationTest {
         clickOn(commandLine).write("del");
         clickOn(commandLine).push(KeyCode.ENTER);
 
-
         clickOn(commandLine).write("draw g1");
         clickOn(commandLine).push(KeyCode.ENTER);
 
@@ -62,6 +61,9 @@ public class test_ha06 extends ApplicationTest {
         clickOn(commandLine).push(KeyCode.ENTER);
 
         clickOn(commandLine).write("undo");
+        clickOn(commandLine).push(KeyCode.ENTER);
+
+        clickOn(commandLine).write("redo");
         clickOn(commandLine).push(KeyCode.ENTER);
 
         sleep(5000);

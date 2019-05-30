@@ -37,6 +37,7 @@ public class EditorController implements Initializable {
         LineCommandHandler lineCommandHandler = new LineCommandHandler(this);
         CloneCommandHandler cloneCommandHandler = new CloneCommandHandler(this);
         UndoCommandHandler undoCommandHandler = new UndoCommandHandler(this);
+        RedoCommandHandler redoCommandHandler = new RedoCommandHandler(this);
 
         objectMap=new HashMap<>();
         handlers=new HashMap<String, CommandLineHandler>();
@@ -46,6 +47,7 @@ public class EditorController implements Initializable {
         handlers.put("del", deleteCommandHandler);
         handlers.put("clone", cloneCommandHandler);
         handlers.put("undo", undoCommandHandler);
+        handlers.put("redo", redoCommandHandler);
     }
 
     public EditorController(EditorModel editorModel){
@@ -56,6 +58,7 @@ public class EditorController implements Initializable {
         LineCommandHandler lineCommandHandler = new LineCommandHandler(this);
         CloneCommandHandler cloneCommandHandler = new CloneCommandHandler(this);
         UndoCommandHandler undoCommandHandler = new UndoCommandHandler(this);
+        RedoCommandHandler redoCommandHandler = new RedoCommandHandler(this);
 
         handlers=new HashMap<String, CommandLineHandler>();
         handlers.put("line",lineCommandHandler);
@@ -64,6 +67,7 @@ public class EditorController implements Initializable {
         handlers.put("del", deleteCommandHandler);
         handlers.put("clone", cloneCommandHandler);
         handlers.put("undo", undoCommandHandler);
+        handlers.put("redo", redoCommandHandler);
     }
 
     @FXML

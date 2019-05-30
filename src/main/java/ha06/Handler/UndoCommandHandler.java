@@ -22,9 +22,8 @@ public class UndoCommandHandler implements CommandLineHandler {
             public void run() {
                 LinkedList<String> tempCommandList =  new LinkedList<>();
                 System.out.println("last command: " + editorModel.getCommandList().getLast());
+                editorModel.getCommandList().removeLast();
                 editorModel.getRevertedCommands().add(editorModel.getCommandList().pollLast());
-                editorModel.getRevertedCommands().add(editorModel.getCommandList().pollLast());
-                System.out.println("last command: " + editorModel.getCommandList().getLast());
                 editorController.clearScreen();
                 System.out.println("Cleared Screen");
 
