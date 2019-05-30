@@ -2,6 +2,7 @@ package ha06.Handler;
 
 import ha06.Controller.EditorController;
 import ha06.Model.EditorModel;
+import javafx.application.Platform;
 
 import java.util.LinkedList;
 
@@ -16,26 +17,36 @@ public class UndoCommandHandler implements CommandLineHandler {
 
     @Override
     public boolean handleCommand(String[] pieces) {
-        LinkedList<String> tempCommandList =  new LinkedList<>();
-        editorModel.getRevertedCommands().add(editorModel.getCommandList().pollLast());
-        editorController.processOldCommand("del");
-        System.out.println("Cleared Screen");
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                LinkedList<String> tempCommandList =  new LinkedList<>();
+                System.out.println("last command: " + editorModel.getCommandList().getLast());
+                editorModel.getRevertedCommands().add(editorModel.getCommandList().pollLast());
+                editorModel.getRevertedCommands().add(editorModel.getCommandList().pollLast());
+                System.out.println("last command: " + editorModel.getCommandList().getLast());
+                editorController.clearScreen();
+                System.out.println("Cleared Screen");
 
-        for(String command : editorModel.getCommandList()){
-            String [] commandParts = command.split(" ");
-            if(commandParts[0]=="del"){
-                tempCommandList=new LinkedList<>();
+                for(String command : editorModel.getCommandList()){
+                    String [] commandParts = command.split(" ");
+                    if(commandParts[0]=="del"){
+                        tempCommandList.clear();
+                    }
+                    else
+                    {
+                        tempCommandList.add(command);
+                    }
+                }
+
+                for(String command : tempCommandList){
+                    System.out.println("Repeating command: " + command);
+                    editorController.processOldCommand(command);
+                }
+
+
             }
-            else
-            {
-                tempCommandList.add(command);
-            }
-        }
-
-        for(String command : tempCommandList){
-            editorController.processOldCommand(command);
-        }
-
+        });
         return false;
     }
 }

@@ -89,10 +89,15 @@ public class EditorController implements Initializable {
 
     @FXML
     public void processOldCommand(String command){
-        String [] stringParts = command.split(" ");
-        CommandLineHandler commandLineHandler = handlers.get(stringParts[0]);
-        commandLineHandler.handleCommand(stringParts);
-        commandLine.clear();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                String [] stringParts = command.split(" ");
+                CommandLineHandler commandLineHandler = handlers.get(stringParts[0]);
+                commandLineHandler.handleCommand(stringParts);
+                commandLine.clear();
+            }
+        });
     }
 
     public void drawLine(Line line){
