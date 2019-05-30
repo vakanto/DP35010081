@@ -51,7 +51,7 @@ public class EditorController implements Initializable {
     }
 
     public EditorController(EditorModel editorModel){
-        editorModel = new EditorModel();
+        this.editorModel = editorModel;
         GroupCommandHandler groupCommandHandler = new GroupCommandHandler(this);
         DrawCommandHandler drawCommandHandler = new DrawCommandHandler(this);
         DeleteCommandHandler deleteCommandHandler = new DeleteCommandHandler(this);

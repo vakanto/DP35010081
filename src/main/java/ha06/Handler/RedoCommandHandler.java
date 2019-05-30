@@ -23,6 +23,7 @@ public class RedoCommandHandler implements CommandLineHandler{
             @Override
             public void run() {
                 LinkedList<String>tempList=new LinkedList<>();
+                editorModel.getCommandList().removeLast();
                 editorModel.getCommandList().add(editorModel.getRevertedCommands().pollLast());
 
                 editorController.processOldCommand(editorModel.getCommandList().getLast());

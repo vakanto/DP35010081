@@ -29,8 +29,8 @@ public class Start extends Application {
     public void start(Stage primaryStage) throws Exception {
         loader=new FXMLLoader();
         root=loadFXML("Editor.fxml");
-        editorModel=new EditorModel();
         primaryStage.setTitle("Editor");
+        editorController=loader.getController();
         primaryStage.setHeight(400);
         primaryStage.setWidth(800);
         primaryStage.setResizable(false);
@@ -43,5 +43,9 @@ public class Start extends Application {
         loader.setLocation(getClass().getResource(path));
         parent=loader.load();
         return parent;
+    }
+
+    public EditorController getEditorController(){
+        return this.editorController;
     }
 }
