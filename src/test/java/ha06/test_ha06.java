@@ -14,7 +14,16 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-
+// HA06: 08/10
+// -2 java.util.NoSuchElementException
+//	at java.util.Optional.orElseThrow(Optional.java:290)
+//	at org.testfx.service.finder.impl.WindowFinderImpl.window(WindowFinderImpl.java:70)
+//	at org.testfx.robot.impl.WriteRobotImpl.fetchTargetWindow(WriteRobotImpl.java:86)
+//	at org.testfx.robot.impl.WriteRobotImpl.write(WriteRobotImpl.java:78)
+//	at org.testfx.robot.impl.WriteRobotImpl.write(WriteRobotImpl.java:73)
+//	at org.testfx.api.FxRobot.write(FxRobot.java:506)
+//	at org.testfx.api.FxRobot.write(FxRobot.java:60)
+//	at ha06.test_ha06.testInput(test_ha06.java:68)
 public class test_ha06 extends ApplicationTest {
 
     private Stage editor;
