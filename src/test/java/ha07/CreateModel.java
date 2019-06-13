@@ -20,7 +20,7 @@ public class CreateModel {
                 .buildAttribute("id", mb.STRING)
                 .buildAttribute("product", mb.STRING);
 
-        ClassBuilder warehouseProductClass = mb.buildClass("WarehouseProduce")
+        ClassBuilder warehouseProductClass = mb.buildClass("WarehouseProduct")
                 .buildAttribute("name", mb.STRING)
                 .buildAttribute("id", mb.STRING);
 

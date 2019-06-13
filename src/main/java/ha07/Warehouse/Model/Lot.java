@@ -4,7 +4,7 @@ import java.beans.PropertyChangeSupport;
 
 import java.beans.PropertyChangeListener;
 
-public class Lot 
+public class Lot  
 {
 
    public static final String PROPERTY_id = "id";
@@ -44,36 +44,6 @@ public class Lot
          double oldValue = this.lotSize;
          this.lotSize = value;
          firePropertyChange("lotSize", oldValue, value);
-      }
-      return this;
-   }
-
-
-   public static final String PROPERTY_wareHouseProduct = "wareHouseProduct";
-
-   private WarehouseProduce wareHouseProduct = null;
-
-   public WarehouseProduce getWareHouseProduct()
-   {
-      return this.wareHouseProduct;
-   }
-
-   public Lot setWareHouseProduct(WarehouseProduce value)
-   {
-      if (this.wareHouseProduct != value)
-      {
-         WarehouseProduce oldValue = this.wareHouseProduct;
-         if (this.wareHouseProduct != null)
-         {
-            this.wareHouseProduct = null;
-            oldValue.withoutLots(this);
-         }
-         this.wareHouseProduct = value;
-         if (value != null)
-         {
-            value.withLots(this);
-         }
-         firePropertyChange("wareHouseProduct", oldValue, value);
       }
       return this;
    }
@@ -178,6 +148,37 @@ public class Lot
       this.setLot(null);
 
    }
+
+
+   public static final String PROPERTY_wareHouseProduct = "wareHouseProduct";
+
+   private WarehouseProduct wareHouseProduct = null;
+
+   public WarehouseProduct getWareHouseProduct()
+   {
+      return this.wareHouseProduct;
+   }
+
+   public Lot setWareHouseProduct(WarehouseProduct value)
+   {
+      if (this.wareHouseProduct != value)
+      {
+         WarehouseProduct oldValue = this.wareHouseProduct;
+         if (this.wareHouseProduct != null)
+         {
+            this.wareHouseProduct = null;
+            oldValue.withoutLots(this);
+         }
+         this.wareHouseProduct = value;
+         if (value != null)
+         {
+            value.withLots(this);
+         }
+         firePropertyChange("wareHouseProduct", oldValue, value);
+      }
+      return this;
+   }
+
 
 
 }

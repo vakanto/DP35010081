@@ -4,7 +4,7 @@ import java.beans.PropertyChangeSupport;
 
 import java.beans.PropertyChangeListener;
 
-public class PalettePlace 
+public class PalettePlace  
 {
 
    public static final String PROPERTY_column = "column";

@@ -1,5 +1,5 @@
 - c1: 	ClassModel
-  classes: 	warehouse2 	warehouseOrder3 	warehouseProduce4 	lot5 	palettePlace6 	
+  classes: 	warehouse2 	warehouseOrder3 	warehouseProduct4 	lot5 	palettePlace6 	
   defaultPropertyStyle: 	POJO
   defaultRoleType: 	"java.util.ArrayList<%s>"
   mainJavaDir: 	"src/main/java"
@@ -22,11 +22,11 @@
   propertyStyle: 	POJO
   roles: 	products15 	
 
-- warehouseProduce4: 	Clazz
+- warehouseProduct4: 	Clazz
   attributes: 	name16 	id17 	
   model: 	c1
   modified: 	false
-  name: 	WarehouseProduce
+  name: 	WarehouseProduct
   propertyStyle: 	POJO
   roles: 	warehouse18 	orders19 	lots20 	
 
@@ -125,14 +125,14 @@
   roleType: 	"java.util.ArrayList<%s>"
 
 - name16: 	Attribute
-  clazz: 	warehouseProduce4
+  clazz: 	warehouseProduct4
   modified: 	false
   name: 	name
   propertyStyle: 	POJO
   type: 	String
 
 - id17: 	Attribute
-  clazz: 	warehouseProduce4
+  clazz: 	warehouseProduct4
   modified: 	false
   name: 	id
   propertyStyle: 	POJO
@@ -141,7 +141,7 @@
 - warehouse18: 	AssocRole
   aggregation: 	false
   cardinality: 	1
-  clazz: 	warehouseProduce4
+  clazz: 	warehouseProduct4
   modified: 	false
   name: 	warehouse
   other: 	products10
@@ -151,7 +151,7 @@
 - orders19: 	AssocRole
   aggregation: 	false
   cardinality: 	42
-  clazz: 	warehouseProduce4
+  clazz: 	warehouseProduct4
   modified: 	false
   name: 	orders
   other: 	products15
@@ -161,7 +161,7 @@
 - lots20: 	AssocRole
   aggregation: 	false
   cardinality: 	42
-  clazz: 	warehouseProduce4
+  clazz: 	warehouseProduct4
   modified: 	false
   name: 	lots
   other: 	wareHouseProduct23
