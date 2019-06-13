@@ -4,6 +4,7 @@ import ha07.Shop.Model.Shop;
 import ha07.Shop.Model.ShopProduct;
 import org.fulib.yaml.EventSource;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class ShopBuilder {
@@ -16,11 +17,13 @@ public class ShopBuilder {
         shop=new Shop();
     }
 
-    public void applyEvents(LinkedHashMap<String, String> event) {
+    public void applyEvents(ArrayList<LinkedHashMap<String, String>> events) {
+        for(LinkedHashMap<String,String>event : events){
         if("add_product_to_shop".equals(event.get("event_type"))){
             String numberOfItems= event.get("size");
             int itemCount = Integer.parseInt(numberOfItems);
             addProductToShop(event.get("event_key"), event.get("productName"), itemCount);
+        }
         }
     }
 

@@ -14,6 +14,8 @@ public class test_ha07 {
 
     @Test
     public void testAddProductToShop() throws IOException, UnirestException, InterruptedException {
+        org.apache.log4j.BasicConfigurator.configure();
+
         WareHouseBuilder wareHouseBuilder = new WareHouseBuilder();
         ShopServer shopServer = new ShopServer();
         shopServer.main(null);
@@ -22,6 +24,11 @@ public class test_ha07 {
 
         wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 50);
 
-        Assert.assertTrue(shopServer.shopBuilder.getFromProducts("Shoe42size8").getInStock()==50);
+        //wait for server to compute
+        sleep(5000);
+
+        System.out.println(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getInStock());
+
+        Assert.assertTrue(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getInStock()==50);
     }
 }

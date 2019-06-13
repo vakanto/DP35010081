@@ -4,13 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import org.fulib.yaml.Yamler;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class ShopServer {
@@ -50,7 +49,14 @@ public class ShopServer {
             message.append(line).append("\n");
         }
 
-        LinkedHashMap <String,String> event = new ObjectMapper().readValue(message.toString(), LinkedHashMap.class);
-        shopBuilder.applyEvents(event);
+        //LinkedHashMap <String,String> event = new ObjectMapper().readValue(message.toString(), LinkedHashMap.class);
+        ArrayList<LinkedHashMap <String,String>> events = new Yamler().decodeList(message.toString());
+        shopBuilder.applyEvents(events);
+
+        String response = "Ok" + exchange.getRequestURI();
+        exchange.sendResponseHeaders(200,response.getBytes().length);
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
     }
 }
