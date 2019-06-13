@@ -101,37 +101,6 @@ public class PalettePlace
 
 
 
-   public static final String PROPERTY_paletteplace = "paletteplace";
-
-   private Lot paletteplace = null;
-
-   public Lot getPaletteplace()
-   {
-      return this.paletteplace;
-   }
-
-   public PalettePlace setPaletteplace(Lot value)
-   {
-      if (this.paletteplace != value)
-      {
-         Lot oldValue = this.paletteplace;
-         if (this.paletteplace != null)
-         {
-            this.paletteplace = null;
-            oldValue.setLot(null);
-         }
-         this.paletteplace = value;
-         if (value != null)
-         {
-            value.setLot(this);
-         }
-         firePropertyChange("paletteplace", oldValue, value);
-      }
-      return this;
-   }
-
-
-
    protected PropertyChangeSupport listeners = null;
 
    public boolean firePropertyChange(String propertyName, Object oldValue, Object newValue)
@@ -196,9 +165,40 @@ public class PalettePlace
    public void removeYou()
    {
       this.setWarehouse(null);
-      this.setPaletteplace(null);
+      this.setLot(null);
 
    }
+
+
+   public static final String PROPERTY_lot = "lot";
+
+   private Lot lot = null;
+
+   public Lot getLot()
+   {
+      return this.lot;
+   }
+
+   public PalettePlace setLot(Lot value)
+   {
+      if (this.lot != value)
+      {
+         Lot oldValue = this.lot;
+         if (this.lot != null)
+         {
+            this.lot = null;
+            oldValue.setPalettePlace(null);
+         }
+         this.lot = value;
+         if (value != null)
+         {
+            value.setPalettePlace(this);
+         }
+         firePropertyChange("lot", oldValue, value);
+      }
+      return this;
+   }
+
 
 
 }

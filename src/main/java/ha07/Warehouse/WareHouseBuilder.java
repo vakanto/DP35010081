@@ -2,12 +2,11 @@ package ha07.Warehouse;
 
 import ha07.Shop.ShopProxy;
 import ha07.Warehouse.Model.Lot;
+import ha07.Warehouse.Model.PalettePlace;
 import ha07.Warehouse.Model.Warehouse;
-import ha07.Warehouse.Model.WarehouseProduce;
 import ha07.Warehouse.Model.WarehouseProduct;
 import org.fulib.yaml.EventSource;
 
-import java.util.ArrayList;
 
 public class WareHouseBuilder {
     private Warehouse warehouse;
@@ -25,22 +24,47 @@ public class WareHouseBuilder {
         double oldSize = lot.getLotSize();
         WarehouseProduct warehouseProduct = getFromProducts(productName);
 
+        lot.setWareHouseProduct(warehouseProduct);
 
+        if(lot.getPalettePlace()==null){
+            for(PalettePlace place : warehouse.getPlaces()){
+                if(place.getLot()==null){
+                    place.setLot(lot);
+                    break;
+                }
+            }
+
+        }
 
         return  lot;
     }
 
     private WarehouseProduct getFromProducts(String productName) {
+        String productID = productName.replaceAll(" ", "");
+
         for(WarehouseProduct wp : warehouse.getProducts()){
             if(wp.getName().equals(productName)){
                 return wp;
             }
         }
-        return null;
+        WarehouseProduct warehouseProduct = new WarehouseProduct()
+                .setWarehouse(this.warehouse)
+                .setId(productID)
+                .setName(productName);
+        return warehouseProduct;
     }
 
     public Lot getLot(String lotId){
-        Lot lot = new Lot();
+
+        for(WarehouseProduct product : warehouse.getProducts()){
+            for(Lot lot : product.getLots()){
+                if(lot.getId().equals(lotId)){
+                    return lot;
+                }
+            }
+        }
+        Lot lot = new Lot()
+                .setId(lotId);
 
         return  lot;
     }

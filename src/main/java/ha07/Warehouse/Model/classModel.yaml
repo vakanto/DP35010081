@@ -36,7 +36,7 @@
   modified: 	false
   name: 	Lot
   propertyStyle: 	POJO
-  roles: 	wareHouseProduct23 	lot24 	
+  roles: 	wareHouseProduct23 	palettePlace24 	
 
 - palettePlace6: 	Clazz
   attributes: 	column25 	id26 	row27 	
@@ -44,7 +44,7 @@
   modified: 	false
   name: 	PalettePlace
   propertyStyle: 	POJO
-  roles: 	warehouse28 	paletteplace29 	
+  roles: 	warehouse28 	lot29 	
 
 - name7: 	Attribute
   clazz: 	warehouse2
@@ -192,13 +192,13 @@
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- lot24: 	AssocRole
+- palettePlace24: 	AssocRole
   aggregation: 	false
   cardinality: 	1
   clazz: 	lot5
   modified: 	false
-  name: 	lot
-  other: 	paletteplace29
+  name: 	palettePlace
+  other: 	lot29
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
@@ -233,13 +233,13 @@
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- paletteplace29: 	AssocRole
+- lot29: 	AssocRole
   aggregation: 	false
   cardinality: 	1
   clazz: 	palettePlace6
   modified: 	false
-  name: 	paletteplace
-  other: 	lot24
+  name: 	lot
+  other: 	palettePlace24
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 

@@ -44,7 +44,7 @@ public class CreateModel {
 
         warehouseProductClass.buildAssociation(lotClass, "lots", mb.MANY, "wareHouseProduct",mb.ONE);
 
-        lotClass.buildAssociation(palettePlaceClass, "lot", mb.ONE, "paletteplace", mb.ONE);
+        lotClass.buildAssociation(palettePlaceClass, "palettePlace", mb.ONE, "lot", mb.ONE);
 
 
         ClassModel classModel = mb.getClassModel();
