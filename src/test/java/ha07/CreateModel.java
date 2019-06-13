@@ -53,12 +53,29 @@ public class CreateModel {
 
     @Test
     public void createShopModel(){
-        ClassModelBuilder mb = Fulib.classModelBuilder("ha07.Warehouse.Model", "src/main/java");
+        ClassModelBuilder mb = Fulib.classModelBuilder("ha07.Shop.Model", "src/main/java");
+
+         ClassBuilder shopClass = mb.buildClass("Shop");
+
+         ClassBuilder shopCustomerClass = mb.buildClass("ShopCustomer")
+                 .buildAttribute("address", mb.STRING)
+                 .buildAttribute("name", mb.STRING);
+
+        ClassBuilder shopProductClass = mb.buildClass("ShopProduct")
+                .buildAttribute("id", mb.STRING)
+                .buildAttribute("inStock", mb.DOUBLE)
+                .buildAttribute("name", mb.STRING)
+                .buildAttribute("price", mb.DOUBLE);
+
+        ClassBuilder shopOrderClass = mb.buildClass("ShopOrder")
+                .buildAttribute("id", mb.STRING);
 
 
-
-
-
+        shopClass.buildAssociation(shopProductClass,"products", mb.MANY, "shop", mb.ONE);
+        shopClass.buildAssociation(shopCustomerClass, "customers", mb.MANY, "shop", mb.ONE);
+        shopClass.buildAssociation(shopOrderClass, "orders", mb.MANY, "shop", mb.ONE);
+        shopCustomerClass.buildAssociation(shopOrderClass, "orders", mb.MANY, "shopCustomer", mb.ONE);
+        shopOrderClass.buildAssociation(shopProductClass, "products", mb.MANY, "orders", mb.MANY);
 
         ClassModel classModel = mb.getClassModel();
         Fulib.generator().generate(classModel);
