@@ -1,14 +1,14 @@
 package ha07.Warehouse;
 
-import ha07.Shop.Model.Shop;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import ha07.Shop.ShopBuilder;
-import ha07.Shop.ShopProxy;
 import ha07.Warehouse.Model.Lot;
 import ha07.Warehouse.Model.PalettePlace;
 import ha07.Warehouse.Model.Warehouse;
 import ha07.Warehouse.Model.WarehouseProduct;
 import org.fulib.yaml.EventSource;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import static org.fulib.yaml.EventSource.EVENT_KEY;
@@ -27,7 +27,7 @@ public class WareHouseBuilder {
         eventSource = new EventSource();
     }
 
-    public Lot addLotToStock(String lotId, String productName, int size){
+    public Lot addLotToStock(String lotId, String productName, int size) throws IOException, UnirestException {
         Lot lot = getLot(lotId);
         double oldSize = lot.getLotSize();
         WarehouseProduct warehouseProduct = getFromProducts(productName);
@@ -45,11 +45,11 @@ public class WareHouseBuilder {
         }
 
         LinkedHashMap<String,String> event = new LinkedHashMap<>();
-        event.put(EVENT_TYPE,"ADD_LOT_TO_STOCK");
-        event.put(EVENT_KEY, lotId);
-        event.put("LOT_ID", lotId);
-        event.put("PRODUCT", productName);
-        event.put("SIZE","" + size);
+        event.put("event_type","add_product_to_shop");
+        event.put("event_key", lotId);
+        event.put("lotID", lotId);
+        event.put("productName", productName);
+        event.put("size","" + size);
         eventSource.append(event);
 
 

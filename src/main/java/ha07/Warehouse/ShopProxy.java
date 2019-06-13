@@ -1,4 +1,4 @@
-package ha07.Shop;
+package ha07.Warehouse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
@@ -38,7 +38,7 @@ public class ShopProxy {
     public void sendRequest(JsonNode eventJson) throws UnirestException {
 
         try {
-            HttpResponse<JsonNode> response = Unirest.post("127.0.0.1:5001/postEvent")
+            HttpResponse<JsonNode> response = Unirest.post("http://127.0.0.1:5001/postEvent")
                     .header("accept", "application/json")
                     .body(eventJson)
                     .asJson();
