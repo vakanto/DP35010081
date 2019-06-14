@@ -29,6 +29,17 @@ public class test_ha07 {
 
         System.out.println(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getInStock());
 
+        //Check the warehousebuilder
+        Assert.assertTrue(wareHouseBuilder.getLot("lot1")!=null);
+        Assert.assertTrue(wareHouseBuilder.getLot("lot1").getWareHouseProduct().getName().equals("Shoe 42, size 8"));
+        Assert.assertTrue(wareHouseBuilder.getLot("lot1").getLotSize()==50);
+
+        //Check transmission to ShopServer
         Assert.assertTrue(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getInStock()==50);
+        Assert.assertTrue(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getId().equals("Shoe42size8"));
+
+        wareHouseBuilder.addLotToStock("lot2", "Shoe 42, size 8", 50);
+        System.out.println(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getInStock());
+        wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 100);
     }
 }

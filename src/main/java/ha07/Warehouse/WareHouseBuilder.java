@@ -43,13 +43,14 @@ public class WareHouseBuilder {
             }
 
         }
-
+        lot.setLotSize(size);
         LinkedHashMap<String,String> event = new LinkedHashMap<>();
         event.put("event_type","add_product_to_shop");
         event.put("event_key", lotId);
         event.put("lotID", lotId);
         event.put("productName", productName);
         event.put("size","" + size);
+        event.put("old_size", ""+oldSize);
         eventSource.append(event);
 
 
