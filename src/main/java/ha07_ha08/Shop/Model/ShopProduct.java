@@ -1,4 +1,4 @@
-package ha07.Shop.Model;
+package ha07_ha08.Shop.Model;
 
 import java.beans.PropertyChangeSupport;
 

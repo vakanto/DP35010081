@@ -1,7 +1,7 @@
-package ha07.Shop;
+package ha07_ha08.Shop;
 
-import ha07.Shop.Model.Shop;
-import ha07.Shop.Model.ShopProduct;
+import ha07_ha08.Shop.Model.Shop;
+import ha07_ha08.Shop.Model.ShopProduct;
 import org.fulib.yaml.EventSource;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package ha07.Warehouse;
+package ha07_ha08.Warehouse;
 
 public class WarehouseServer {
 }

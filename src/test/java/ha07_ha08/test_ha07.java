@@ -1,8 +1,8 @@
-package ha07;
+package ha07_ha08;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import ha07.Shop.ShopServer;
-import ha07.Warehouse.WareHouseBuilder;
+import ha07_ha08.Shop.ShopServer;
+import ha07_ha08.Warehouse.WareHouseBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,12 +1,8 @@
-package ha07.Warehouse;
+package ha07_ha08.Warehouse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.body.RequestBodyEntity;
 import org.fulib.yaml.EventSource;
 import org.json.JSONObject;
 
@@ -44,29 +40,6 @@ public class ShopProxy {
     public void sendRequest(String yaml) throws UnirestException {
 
         try {
-            /**RequestBodyEntity response = Unirest.post("http://127.0.0.1:5001/postEvent")
-                    .header("accept", "application/json")
-                    .body(eventJson);**/
-
-
-            /**.asJsonAsync(new Callback<JsonNode>() {
-                @Override
-                public void completed(HttpResponse<JsonNode> response) {
-                    int responseCode=response.getCode();
-                    JsonNode body = response.getBody();
-                }
-
-                @Override
-                public void failed(UnirestException e) {
-                    System.out.println("The request failed");
-                }
-
-                @Override
-                public void cancelled() {
-                    System.out.println("Request was cancelled.");
-                }
-            });**/
-
             URL url = new URL("http://127.0.0.1:5001/postEvent");
             URLConnection connection = url.openConnection();
             HttpURLConnection http =(HttpURLConnection)connection;

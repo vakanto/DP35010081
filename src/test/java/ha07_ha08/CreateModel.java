@@ -1,11 +1,11 @@
-package ha07;
+package ha07_ha08;
 
 import org.junit.Test;
 import org.fulib.Fulib;
 import org.fulib.builder.ClassBuilder;
 import org.fulib.builder.ClassModelBuilder;
 import org.fulib.classmodel.ClassModel;
-import org.junit.Test;
+
 public class CreateModel {
 
     @Test

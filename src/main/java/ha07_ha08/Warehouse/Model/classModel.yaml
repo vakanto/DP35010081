@@ -3,8 +3,8 @@
   defaultPropertyStyle: 	POJO
   defaultRoleType: 	"java.util.ArrayList<%s>"
   mainJavaDir: 	"src/main/java"
-  packageName: 	ha07.Warehouse.Model
-  packageSrcFolder: 	"src/main/java/ha07/Warehouse/Model"
+  packageName: 	ha07_ha08.Warehouse.Model
+  packageSrcFolder: 	"src/main/java/ha07_ha08/Warehouse/Model"
 
 - warehouse2: 	Clazz
   attributes: 	name7 	

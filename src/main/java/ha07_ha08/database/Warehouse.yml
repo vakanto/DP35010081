@@ -1,0 +1,24 @@
+- event_type: add_product_to_shop
+  event_key: lot1
+  lotID: lot1
+  productName: "Shoe 42, size 8"
+  size: 50
+  old_size: 0.0
+  .eventTimestamp: "2019-06-19T22:21:53.908"
+
+- event_type: add_product_to_shop
+  event_key: lot2
+  lotID: lot2
+  productName: "Shoe 42, size 8"
+  size: 50
+  old_size: 0.0
+  .eventTimestamp: "2019-06-19T22:21:59.246"
+
+- event_type: add_product_to_shop
+  event_key: lot1
+  lotID: lot1
+  productName: "Shoe 42, size 8"
+  size: 100
+  old_size: 50.0
+  .eventTimestamp: "2019-06-19T22:21:59.260"
+
