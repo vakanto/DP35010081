@@ -2,6 +2,7 @@ package ha07_ha08.Shop;
 
 import ha07_ha08.Shop.Model.Shop;
 import ha07_ha08.Shop.Model.ShopProduct;
+import ha07_ha08.Warehouse.Model.Warehouse;
 import org.fulib.yaml.EventSource;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class ShopBuilder {
 
     private EventSource eventSource;
     private Shop shop;
+    private WarehouseProxy theWarehouse;
 
     public ShopBuilder(){
         eventSource=new EventSource();
@@ -60,5 +62,9 @@ public class ShopBuilder {
                 .setShop(this.shop);
 
         return shopProduct;
+    }
+
+    public WarehouseProxy getTheWarehouse() {
+        return theWarehouse;
     }
 }

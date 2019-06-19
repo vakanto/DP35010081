@@ -22,3 +22,27 @@
   old_size: 50.0
   .eventTimestamp: "2019-06-19T22:21:59.260"
 
+- event_type: add_product_to_shop
+  event_key: lot1
+  lotID: lot1
+  productName: "Shoe 42, size 8"
+  size: 50
+  old_size: 100.0
+  .eventTimestamp: "2019-06-19T23:16:06.468"
+
+- event_type: add_product_to_shop
+  event_key: lot1
+  lotID: lot1
+  productName: "Shoe 42, size 8"
+  size: 50
+  old_size: 50.0
+  .eventTimestamp: "2019-06-19T23:16:45.524"
+
+- event_type: add_product_to_shop
+  event_key: lot1
+  lotID: lot1
+  productName: "Shoe 42, size 8"
+  size: 50
+  old_size: 50.0
+  .eventTimestamp: "2019-06-19T23:17:02.368"
+
