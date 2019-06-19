@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import static java.lang.Thread.sleep;
 
+// HA07: 10/10
 public class test_ha07 {
 
     @Test
