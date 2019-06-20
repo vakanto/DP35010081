@@ -2,10 +2,7 @@ package ha07_ha08.Warehouse;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
 import ha07_ha08.Shop.ShopBuilder;
-import ha07_ha08.Warehouse.Model.Lot;
-import ha07_ha08.Warehouse.Model.PalettePlace;
-import ha07_ha08.Warehouse.Model.Warehouse;
-import ha07_ha08.Warehouse.Model.WarehouseProduct;
+import ha07_ha08.Warehouse.Model.*;
 import org.fulib.yaml.EventFiler;
 import org.fulib.yaml.EventSource;
 import org.fulib.yaml.Yamler;
@@ -18,7 +15,6 @@ import java.util.LinkedHashMap;
 public class WareHouseBuilder {
     private Warehouse warehouse;
     private ShopProxy shopProxy;
-    private ShopBuilder shopBuilder;
     private EventSource eventSource;
     private EventFiler eventFiler;
 
@@ -50,7 +46,18 @@ public class WareHouseBuilder {
     }
 
     private void orderProduct(String orderID, String productName, String address) {
+        WarehouseOrder order = getFromOrders(orderID);
 
+        if(order.getProduct()==null){
+            WarehouseProduct product = getFromProducts(productName);
+            order.setProduct(product)
+                .setAddress(address);
+        }
+
+    }
+
+    private WarehouseOrder getFromOrders(String orderID) {
+        return null;
     }
 
     public Lot addLotToStock(String lotId, String productName, int size) throws IOException, UnirestException {

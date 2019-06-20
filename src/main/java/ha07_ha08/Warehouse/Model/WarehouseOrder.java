@@ -51,18 +51,18 @@ public class WarehouseOrder
 
    public static final String PROPERTY_product = "product";
 
-   private String product;
+   private WarehouseProduct product;
 
-   public String getProduct()
+   public WarehouseProduct getProduct()
    {
       return product;
    }
 
-   public WarehouseOrder setProduct(String value)
+   public WarehouseOrder setProduct(WarehouseProduct value)
    {
       if (value == null ? this.product != null : ! value.equals(this.product))
       {
-         String oldValue = this.product;
+         WarehouseProduct oldValue = this.product;
          this.product = value;
          firePropertyChange("product", oldValue, value);
       }

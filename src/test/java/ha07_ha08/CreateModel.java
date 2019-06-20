@@ -1,5 +1,6 @@
 package ha07_ha08;
 
+import ha07_ha08.Warehouse.Model.WarehouseProduct;
 import org.junit.Test;
 import org.fulib.Fulib;
 import org.fulib.builder.ClassBuilder;
@@ -18,7 +19,7 @@ public class CreateModel {
         ClassBuilder warehouseOrderClass = mb.buildClass("WarehouseOrder")
                 .buildAttribute("address", mb.STRING)
                 .buildAttribute("id", mb.STRING)
-                .buildAttribute("product", mb.STRING);
+                .buildAttribute("product", "WarehouseProduct.class");
 
         ClassBuilder warehouseProductClass = mb.buildClass("WarehouseProduct")
                 .buildAttribute("name", mb.STRING)

@@ -12,11 +12,12 @@ public class ShopBuilder {
 
     private EventSource eventSource;
     private Shop shop;
-    private WarehouseProxy theWarehouse;
+    private WarehouseProxy warehouseProxy;
 
     public ShopBuilder(){
         eventSource=new EventSource();
         shop=new Shop();
+        warehouseProxy=new WarehouseProxy(this);
     }
 
     public void applyEvents(ArrayList<LinkedHashMap<String, String>> events) {
@@ -64,7 +65,7 @@ public class ShopBuilder {
         return shopProduct;
     }
 
-    public WarehouseProxy getTheWarehouse() {
-        return theWarehouse;
+    public WarehouseProxy getWarehouseProxy() {
+        return warehouseProxy;
     }
 }
