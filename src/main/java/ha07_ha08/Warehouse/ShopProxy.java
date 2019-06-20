@@ -35,8 +35,8 @@ public class ShopProxy {
             eventSource.append(history);
         }
 
-        eventFiler.storeHistory();
-        eventFiler.startEventLogging();
+        //eventFiler.storeHistory();
+        //eventFiler.startEventLogging();
     }
 
     public void addProductToShop(LinkedHashMap<String,String> event) throws IOException, UnirestException {
@@ -45,7 +45,19 @@ public class ShopProxy {
         sendRequest(yaml);
     }
 
-    public void sendRequest(String yaml) throws UnirestException {
+    public void sendLoadedEvents(ArrayList<LinkedHashMap<String,String>> eventList) throws UnirestException {
+        for(LinkedHashMap<String,String>event:eventList){
+            String yaml = EventSource.encodeYaml(event);
+            sendRequest(yaml);
+        }
+    }
+
+    public void deleteShop(LinkedHashMap<String,String> event) throws UnirestException {
+        String yaml = EventSource.encodeYaml(event);
+        sendRequest(yaml);
+    }
+
+    public String sendRequest(String yaml) throws UnirestException {
 
         try {
             URL url = new URL("http://127.0.0.1:5001/postEvent");
@@ -67,19 +79,35 @@ public class ShopProxy {
 
             InputStream inputStream = http.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            String line = bufferedReader.readLine();
-
+            StringBuilder response = new StringBuilder();
+            while(true) {
+                String line = bufferedReader.readLine();
+                if(line==null){
+                    break;
+                }
+                response.append(line).append("\n");
+            }
             bufferedReader.close();
 
+            return response.toString();
 
         } catch (Exception e) {
-            executorService.schedule(()-> {
+            /**executorService.schedule(()-> {
                 try {
                     sendRequest(yaml);
                 } catch (UnirestException ex) {
                     ex.printStackTrace();
                 }
-            }, 10, TimeUnit.SECONDS);
+            }, 10, TimeUnit.SECONDS);**/
         }
+        return null;
+    }
+
+    public String loadEvents() throws UnirestException {
+        LinkedHashMap<String, String> event = new LinkedHashMap<>();
+        event.put("event_type", "getEvents");
+        String yaml = EventSource.encodeYaml(event);
+        String response = sendRequest(yaml);
+        return response;
     }
 }

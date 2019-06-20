@@ -21,24 +21,32 @@ public class WarehouseServer {
 
     private static int orderProduct(Request request, Response response) throws IOException, UnirestException {
         String message = request.body();
-
         ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(message);
-        wareHouseBuilder.applyEvents(events);
+        wareHouseBuilder.applyEvents(events, 0);
         return 0;
     }
 
     public static void main(String [] args) {
-        try {
-            wareHouseBuilder=new WareHouseBuilder();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (UnirestException e) {
-            e.printStackTrace();
-        }
 
         Spark.stop();
         Spark.ipAddress("127.0.0.1");
         Spark.port(5002);
         Spark.post("/orderProduct", (request, response) -> orderProduct(request, response));
+        Spark.post("/getShopEvents", (request, response) -> getEvents(request, response));
+
+        try {
+            wareHouseBuilder= new WareHouseBuilder();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Object getEvents(Request request, Response response) throws IOException, UnirestException {
+        String message = request.body();
+        ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(message);
+        wareHouseBuilder.applyEvents(events, 1);
+        return null;
     }
 }

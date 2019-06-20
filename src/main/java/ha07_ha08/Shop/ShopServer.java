@@ -3,6 +3,7 @@ package ha07_ha08.Shop;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import ha07_ha08.Shop.Model.Shop;
 import org.fulib.yaml.Yamler;
 
 import java.io.*;
@@ -21,7 +22,7 @@ public class ShopServer {
     private static WarehouseProxy warehouseProxy;
     //private static Executor executor;
     public ShopServer(){
-        shopBuilder = new ShopBuilder();
+
     }
     private static Date time;
     private static String lastKnownWarhouseEventTime;
@@ -31,20 +32,34 @@ public class ShopServer {
 
         try{
             server=HttpServer.create(new InetSocketAddress(5001 ),0);
-            //executor = Executors.newSingleThreadExecutor();
-            //server.setExecutor(executor);
+
             HttpContext context = server.createContext("/postEvent");
             context.setHandler(x->handlePostEvent(x));
-
-            HttpContext warhouseEventContext = server.createContext("/getWarhouseEvents");
-            //context.setHandler(x->shopBuilder.getWarehouseProxy().getWarehouseEvents());
-
+            //HttpContext warhouseEventContext = server.createContext("/warhouseEvents");
+            //context.setHandler(x->handleWareHouseEvents(x));
             server.start();
 
         }catch (Exception e){
             System.out.println("Server failed during Startup");
         }
+        shopBuilder = new ShopBuilder();
 
+    }
+
+    private static void handleWareHouseEvents(HttpExchange exchange) throws IOException {
+        String body = getBody(exchange);
+        shopBuilder.shop=new Shop();
+        //LinkedHashMap <String,String> event = new ObjectMapper().readValue(message.toString(), LinkedHashMap.class);
+        ArrayList<LinkedHashMap <String,String>> events = new Yamler().decodeList(body.toString());
+        String response = shopBuilder.applyEvents(events);
+        lastKnownWarhouseEventTime=time.toString();
+        warehouseProxy.getWarehouseEvents(lastKnownWarhouseEventTime);
+        if(!response.isEmpty()){
+            writeAnswer(exchange, response);
+            return;
+        }
+        writeAnswer(exchange, "Ok" + exchange.getRequestURI());
+        return;
     }
 
     /**private static void retrieveNewEventsFromWarehouse() {
@@ -58,9 +73,13 @@ public class ShopServer {
 
         //LinkedHashMap <String,String> event = new ObjectMapper().readValue(message.toString(), LinkedHashMap.class);
         ArrayList<LinkedHashMap <String,String>> events = new Yamler().decodeList(body.toString());
-        shopBuilder.applyEvents(events);
-        lastKnownWarhouseEventTime=time.toString();
-        warehouseProxy.getWarehouseEvents(lastKnownWarhouseEventTime);
+        String response = shopBuilder.applyEvents(events);
+        //lastKnownWarhouseEventTime=time.toString();
+        //warehouseProxy.getWarehouseEvents(lastKnownWarhouseEventTime);
+        if(!response.isEmpty()){
+            writeAnswer(exchange, response);
+            return;
+        }
         writeAnswer(exchange, "Ok" + exchange.getRequestURI());
         return;
     }

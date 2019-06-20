@@ -29,10 +29,12 @@ public class test_ha08 {
         File file = new File("src/main/java/ha07_ha08/database/ShopProxy.yml");
         File file2 = new File("src/main/java/ha07_ha08/database/Warehouse.yml");
         File file3 = new File("src/main/java/ha07_ha08/database/WarehouseProxy.yml");
+        File file4 = new File("src/main/java/ha07_ha08/database/Shop.yml");
 
         file.delete();
         file2.delete();
         file3.delete();
+        file4.delete();
 
 
         ShopServer shopServer = new ShopServer();
@@ -45,7 +47,7 @@ public class test_ha08 {
         ShopBuilder shopBuilder = shopServer.shopBuilder;
         sleep(2000);
 
-        wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 50);
+        wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 50,0);
 
         sleep(1000);
 
@@ -65,15 +67,30 @@ public class test_ha08 {
 
         //Restart server
         warehouseServer=new WarehouseServer();
+        warehouseServer.wareHouseBuilder=new WareHouseBuilder();
         warehouseServer.main(null);
-        sleep(1000);
+        sleep(8000);
         wareHouseBuilder = warehouseServer.wareHouseBuilder;
+        sleep(5000);
+
         System.out.println(wareHouseBuilder.warehouse.getOrders().get(0).getId());
         Assert.assertTrue(wareHouseBuilder.getProductCount("Shoe 42, size 8")==48.0);
         Assert.assertTrue(wareHouseBuilder.warehouse.getOrders().get(0).getId().equals("order1"));
 
+        System.out.println(shopBuilder.shop.getProducts().size());
+
         Assert.assertTrue(shopBuilder.shop.getProducts().size()==1);
-        Assert.assertTrue(shopBuilder.shop.getProducts().get(0).getInStock()==98.0);
+
+        System.out.println(shopBuilder.shop.getProducts().get(0).getInStock());
+
+        Assert.assertTrue(shopBuilder.shop.getProducts().get(0).getInStock()==48.0);
+
+        shopServer = new ShopServer();
+        sleep(2000);
+        shopServer.main(null);
+
+        sleep(1000);
+        shopBuilder=shopServer.shopBuilder;
 
         printWareHouseAndShopProducts(wareHouseBuilder, shopBuilder);
     }

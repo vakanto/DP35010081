@@ -32,7 +32,7 @@ public class test_ha07 {
 
         sleep(2000);
 
-        wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 50);
+        wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 50, 0);
 
         //wait for server to compute
         sleep(2000);
@@ -48,9 +48,9 @@ public class test_ha07 {
         Assert.assertTrue(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getInStock()==50);
         Assert.assertTrue(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getId().equals("Shoe42size8"));
 
-        wareHouseBuilder.addLotToStock("lot2", "Shoe 42, size 8", 50);
+        wareHouseBuilder.addLotToStock("lot2", "Shoe 42, size 8", 50,0);
         sleep(2000);
         System.out.println(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getInStock());
-        wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 100);
+        wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 100,0);
     }
 }

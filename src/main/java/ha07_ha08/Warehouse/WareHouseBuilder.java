@@ -7,6 +7,7 @@ import org.fulib.yaml.EventFiler;
 import org.fulib.yaml.EventSource;
 import org.fulib.yaml.Yamler;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -29,20 +30,34 @@ public class WareHouseBuilder {
 
         String history = eventFiler.loadHistory();
         if(history!=null){
-            ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(history);
-            this.applyEvents(eventList);
+            //LinkedHashMap<String,String>event = new LinkedHashMap<>();
+            //event.put("event_type","delete_shop");
+            //shopProxy.deleteShop(event);
+            //ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(history);
+            //shopProxy.sendRequest(EventSource.encodeYaml(event));
+            //this.applyEvents(eventList);
+            //eventList.remove(0);
+            //shopProxy.sendLoadedEvents(eventList);
+            File file = new File("src/main/java/ha07_ha08/database/Warehouse.yml");
+            file.delete();
+            file.createNewFile();
+            ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(shopProxy.loadEvents());
+            this.applyEvents(eventList,1);
         }
         eventFiler.startEventLogging();
     }
 
-    public void applyEvents(ArrayList<LinkedHashMap<String, String>> eventList) throws IOException, UnirestException {
+    public void applyEvents(ArrayList<LinkedHashMap<String, String>> eventList, int applyLocalFlag) throws IOException, UnirestException {
         for(LinkedHashMap<String, String> event : eventList){
             if("add_product_to_shop".equals(event.get("event_type"))){
-                int size = Integer.valueOf(event.get("size"));
-                addLotToStock(event.get("lotID"),event.get("product_name"), size);
+                double size = Double.valueOf(event.get("itemCount"));
+                addLotToStock(event.get("lotID"),event.get("product_name"), size, applyLocalFlag);
             }
             else if ("order_product".equals(event.get("event_type"))){
                 orderProduct(event.get("event_key"),event.get("product_name"), event.get("address"));
+            }
+            else if("delete_shop".equals(event.get("event_type"))){
+                shopProxy.deleteShop(event);
             }
         }
     }
@@ -76,7 +91,7 @@ public class WareHouseBuilder {
         return new WarehouseOrder();
     }
 
-    public Lot addLotToStock(String lotId, String product_name, int size) throws IOException, UnirestException {
+    public Lot addLotToStock(String lotId, String product_name, double itemCount, int applyLocalFlag) throws IOException, UnirestException {
 
         Lot lot = getLot(lotId);
         double oldSize = lot.getLotSize();
@@ -96,18 +111,17 @@ public class WareHouseBuilder {
             }
 
         }
-        lot.setLotSize(size);
+        lot.setLotSize(itemCount);
         LinkedHashMap<String,String> event = new LinkedHashMap<>();
         event.put("event_type","add_product_to_shop");
         event.put("event_key", lotId);
         event.put("lotID", lotId);
         event.put("product_name", product_name);
-        event.put("size","" + size);
+        event.put("itemCount","" + itemCount);
         event.put("old_size", ""+oldSize);
         eventSource.append(event);
 
-
-        if(oldSize==0.0){
+        if(oldSize==0.0 && applyLocalFlag==0){
             shopProxy.addProductToShop(event);
         }
 

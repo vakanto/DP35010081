@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 public class WarehouseProxy {
 
+    private final String GET_REQUEST_URL = "http://127.0.0.1:5002/getShopEvents";
     private final String GET_WAREHOUSE_EVENTS_URL="http://127.0.0.1:5002/getShopEvents";
     private final String ORDER_PRODUCT_URL="http://127.0.0.1:5002/orderProduct";
 
@@ -105,5 +106,9 @@ public class WarehouseProxy {
     public void orderProduct(LinkedHashMap<String,String> event) throws IOException, UnirestException {
         String productOrder = EventSource.encodeYaml(event);
         sendRequest(ORDER_PRODUCT_URL, productOrder);
+    }
+    public void sendEvents(ArrayList<LinkedHashMap<String,String>>events){
+        String eventList = EventSource.encodeYaml(events);
+        sendRequest(GET_REQUEST_URL, eventList);
     }
 }
