@@ -4,11 +4,11 @@
   productName: "Shoe 42, size 8"
   size: 50
   old_size: 0.0
-  .eventTimestamp: "2019-06-20T15:16:24.260"
+  .eventTimestamp: "2019-06-20T16:58:15.079"
 
 - event_type: order_product
   event_key: order1
   product_name: "Shoe 42, size 8"
   address: meineAdresse
-  .eventTimestamp: "2019-06-20T15:16:42.944"
+  .eventTimestamp: "2019-06-20T16:58:16.327"
 

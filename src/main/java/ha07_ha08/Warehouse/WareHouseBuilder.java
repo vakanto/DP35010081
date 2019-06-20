@@ -51,7 +51,8 @@ public class WareHouseBuilder {
         if(order.getProduct()==null){
             WarehouseProduct product = getFromProducts(productName);
             order.setProduct(product)
-                .setAddress(address);
+                .setAddress(address)
+                .setId(orderID);
 
             LinkedHashMap<String,String>event = new LinkedHashMap<>();
             event.put("event_type","order_product");
@@ -65,9 +66,6 @@ public class WareHouseBuilder {
             double lotSize = lot.getLotSize();
             lot.setLotSize(lotSize-1);
         }
-
-
-
     }
 
     private WarehouseOrder getFromOrders(String orderID) {
@@ -81,6 +79,9 @@ public class WareHouseBuilder {
         WarehouseProduct warehouseProduct = getFromProducts(productName);
 
         lot.setWareHouseProduct(warehouseProduct);
+        if(!warehouse.getProducts().contains(warehouseProduct)) {
+            warehouse.getProducts().add(warehouseProduct);
+        }
 
         if(lot.getPalettePlace()==null){
             for(PalettePlace place : warehouse.getPlaces()){

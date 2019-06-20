@@ -10,6 +10,8 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
+import static java.lang.Thread.sleep;
+
 public class test_ha08 {
 
     @Test
@@ -24,7 +26,6 @@ public class test_ha08 {
         file2.delete();
         file3.delete();
 
-        WareHouseBuilder wareHouseBuilder = new WareHouseBuilder();
         ShopBuilder shopBuilder = new ShopBuilder();
         ShopServer shopServer = new ShopServer();
         WarehouseServer warehouseServer = new WarehouseServer();
@@ -32,9 +33,14 @@ public class test_ha08 {
         warehouseServer.main(null);
         shopServer.main(null);
 
-        Thread.sleep(5000);
+        WareHouseBuilder wareHouseBuilder = warehouseServer.wareHouseBuilder;
+
+        sleep(5000);
 
         wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 50);
+
+        sleep(1000);
+
         shopBuilder.orderProduct("Shoe 42, size 8", "meineAdresse", "order1");
 
         System.out.println(wareHouseBuilder.getProductCount("Shoe 42, size 8"));
