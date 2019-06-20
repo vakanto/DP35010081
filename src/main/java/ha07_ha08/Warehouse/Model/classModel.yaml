@@ -112,7 +112,7 @@
   modified: 	false
   name: 	product
   propertyStyle: 	POJO
-  type: 	String
+  type: 	WarehouseProduct
 
 - products15: 	AssocRole
   aggregation: 	false

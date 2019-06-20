@@ -33,13 +33,13 @@ public class WareHouseBuilder {
         eventFiler.startEventLogging();
     }
 
-    private void applyEvents(ArrayList<LinkedHashMap<String, String>> eventList) throws IOException, UnirestException {
+    public void applyEvents(ArrayList<LinkedHashMap<String, String>> eventList) throws IOException, UnirestException {
         for(LinkedHashMap<String, String> event : eventList){
             if("add_product_to_shop".equals(event.get("event_type"))){
                 int size = Integer.valueOf(event.get("size"));
                 addLotToStock(event.get("lotID"),event.get("productName"), size);
             }
-            else if ("orderProduct".equals(event.get("event_type"))){
+            else if ("order_product".equals(event.get("event_type"))){
                 orderProduct(event.get("event_key"),event.get("productName"), event.get("address"));
             }
         }
@@ -52,12 +52,26 @@ public class WareHouseBuilder {
             WarehouseProduct product = getFromProducts(productName);
             order.setProduct(product)
                 .setAddress(address);
+
+            LinkedHashMap<String,String>event = new LinkedHashMap<>();
+            event.put("event_type","order_product");
+            event.put("event_key", orderID);
+            event.put("product_name",productName);
+            event.put("address", address);
+            eventSource.append(event);
+
+            //Reallocate one lot slot.
+            Lot lot = product.getLots().get(0);
+            double lotSize = lot.getLotSize();
+            lot.setLotSize(lotSize-1);
         }
+
+
 
     }
 
     private WarehouseOrder getFromOrders(String orderID) {
-        return null;
+        return new WarehouseOrder();
     }
 
     public Lot addLotToStock(String lotId, String productName, int size) throws IOException, UnirestException {
@@ -124,5 +138,21 @@ public class WareHouseBuilder {
                 .setId(lotId);
 
         return  lot;
+    }
+
+    public double getProductCount(String productName){
+        ArrayList<WarehouseProduct> products = warehouse.getProducts();
+        for(WarehouseProduct warehouseProduct : products){
+            if(productName.equals(warehouseProduct.getName())){
+                ArrayList<Lot> lots = warehouseProduct.getLots();
+                double count = 0;
+                for(Lot lot : lots){
+                    count=lot.getLotSize();
+                }
+                return count;
+            }
+
+        }
+        return 0;
     }
 }

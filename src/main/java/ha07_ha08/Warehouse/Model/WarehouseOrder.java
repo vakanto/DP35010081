@@ -48,19 +48,9 @@ public class WarehouseOrder
       return this;
    }
 
-
-   public static final String PROPERTY_product = "product";
-
-   private WarehouseProduct product;
-
-   public WarehouseProduct getProduct()
-   {
-      return product;
-   }
-
    public WarehouseOrder setProduct(WarehouseProduct value)
    {
-      if (value == null ? this.product != null : ! value.equals(this.product))
+      if (value != this.product)
       {
          WarehouseProduct oldValue = this.product;
          this.product = value;
@@ -118,19 +108,6 @@ public class WarehouseOrder
          listeners.removePropertyChangeListener(propertyName, listener);
       }
       return true;
-   }
-
-   @Override
-   public String toString()
-   {
-      StringBuilder result = new StringBuilder();
-
-      result.append(" ").append(this.getAddress());
-      result.append(" ").append(this.getId());
-      result.append(" ").append(this.getProduct());
-
-
-      return result.substring(1);
    }
 
    public void removeYou()
@@ -218,5 +195,26 @@ public class WarehouseOrder
       return this;
    }
 
+
+   public static final String PROPERTY_product = "product";
+
+   private WarehouseProduct product;
+
+   public WarehouseProduct getProduct()
+   {
+      return product;
+   }
+
+   @Override
+   public String toString()
+   {
+      StringBuilder result = new StringBuilder();
+
+      result.append(" ").append(this.getAddress());
+      result.append(" ").append(this.getId());
+
+
+      return result.substring(1);
+   }
 
 }

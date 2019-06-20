@@ -16,7 +16,7 @@ public class test_ha07 {
 
     @Test
     public void testAddProductToShop() throws IOException, UnirestException, InterruptedException {
-        org.apache.log4j.BasicConfigurator.configure();
+        //org.apache.log4j.BasicConfigurator.configure();
 
         File file = new File("src/main/java/ha07_ha08/database/ShopProxy.yml");
         File file2 = new File("src/main/java/ha07_ha08/database/Warehouse.yml");

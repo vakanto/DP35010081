@@ -1,10 +1,13 @@
 package ha07_ha08.Shop;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import ha07_ha08.Shop.Model.Shop;
 import ha07_ha08.Shop.Model.ShopProduct;
 import ha07_ha08.Warehouse.Model.Warehouse;
+import ha07_ha08.Warehouse.Model.WarehouseProduct;
 import org.fulib.yaml.EventSource;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -20,13 +23,32 @@ public class ShopBuilder {
         warehouseProxy=new WarehouseProxy(this);
     }
 
+    public void orderProduct(String productName, String address, String orderID){
+        LinkedHashMap<String, String> event = new LinkedHashMap<>();
+        ShopProduct product = getFromProducts(productName);
+        event.put("event_type","order_product");
+        event.put("event_key", orderID);
+        event.put("productName", productName);
+        event.put("address", address);
+        eventSource.append(event);
+
+        try {
+            warehouseProxy.orderProduct(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void applyEvents(ArrayList<LinkedHashMap<String, String>> events) {
         for(LinkedHashMap<String,String>event : events){
         if("add_product_to_shop".equals(event.get("event_type"))){
             String numberOfItems= event.get("size");
             int itemCount = Integer.parseInt(numberOfItems);
             addProductToShop(event.get("event_key"), event.get("productName"), itemCount);
-        }
+            }
         }
     }
 

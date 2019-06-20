@@ -11,7 +11,7 @@ public class CreateModel {
 
     @Test
     public void createWarehouseModel(){
-        ClassModelBuilder mb = Fulib.classModelBuilder("test_ha07.Warehouse.Model", "src/main/java");
+        ClassModelBuilder mb = Fulib.classModelBuilder("ha07_ha08.Warehouse.Model", "src/main/java");
 
         ClassBuilder warehouseClass = mb.buildClass("Warehouse")
                 .buildAttribute("name", mb.STRING);
@@ -54,7 +54,7 @@ public class CreateModel {
 
     @Test
     public void createShopModel(){
-        ClassModelBuilder mb = Fulib.classModelBuilder("test_ha07.Shop.Model", "src/main/java");
+        ClassModelBuilder mb = Fulib.classModelBuilder("ha07_ha08.Shop.Model", "src/main/java");
 
          ClassBuilder shopClass = mb.buildClass("Shop");
 

@@ -1,5 +1,6 @@
 package ha07_ha08.Shop;
 
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.sun.net.httpserver.HttpExchange;
 import org.fulib.yaml.EventFiler;
 import org.fulib.yaml.EventSource;
@@ -14,10 +15,12 @@ import java.util.LinkedHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class WarehouseProxy {
 
-    private final String GET_SHOP_EVENTS_URL="http://127.0.0.1:5002/getShopEvents";
+    private final String GET_WAREHOUSE_EVENTS_URL="http://127.0.0.1:5002/getShopEvents";
+    private final String ORDER_PRODUCT_URL="http://127.0.0.1:5002/orderProduct";
 
     private EventSource eventSource;
     private EventFiler eventFiler;
@@ -46,12 +49,12 @@ public class WarehouseProxy {
     }
 
     public void getWarehouseEvents(String lastKnownWarhouseEventTime){
-        String warehouseEvents = sendRequest(GET_SHOP_EVENTS_URL, "lastKnown" + lastKnownWarhouseEventTime);
+        String warehouseEvents = sendRequest(GET_WAREHOUSE_EVENTS_URL, "lastKnown" + lastKnownWarhouseEventTime);
         ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(warehouseEvents);
         executor.execute(()-> shopBuilder.applyEvents(events));
     }
 
-    private static String sendRequest(String url, String lastEvents) {
+    private static String sendRequest(String url, String message) {
         try {
             URL requestUrl = new URL(url);
             URLConnection connection = requestUrl.openConnection();
@@ -59,7 +62,7 @@ public class WarehouseProxy {
             urlConnection.setRequestMethod("GET");
             urlConnection.setDoOutput(true);
 
-            byte[] output = lastEvents.getBytes((StandardCharsets.UTF_8));
+            byte[] output = message.getBytes((StandardCharsets.UTF_8));
             int length = output.length;
 
             urlConnection.setFixedLengthStreamingMode(length);
@@ -97,5 +100,10 @@ public class WarehouseProxy {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void orderProduct(LinkedHashMap<String,String> event) throws IOException, UnirestException {
+        String productOrder = EventSource.encodeYaml(event);
+        sendRequest(ORDER_PRODUCT_URL, productOrder);
     }
 }
