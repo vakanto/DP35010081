@@ -186,18 +186,18 @@ public class WarehouseOrder
 
    public static final String PROPERTY_product = "product";
 
-   private WarehouseProduct.class product;
+   private WarehouseProduct product;
 
-   public WarehouseProduct.class getProduct()
+   public WarehouseProduct getProduct()
    {
       return product;
    }
 
-   public WarehouseOrder setProduct(WarehouseProduct.class value)
+   public WarehouseOrder setProduct(WarehouseProduct value)
    {
       if (value != this.product)
       {
-         WarehouseProduct.class oldValue = this.product;
+         WarehouseProduct oldValue = this.product;
          this.product = value;
          firePropertyChange("product", oldValue, value);
       }

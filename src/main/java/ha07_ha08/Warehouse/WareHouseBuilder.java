@@ -61,6 +61,7 @@ public class WareHouseBuilder {
     }
 
     public Lot addLotToStock(String lotId, String productName, int size) throws IOException, UnirestException {
+
         Lot lot = getLot(lotId);
         double oldSize = lot.getLotSize();
         WarehouseProduct warehouseProduct = getFromProducts(productName);
@@ -95,6 +96,7 @@ public class WareHouseBuilder {
     }
 
     private WarehouseProduct getFromProducts(String productName) {
+
         String productID = productName.replaceAll("\\W", "");
 
         for(WarehouseProduct wp : warehouse.getProducts()){

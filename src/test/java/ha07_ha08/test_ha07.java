@@ -6,6 +6,7 @@ import ha07_ha08.Warehouse.WareHouseBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 import static java.lang.Thread.sleep;
@@ -17,18 +18,26 @@ public class test_ha07 {
     public void testAddProductToShop() throws IOException, UnirestException, InterruptedException {
         org.apache.log4j.BasicConfigurator.configure();
 
+        File file = new File("src/main/java/ha07_ha08/database/ShopProxy.yml");
+        File file2 = new File("src/main/java/ha07_ha08/database/Warehouse.yml");
+        File file3 = new File("src/main/java/ha07_ha08/database/WarehouseProxy.yml");
+
+        file.delete();
+        file2.delete();
+        file3.delete();
+
         WareHouseBuilder wareHouseBuilder = new WareHouseBuilder();
         ShopServer shopServer = new ShopServer();
         shopServer.main(null);
 
-        sleep(1000);
+        sleep(2000);
 
         wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 50);
 
         //wait for server to compute
-        sleep(5000);
+        sleep(2000);
 
-        System.out.println(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getInStock());
+        //System.out.println(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getInStock());
 
         //Check the warehousebuilder
         Assert.assertTrue(wareHouseBuilder.getLot("lot1")!=null);
@@ -40,6 +49,7 @@ public class test_ha07 {
         Assert.assertTrue(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getId().equals("Shoe42size8"));
 
         wareHouseBuilder.addLotToStock("lot2", "Shoe 42, size 8", 50);
+        sleep(2000);
         System.out.println(ShopServer.shopBuilder.getFromProducts("Shoe 42, size 8").getInStock());
         wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 100);
     }

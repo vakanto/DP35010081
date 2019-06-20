@@ -30,7 +30,7 @@ public class WarehouseProxy {
         this.shopBuilder=shopBuilder;
         this.eventSource=new EventSource();
         this.eventFiler = new EventFiler(eventSource)
-                .setHistoryFileName("src/main/java/ha07_ha08/database/WarhouseProxy.yml");
+                .setHistoryFileName("src/main/java/ha07_ha08/database/WarehouseProxy.yml");
         executorService = Executors.newSingleThreadScheduledExecutor();
         executor = Executors.newSingleThreadExecutor();
 

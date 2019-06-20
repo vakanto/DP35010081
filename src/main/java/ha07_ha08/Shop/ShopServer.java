@@ -19,7 +19,7 @@ public class ShopServer {
 
     public static ShopBuilder shopBuilder;
     private static WarehouseProxy warehouseProxy;
-    private static Executor executor;
+    //private static Executor executor;
     public ShopServer(){
         shopBuilder = new ShopBuilder();
     }
@@ -31,8 +31,8 @@ public class ShopServer {
 
         try{
             server=HttpServer.create(new InetSocketAddress(5001 ),0);
-            executor = Executors.newSingleThreadExecutor();
-            server.setExecutor(executor);
+            //executor = Executors.newSingleThreadExecutor();
+            //server.setExecutor(executor);
             HttpContext context = server.createContext("/postEvent");
             context.setHandler(x->handlePostEvent(x));
 
@@ -45,6 +45,24 @@ public class ShopServer {
             System.out.println("Server failed during Startup");
         }
 
+    }
+
+    /**private static void retrieveNewEventsFromWarehouse() {
+        String warehouseEvents = sendRequest(GET_SHOP_EVENTS_URL, "lastKnown" + lastKnownWarhouseEventTime);
+        ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(warehouseEvents);
+        executor.execute(()-> shopBuilder.applyEvents(events));
+    }**/
+
+    private static void handlePostEvent(HttpExchange exchange) throws IOException {
+        String body = getBody(exchange);
+
+        //LinkedHashMap <String,String> event = new ObjectMapper().readValue(message.toString(), LinkedHashMap.class);
+        ArrayList<LinkedHashMap <String,String>> events = new Yamler().decodeList(body.toString());
+        shopBuilder.applyEvents(events);
+        lastKnownWarhouseEventTime=time.toString();
+        warehouseProxy.getWarehouseEvents(lastKnownWarhouseEventTime);
+        writeAnswer(exchange, "Ok" + exchange.getRequestURI());
+        return;
     }
 
     public static String getBody(HttpExchange exchange) throws IOException {
@@ -64,26 +82,7 @@ public class ShopServer {
         return yaml;
     }
 
-    /**private static void retrieveNewEventsFromWarehouse() {
-        String warehouseEvents = sendRequest(GET_SHOP_EVENTS_URL, "lastKnown" + lastKnownWarhouseEventTime);
-        ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(warehouseEvents);
-        executor.execute(()-> shopBuilder.applyEvents(events));
-    }**/
-
-
-
-    private static void handlePostEvent(HttpExchange exchange) throws IOException {
-        String body = getBody(exchange);
-
-        //LinkedHashMap <String,String> event = new ObjectMapper().readValue(message.toString(), LinkedHashMap.class);
-        ArrayList<LinkedHashMap <String,String>> events = new Yamler().decodeList(body.toString());
-        shopBuilder.applyEvents(events);
-        lastKnownWarhouseEventTime=time.toString();
-        warehouseProxy.getWarehouseEvents(lastKnownWarhouseEventTime);
-        return;
-    }
-
-    private static void writeAnswer(HttpExchange exchange,String response){
+    private static void writeAnswer(HttpExchange exchange, String response){
         try {
             byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
             exchange.sendResponseHeaders(200,bytes.length);
