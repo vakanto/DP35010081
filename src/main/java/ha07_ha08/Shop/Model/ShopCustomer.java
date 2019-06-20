@@ -4,7 +4,7 @@ import java.beans.PropertyChangeSupport;
 
 import java.beans.PropertyChangeListener;
 
-public class ShopCustomer 
+public class ShopCustomer  
 {
 
    public static final String PROPERTY_address = "address";

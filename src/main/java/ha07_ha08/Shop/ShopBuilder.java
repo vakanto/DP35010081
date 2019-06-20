@@ -14,18 +14,21 @@ import java.util.LinkedHashMap;
 public class ShopBuilder {
 
     private EventSource eventSource;
-    private Shop shop;
+    public Shop shop;
     private WarehouseProxy warehouseProxy;
 
     public ShopBuilder(){
         eventSource=new EventSource();
-        shop=new Shop();
+        shop=new Shop()
+            .setName("DerLaden");
         warehouseProxy=new WarehouseProxy(this);
     }
 
     public void orderProduct(String product_name, String address, String orderID){
         LinkedHashMap<String, String> event = new LinkedHashMap<>();
         ShopProduct product = getFromProducts(product_name);
+        double oldCount=product.getInStock();
+        product.setInStock(oldCount-1);
         event.put("event_type","order_product");
         event.put("event_key", orderID);
         event.put("product_name", product_name);
@@ -63,6 +66,8 @@ public class ShopBuilder {
         ShopProduct shopProduct = getFromProducts(product_name);
         double inStock = shopProduct.getInStock();
         shopProduct.setInStock(inStock+itemCount);
+
+        shop.withProducts(shopProduct);
 
         event = new LinkedHashMap<>();
         event.put("event_type","add_product_to_shop");

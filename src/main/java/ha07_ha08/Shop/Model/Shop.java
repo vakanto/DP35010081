@@ -4,7 +4,7 @@ import java.beans.PropertyChangeSupport;
 
 import java.beans.PropertyChangeListener;
 
-public class Shop 
+public class Shop  
 {
 
    public static final java.util.ArrayList<ShopProduct> EMPTY_products = new java.util.ArrayList<ShopProduct>()
@@ -306,5 +306,39 @@ public class Shop
 
    }
 
+
+
+
+   public static final String PROPERTY_name = "name";
+
+   private String name;
+
+   public String getName()
+   {
+      return name;
+   }
+
+   public Shop setName(String value)
+   {
+      if (value == null ? this.name != null : ! value.equals(this.name))
+      {
+         String oldValue = this.name;
+         this.name = value;
+         firePropertyChange("name", oldValue, value);
+      }
+      return this;
+   }
+
+
+   @Override
+   public String toString()
+   {
+      StringBuilder result = new StringBuilder();
+
+      result.append(" ").append(this.getName());
+
+
+      return result.substring(1);
+   }
 
 }

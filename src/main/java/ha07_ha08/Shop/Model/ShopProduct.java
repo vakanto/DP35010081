@@ -4,7 +4,7 @@ import java.beans.PropertyChangeSupport;
 
 import java.beans.PropertyChangeListener;
 
-public class ShopProduct 
+public class ShopProduct  
 {
 
    public static final String PROPERTY_id = "id";

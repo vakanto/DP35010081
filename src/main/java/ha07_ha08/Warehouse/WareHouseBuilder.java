@@ -20,7 +20,8 @@ public class WareHouseBuilder {
     private EventFiler eventFiler;
 
     public WareHouseBuilder() throws IOException, UnirestException {
-        warehouse = new Warehouse();
+        warehouse = new Warehouse()
+            .setName("DasWarenhaus");
         shopProxy = new ShopProxy();
         eventSource = new EventSource();
         eventFiler = new EventFiler(eventSource)

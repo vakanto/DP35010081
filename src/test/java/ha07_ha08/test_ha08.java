@@ -1,15 +1,22 @@
 package ha07_ha08;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import ha07_ha08.Shop.Model.ShopProduct;
 import ha07_ha08.Shop.ShopBuilder;
 import ha07_ha08.Shop.ShopServer;
+import ha07_ha08.Warehouse.Model.Lot;
+import ha07_ha08.Warehouse.Model.Warehouse;
+import ha07_ha08.Warehouse.Model.WarehouseProduct;
 import ha07_ha08.Warehouse.WareHouseBuilder;
 import ha07_ha08.Warehouse.WarehouseServer;
 import org.junit.Assert;
 import org.junit.Test;
+import sun.rmi.transport.ObjectTable;
 
 import java.io.File;
 import java.io.IOException;
+
+import org.fulib.*;
 
 import static java.lang.Thread.sleep;
 
@@ -27,7 +34,7 @@ public class test_ha08 {
         file2.delete();
         file3.delete();
 
-        ShopBuilder shopBuilder = new ShopBuilder();
+
         ShopServer shopServer = new ShopServer();
         WarehouseServer warehouseServer = new WarehouseServer();
 
@@ -35,7 +42,7 @@ public class test_ha08 {
         shopServer.main(null);
 
         WareHouseBuilder wareHouseBuilder = warehouseServer.wareHouseBuilder;
-
+        ShopBuilder shopBuilder = shopServer.shopBuilder;
         sleep(2000);
 
         wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 50);
@@ -64,5 +71,34 @@ public class test_ha08 {
         System.out.println(wareHouseBuilder.warehouse.getOrders().get(0).getId());
         Assert.assertTrue(wareHouseBuilder.getProductCount("Shoe 42, size 8")==48.0);
         Assert.assertTrue(wareHouseBuilder.warehouse.getOrders().get(0).getId().equals("order1"));
+
+        Assert.assertTrue(shopBuilder.shop.getProducts().size()==1);
+        Assert.assertTrue(shopBuilder.shop.getProducts().get(0).getInStock()==98.0);
+
+        printWareHouseAndShopProducts(wareHouseBuilder, shopBuilder);
+    }
+
+    public void printWareHouseAndShopProducts(WareHouseBuilder wareHouseBuilder, ShopBuilder shopBuilder){
+        System.out.println("===============================================================");
+        if(wareHouseBuilder!=null){
+            System.out.println("Warehouse: " + wareHouseBuilder.warehouse.getName());
+            System.out.println("Products: ");
+            for(WarehouseProduct product : wareHouseBuilder.warehouse.getProducts()){
+                System.out.println(product.getName() + "  " + product.getId());
+                for(Lot lot : product.getLots()){
+                    System.out.println("Lot : " + lot + "size: " + lot.getLotSize());
+                }
+            }
+        }
+        System.out.println("===============================================================");
+        if(shopBuilder!=null){
+            System.out.println("Shop: " + shopBuilder.shop.getName());
+            System.out.println("Products: ");
+            for(ShopProduct product : shopBuilder.shop.getProducts()){
+                System.out.println(product.getName() + "  " + product.getId());
+                System.out.println("ProductCount  " + product.getInStock());
+            }
+        }
+        System.out.println("===============================================================");
     }
 }

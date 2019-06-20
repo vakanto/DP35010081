@@ -7,182 +7,190 @@
   packageSrcFolder: 	"src/main/java/ha07_ha08/Shop/Model"
 
 - shop2: 	Clazz
+  attributes: 	name6 	
   model: 	c1
   modified: 	false
   name: 	Shop
   propertyStyle: 	POJO
-  roles: 	products6 	customers7 	orders8 	
+  roles: 	products7 	customers8 	orders9 	
 
 - shopCustomer3: 	Clazz
-  attributes: 	address9 	name10 	
+  attributes: 	address10 	name11 	
   model: 	c1
   modified: 	false
   name: 	ShopCustomer
   propertyStyle: 	POJO
-  roles: 	shop11 	orders12 	
+  roles: 	shop12 	orders13 	
 
 - shopProduct4: 	Clazz
-  attributes: 	id13 	inStock14 	name15 	price16 	
+  attributes: 	id14 	inStock15 	name16 	price17 	
   model: 	c1
   modified: 	false
   name: 	ShopProduct
   propertyStyle: 	POJO
-  roles: 	shop17 	orders18 	
+  roles: 	shop18 	orders19 	
 
 - shopOrder5: 	Clazz
-  attributes: 	id19 	
+  attributes: 	id20 	
   model: 	c1
   modified: 	false
   name: 	ShopOrder
   propertyStyle: 	POJO
-  roles: 	shop20 	shopCustomer21 	products22 	
+  roles: 	shop21 	shopCustomer22 	products23 	
 
-- products6: 	AssocRole
+- name6: 	Attribute
+  clazz: 	shop2
+  modified: 	false
+  name: 	name
+  propertyStyle: 	POJO
+  type: 	String
+
+- products7: 	AssocRole
   aggregation: 	false
   cardinality: 	42
   clazz: 	shop2
   modified: 	false
   name: 	products
-  other: 	shop17
+  other: 	shop18
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- customers7: 	AssocRole
+- customers8: 	AssocRole
   aggregation: 	false
   cardinality: 	42
   clazz: 	shop2
   modified: 	false
   name: 	customers
-  other: 	shop11
+  other: 	shop12
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- orders8: 	AssocRole
+- orders9: 	AssocRole
   aggregation: 	false
   cardinality: 	42
   clazz: 	shop2
   modified: 	false
   name: 	orders
-  other: 	shop20
+  other: 	shop21
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- address9: 	Attribute
+- address10: 	Attribute
   clazz: 	shopCustomer3
   modified: 	false
   name: 	address
   propertyStyle: 	POJO
   type: 	String
 
-- name10: 	Attribute
+- name11: 	Attribute
   clazz: 	shopCustomer3
   modified: 	false
   name: 	name
   propertyStyle: 	POJO
   type: 	String
 
-- shop11: 	AssocRole
+- shop12: 	AssocRole
   aggregation: 	false
   cardinality: 	1
   clazz: 	shopCustomer3
   modified: 	false
   name: 	shop
-  other: 	customers7
+  other: 	customers8
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- orders12: 	AssocRole
+- orders13: 	AssocRole
   aggregation: 	false
   cardinality: 	42
   clazz: 	shopCustomer3
   modified: 	false
   name: 	orders
-  other: 	shopCustomer21
+  other: 	shopCustomer22
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- id13: 	Attribute
+- id14: 	Attribute
   clazz: 	shopProduct4
   modified: 	false
   name: 	id
   propertyStyle: 	POJO
   type: 	String
 
-- inStock14: 	Attribute
+- inStock15: 	Attribute
   clazz: 	shopProduct4
   modified: 	false
   name: 	inStock
   propertyStyle: 	POJO
   type: 	double
 
-- name15: 	Attribute
+- name16: 	Attribute
   clazz: 	shopProduct4
   modified: 	false
   name: 	name
   propertyStyle: 	POJO
   type: 	String
 
-- price16: 	Attribute
+- price17: 	Attribute
   clazz: 	shopProduct4
   modified: 	false
   name: 	price
   propertyStyle: 	POJO
   type: 	double
 
-- shop17: 	AssocRole
+- shop18: 	AssocRole
   aggregation: 	false
   cardinality: 	1
   clazz: 	shopProduct4
   modified: 	false
   name: 	shop
-  other: 	products6
+  other: 	products7
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- orders18: 	AssocRole
+- orders19: 	AssocRole
   aggregation: 	false
   cardinality: 	42
   clazz: 	shopProduct4
   modified: 	false
   name: 	orders
-  other: 	products22
+  other: 	products23
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- id19: 	Attribute
+- id20: 	Attribute
   clazz: 	shopOrder5
   modified: 	false
   name: 	id
   propertyStyle: 	POJO
   type: 	String
 
-- shop20: 	AssocRole
+- shop21: 	AssocRole
   aggregation: 	false
   cardinality: 	1
   clazz: 	shopOrder5
   modified: 	false
   name: 	shop
-  other: 	orders8
+  other: 	orders9
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- shopCustomer21: 	AssocRole
+- shopCustomer22: 	AssocRole
   aggregation: 	false
   cardinality: 	1
   clazz: 	shopOrder5
   modified: 	false
   name: 	shopCustomer
-  other: 	orders12
+  other: 	orders13
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- products22: 	AssocRole
+- products23: 	AssocRole
   aggregation: 	false
   cardinality: 	42
   clazz: 	shopOrder5
   modified: 	false
   name: 	products
-  other: 	orders18
+  other: 	orders19
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 

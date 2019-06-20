@@ -56,7 +56,8 @@ public class CreateModel {
     public void createShopModel(){
         ClassModelBuilder mb = Fulib.classModelBuilder("ha07_ha08.Shop.Model", "src/main/java");
 
-         ClassBuilder shopClass = mb.buildClass("Shop");
+         ClassBuilder shopClass = mb.buildClass("Shop")
+                 .buildAttribute("name", mb.STRING);
 
          ClassBuilder shopCustomerClass = mb.buildClass("ShopCustomer")
                  .buildAttribute("address", mb.STRING)
