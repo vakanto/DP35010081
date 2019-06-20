@@ -41,6 +41,7 @@ public class ShopProxy {
 
     public void addProductToShop(LinkedHashMap<String,String> event) throws IOException, UnirestException {
         String yaml = EventSource.encodeYaml(event);
+        eventSource.append(event);
         sendRequest(yaml);
     }
 

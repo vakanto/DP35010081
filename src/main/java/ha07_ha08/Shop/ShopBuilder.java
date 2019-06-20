@@ -23,12 +23,12 @@ public class ShopBuilder {
         warehouseProxy=new WarehouseProxy(this);
     }
 
-    public void orderProduct(String productName, String address, String orderID){
+    public void orderProduct(String product_name, String address, String orderID){
         LinkedHashMap<String, String> event = new LinkedHashMap<>();
-        ShopProduct product = getFromProducts(productName);
+        ShopProduct product = getFromProducts(product_name);
         event.put("event_type","order_product");
         event.put("event_key", orderID);
-        event.put("productName", productName);
+        event.put("product_name", product_name);
         event.put("address", address);
         eventSource.append(event);
 
@@ -47,12 +47,12 @@ public class ShopBuilder {
         if("add_product_to_shop".equals(event.get("event_type"))){
             String numberOfItems= event.get("size");
             int itemCount = Integer.parseInt(numberOfItems);
-            addProductToShop(event.get("event_key"), event.get("productName"), itemCount);
+            addProductToShop(event.get("event_key"), event.get("product_name"), itemCount);
             }
         }
     }
 
-    public void addProductToShop(String eventKey, String productName, int itemCount){
+    public void addProductToShop(String eventKey, String product_name, int itemCount){
         LinkedHashMap<String, String> event = eventSource.getEvent(eventKey);
 
         if(event!=null){
@@ -60,14 +60,14 @@ public class ShopBuilder {
             return;
         }
 
-        ShopProduct shopProduct = getFromProducts(productName);
+        ShopProduct shopProduct = getFromProducts(product_name);
         double inStock = shopProduct.getInStock();
         shopProduct.setInStock(inStock+itemCount);
 
         event = new LinkedHashMap<>();
         event.put("event_type","add_product_to_shop");
         event.put("event_key", eventKey);
-        event.put("productName", productName);
+        event.put("product_name", product_name);
         event.put("itemCount","" + shopProduct.getInStock());
         eventSource.append(event);
     }

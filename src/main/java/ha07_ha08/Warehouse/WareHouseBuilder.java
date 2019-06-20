@@ -13,7 +13,8 @@ import java.util.LinkedHashMap;
 
 
 public class WareHouseBuilder {
-    private Warehouse warehouse;
+
+    public Warehouse warehouse;
     private ShopProxy shopProxy;
     private EventSource eventSource;
     private EventFiler eventFiler;
@@ -37,27 +38,29 @@ public class WareHouseBuilder {
         for(LinkedHashMap<String, String> event : eventList){
             if("add_product_to_shop".equals(event.get("event_type"))){
                 int size = Integer.valueOf(event.get("size"));
-                addLotToStock(event.get("lotID"),event.get("productName"), size);
+                addLotToStock(event.get("lotID"),event.get("product_name"), size);
             }
             else if ("order_product".equals(event.get("event_type"))){
-                orderProduct(event.get("event_key"),event.get("productName"), event.get("address"));
+                orderProduct(event.get("event_key"),event.get("product_name"), event.get("address"));
             }
         }
     }
 
-    private void orderProduct(String orderID, String productName, String address) {
+    private void orderProduct(String orderID, String product_name, String address) {
         WarehouseOrder order = getFromOrders(orderID);
 
         if(order.getProduct()==null){
-            WarehouseProduct product = getFromProducts(productName);
+            WarehouseProduct product = getFromProducts(product_name);
             order.setProduct(product)
                 .setAddress(address)
                 .setId(orderID);
 
+            warehouse.withOrders(order);
+
             LinkedHashMap<String,String>event = new LinkedHashMap<>();
             event.put("event_type","order_product");
             event.put("event_key", orderID);
-            event.put("product_name",productName);
+            event.put("product_name",product_name);
             event.put("address", address);
             eventSource.append(event);
 
@@ -72,11 +75,11 @@ public class WareHouseBuilder {
         return new WarehouseOrder();
     }
 
-    public Lot addLotToStock(String lotId, String productName, int size) throws IOException, UnirestException {
+    public Lot addLotToStock(String lotId, String product_name, int size) throws IOException, UnirestException {
 
         Lot lot = getLot(lotId);
         double oldSize = lot.getLotSize();
-        WarehouseProduct warehouseProduct = getFromProducts(productName);
+        WarehouseProduct warehouseProduct = getFromProducts(product_name);
 
         lot.setWareHouseProduct(warehouseProduct);
         if(!warehouse.getProducts().contains(warehouseProduct)) {
@@ -97,7 +100,7 @@ public class WareHouseBuilder {
         event.put("event_type","add_product_to_shop");
         event.put("event_key", lotId);
         event.put("lotID", lotId);
-        event.put("productName", productName);
+        event.put("product_name", product_name);
         event.put("size","" + size);
         event.put("old_size", ""+oldSize);
         eventSource.append(event);
@@ -110,19 +113,19 @@ public class WareHouseBuilder {
         return  lot;
     }
 
-    private WarehouseProduct getFromProducts(String productName) {
+    private WarehouseProduct getFromProducts(String product_name) {
 
-        String productID = productName.replaceAll("\\W", "");
+        String productID = product_name.replaceAll("\\W", "");
 
         for(WarehouseProduct wp : warehouse.getProducts()){
-            if(wp.getName().equals(productName)){
+            if(wp.getName().equals(product_name)){
                 return wp;
             }
         }
         WarehouseProduct warehouseProduct = new WarehouseProduct()
                 .setWarehouse(this.warehouse)
                 .setId(productID)
-                .setName(productName);
+                .setName(product_name);
         return warehouseProduct;
     }
 

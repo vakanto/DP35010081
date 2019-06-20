@@ -12,15 +12,15 @@
   modified: 	false
   name: 	Warehouse
   propertyStyle: 	POJO
-  roles: 	orders8 	warehouse9 	products10 	places11 	
+  roles: 	orders8 	products9 	places10 	
 
 - warehouseOrder3: 	Clazz
-  attributes: 	address12 	id13 	product14 	
+  attributes: 	address11 	id12 	product13 	
   model: 	c1
   modified: 	false
   name: 	WarehouseOrder
   propertyStyle: 	POJO
-  roles: 	products15 	
+  roles: 	warehouseOrder14 	products15 	
 
 - warehouseProduct4: 	Clazz
   attributes: 	name16 	id17 	
@@ -59,21 +59,11 @@
   clazz: 	warehouse2
   modified: 	false
   name: 	orders
-  other: 	warehouse9
+  other: 	warehouseOrder14
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- warehouse9: 	AssocRole
-  aggregation: 	false
-  cardinality: 	1
-  clazz: 	warehouse2
-  modified: 	false
-  name: 	warehouse
-  other: 	orders8
-  propertyStyle: 	POJO
-  roleType: 	"java.util.ArrayList<%s>"
-
-- products10: 	AssocRole
+- products9: 	AssocRole
   aggregation: 	false
   cardinality: 	42
   clazz: 	warehouse2
@@ -83,7 +73,7 @@
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- places11: 	AssocRole
+- places10: 	AssocRole
   aggregation: 	false
   cardinality: 	42
   clazz: 	warehouse2
@@ -93,26 +83,36 @@
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
-- address12: 	Attribute
+- address11: 	Attribute
   clazz: 	warehouseOrder3
   modified: 	false
   name: 	address
   propertyStyle: 	POJO
   type: 	String
 
-- id13: 	Attribute
+- id12: 	Attribute
   clazz: 	warehouseOrder3
   modified: 	false
   name: 	id
   propertyStyle: 	POJO
   type: 	String
 
-- product14: 	Attribute
+- product13: 	Attribute
   clazz: 	warehouseOrder3
   modified: 	false
   name: 	product
   propertyStyle: 	POJO
   type: 	WarehouseProduct
+
+- warehouseOrder14: 	AssocRole
+  aggregation: 	false
+  cardinality: 	1
+  clazz: 	warehouseOrder3
+  modified: 	false
+  name: 	warehouseOrder
+  other: 	orders8
+  propertyStyle: 	POJO
+  roleType: 	"java.util.ArrayList<%s>"
 
 - products15: 	AssocRole
   aggregation: 	false
@@ -144,7 +144,7 @@
   clazz: 	warehouseProduct4
   modified: 	false
   name: 	warehouse
-  other: 	products10
+  other: 	products9
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 
@@ -229,7 +229,7 @@
   clazz: 	palettePlace6
   modified: 	false
   name: 	warehouse
-  other: 	places11
+  other: 	places10
   propertyStyle: 	POJO
   roleType: 	"java.util.ArrayList<%s>"
 

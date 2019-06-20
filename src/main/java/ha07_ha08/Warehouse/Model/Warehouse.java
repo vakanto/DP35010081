@@ -28,114 +28,6 @@ public class Warehouse
    }
 
 
-   public static final java.util.ArrayList<Warehouse> EMPTY_orders = new java.util.ArrayList<Warehouse>()
-   { @Override public boolean add(Warehouse value){ throw new UnsupportedOperationException("No direct add! Use xy.withOrders(obj)"); }};
-
-
-   public static final String PROPERTY_orders = "orders";
-
-   private java.util.ArrayList<Warehouse> orders = null;
-
-   public java.util.ArrayList<Warehouse> getOrders()
-   {
-      if (this.orders == null)
-      {
-         return EMPTY_orders;
-      }
-
-      return this.orders;
-   }
-
-   public Warehouse withOrders(Object... value)
-   {
-      if(value==null) return this;
-      for (Object item : value)
-      {
-         if (item == null) continue;
-         if (item instanceof java.util.Collection)
-         {
-            for (Object i : (java.util.Collection) item)
-            {
-               this.withOrders(i);
-            }
-         }
-         else if (item instanceof Warehouse)
-         {
-            if (this.orders == null)
-            {
-               this.orders = new java.util.ArrayList<Warehouse>();
-            }
-            if ( ! this.orders.contains(item))
-            {
-               this.orders.add((Warehouse)item);
-               ((Warehouse)item).setWarehouse(this);
-               firePropertyChange("orders", null, item);
-            }
-         }
-         else throw new IllegalArgumentException();
-      }
-      return this;
-   }
-
-
-
-   public Warehouse withoutOrders(Object... value)
-   {
-      if (this.orders == null || value==null) return this;
-      for (Object item : value)
-      {
-         if (item == null) continue;
-         if (item instanceof java.util.Collection)
-         {
-            for (Object i : (java.util.Collection) item)
-            {
-               this.withoutOrders(i);
-            }
-         }
-         else if (item instanceof Warehouse)
-         {
-            if (this.orders.contains(item))
-            {
-               this.orders.remove((Warehouse)item);
-               ((Warehouse)item).setWarehouse(null);
-               firePropertyChange("orders", item, null);
-            }
-         }
-      }
-      return this;
-   }
-
-
-   public static final String PROPERTY_warehouse = "warehouse";
-
-   private Warehouse warehouse = null;
-
-   public Warehouse getWarehouse()
-   {
-      return this.warehouse;
-   }
-
-   public Warehouse setWarehouse(Warehouse value)
-   {
-      if (this.warehouse != value)
-      {
-         Warehouse oldValue = this.warehouse;
-         if (this.warehouse != null)
-         {
-            this.warehouse = null;
-            oldValue.withoutOrders(this);
-         }
-         this.warehouse = value;
-         if (value != null)
-         {
-            value.withOrders(this);
-         }
-         firePropertyChange("warehouse", oldValue, value);
-      }
-      return this;
-   }
-
-
    public static final java.util.ArrayList<PalettePlace> EMPTY_places = new java.util.ArrayList<PalettePlace>()
    { @Override public boolean add(PalettePlace value){ throw new UnsupportedOperationException("No direct add! Use xy.withPlaces(obj)"); }};
 
@@ -277,8 +169,6 @@ public class Warehouse
 
    public void removeYou()
    {
-      this.setWarehouse(null);
-
       this.withoutOrders(this.getOrders().clone());
 
 
@@ -362,6 +252,84 @@ public class Warehouse
                this.products.remove((WarehouseProduct)item);
                ((WarehouseProduct)item).setWarehouse(null);
                firePropertyChange("products", item, null);
+            }
+         }
+      }
+      return this;
+   }
+
+
+   public static final java.util.ArrayList<WarehouseOrder> EMPTY_orders = new java.util.ArrayList<WarehouseOrder>()
+   { @Override public boolean add(WarehouseOrder value){ throw new UnsupportedOperationException("No direct add! Use xy.withOrders(obj)"); }};
+
+
+   public static final String PROPERTY_orders = "orders";
+
+   private java.util.ArrayList<WarehouseOrder> orders = null;
+
+   public java.util.ArrayList<WarehouseOrder> getOrders()
+   {
+      if (this.orders == null)
+      {
+         return EMPTY_orders;
+      }
+
+      return this.orders;
+   }
+
+   public Warehouse withOrders(Object... value)
+   {
+      if(value==null) return this;
+      for (Object item : value)
+      {
+         if (item == null) continue;
+         if (item instanceof java.util.Collection)
+         {
+            for (Object i : (java.util.Collection) item)
+            {
+               this.withOrders(i);
+            }
+         }
+         else if (item instanceof WarehouseOrder)
+         {
+            if (this.orders == null)
+            {
+               this.orders = new java.util.ArrayList<WarehouseOrder>();
+            }
+            if ( ! this.orders.contains(item))
+            {
+               this.orders.add((WarehouseOrder)item);
+               ((WarehouseOrder)item).setWarehouseOrder(this);
+               firePropertyChange("orders", null, item);
+            }
+         }
+         else throw new IllegalArgumentException();
+      }
+      return this;
+   }
+
+
+
+   public Warehouse withoutOrders(Object... value)
+   {
+      if (this.orders == null || value==null) return this;
+      for (Object item : value)
+      {
+         if (item == null) continue;
+         if (item instanceof java.util.Collection)
+         {
+            for (Object i : (java.util.Collection) item)
+            {
+               this.withoutOrders(i);
+            }
+         }
+         else if (item instanceof WarehouseOrder)
+         {
+            if (this.orders.contains(item))
+            {
+               this.orders.remove((WarehouseOrder)item);
+               ((WarehouseOrder)item).setWarehouseOrder(null);
+               firePropertyChange("orders", item, null);
             }
          }
       }

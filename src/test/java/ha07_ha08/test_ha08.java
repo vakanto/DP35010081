@@ -5,6 +5,7 @@ import ha07_ha08.Shop.ShopBuilder;
 import ha07_ha08.Shop.ShopServer;
 import ha07_ha08.Warehouse.WareHouseBuilder;
 import ha07_ha08.Warehouse.WarehouseServer;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -35,14 +36,33 @@ public class test_ha08 {
 
         WareHouseBuilder wareHouseBuilder = warehouseServer.wareHouseBuilder;
 
-        sleep(5000);
+        sleep(2000);
 
         wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 50);
 
         sleep(1000);
 
+        Assert.assertTrue(wareHouseBuilder.getLot("lot1")!=null);
+        Assert.assertTrue(wareHouseBuilder.getLot("lot1").getWareHouseProduct().getName().equals("Shoe 42, size 8"));
+        Assert.assertTrue(wareHouseBuilder.getLot("lot1").getLotSize()==50);
+
         shopBuilder.orderProduct("Shoe 42, size 8", "meineAdresse", "order1");
 
         System.out.println(wareHouseBuilder.getProductCount("Shoe 42, size 8"));
+
+        Assert.assertTrue(wareHouseBuilder.getProductCount("Shoe 42, size 8")==49.0);
+
+        shopBuilder.orderProduct("Shoe 42, size 8", "meineAdresse", "order1");
+
+        Assert.assertTrue(wareHouseBuilder.getProductCount("Shoe 42, size 8")==48.0);
+
+        //Restart server
+        warehouseServer=new WarehouseServer();
+        warehouseServer.main(null);
+        sleep(1000);
+        wareHouseBuilder = warehouseServer.wareHouseBuilder;
+        System.out.println(wareHouseBuilder.warehouse.getOrders().get(0).getId());
+        Assert.assertTrue(wareHouseBuilder.getProductCount("Shoe 42, size 8")==48.0);
+        Assert.assertTrue(wareHouseBuilder.warehouse.getOrders().get(0).getId().equals("order1"));
     }
 }

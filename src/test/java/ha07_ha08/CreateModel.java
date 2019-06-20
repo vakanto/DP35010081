@@ -37,7 +37,7 @@ public class CreateModel {
 
 
 
-        warehouseClass.buildAssociation(warehouseClass, "orders", mb.MANY, "warehouse", mb.ONE);
+        warehouseClass.buildAssociation(warehouseOrderClass, "orders", mb.MANY, "warehouseOrder", mb.ONE);
         warehouseClass.buildAssociation(warehouseProductClass, "products", mb.MANY, "warehouse", mb.ONE);
         warehouseClass.buildAssociation(palettePlaceClass, "places", mb.MANY, "warehouse", mb.ONE);
 

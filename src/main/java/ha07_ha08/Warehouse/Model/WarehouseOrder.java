@@ -112,6 +112,8 @@ public class WarehouseOrder
 
    public void removeYou()
    {
+      this.setWarehouseOrder(null);
+
       this.withoutProducts(this.getProducts().clone());
 
 
@@ -216,5 +218,36 @@ public class WarehouseOrder
 
       return result.substring(1);
    }
+
+   public static final String PROPERTY_warehouseOrder = "warehouseOrder";
+
+   private Warehouse warehouseOrder = null;
+
+   public Warehouse getWarehouseOrder()
+   {
+      return this.warehouseOrder;
+   }
+
+   public WarehouseOrder setWarehouseOrder(Warehouse value)
+   {
+      if (this.warehouseOrder != value)
+      {
+         Warehouse oldValue = this.warehouseOrder;
+         if (this.warehouseOrder != null)
+         {
+            this.warehouseOrder = null;
+            oldValue.withoutOrders(this);
+         }
+         this.warehouseOrder = value;
+         if (value != null)
+         {
+            value.withOrders(this);
+         }
+         firePropertyChange("warehouseOrder", oldValue, value);
+      }
+      return this;
+   }
+
+
 
 }

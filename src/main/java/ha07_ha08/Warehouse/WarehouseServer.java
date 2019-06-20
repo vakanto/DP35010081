@@ -4,13 +4,11 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.fulib.yaml.Yamler;
 import spark.Request;
 import spark.Response;
+import spark.Spark;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-
-import static spark.Spark.port;
-import static spark.Spark.post;
 
 
 public class WarehouseServer {
@@ -37,7 +35,10 @@ public class WarehouseServer {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        port(5002);
-        post("/orderProduct", (request, response) -> orderProduct(request, response));
+
+        Spark.stop();
+        Spark.ipAddress("127.0.0.1");
+        Spark.port(5002);
+        Spark.post("/orderProduct", (request, response) -> orderProduct(request, response));
     }
 }
