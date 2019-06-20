@@ -43,10 +43,10 @@ public class WarehouseServer {
         }
     }
 
-    private static Object getEvents(Request request, Response response) throws IOException, UnirestException {
+    private static String getEvents(Request request, Response response) throws IOException, UnirestException {
         String message = request.body();
         ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(message);
-        wareHouseBuilder.applyEvents(events, 1);
-        return null;
+        String responseYaml = wareHouseBuilder.applyEvents(events, 0);
+        return responseYaml;
     }
 }

@@ -29,6 +29,8 @@ public class WareHouseBuilder {
             .setHistoryFileName("src/main/java/ha07_ha08/database/Warehouse.yml");
 
         String history = eventFiler.loadHistory();
+        ArrayList<LinkedHashMap<String,String>> eventList=null;
+
         if(history!=null){
             //LinkedHashMap<String,String>event = new LinkedHashMap<>();
             //event.put("event_type","delete_shop");
@@ -41,13 +43,20 @@ public class WareHouseBuilder {
             File file = new File("src/main/java/ha07_ha08/database/Warehouse.yml");
             file.delete();
             file.createNewFile();
-            ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(shopProxy.loadEvents());
+
+            eventList = new Yamler().decodeList(shopProxy.loadEvents());
             this.applyEvents(eventList,1);
         }
-        eventFiler.startEventLogging();
+       eventFiler.startEventLogging();
+        if(eventList!=null) {
+            for (LinkedHashMap<String, String> event : eventList) {
+                eventSource.append(event);
+            }
+        }
+
     }
 
-    public void applyEvents(ArrayList<LinkedHashMap<String, String>> eventList, int applyLocalFlag) throws IOException, UnirestException {
+    public String applyEvents(ArrayList<LinkedHashMap<String, String>> eventList, int applyLocalFlag) throws IOException, UnirestException {
         for(LinkedHashMap<String, String> event : eventList){
             if("add_product_to_shop".equals(event.get("event_type"))){
                 double size = Double.valueOf(event.get("itemCount"));
@@ -59,7 +68,11 @@ public class WareHouseBuilder {
             else if("delete_shop".equals(event.get("event_type"))){
                 shopProxy.deleteShop(event);
             }
+            else if("getEvents".equals(event.get("event_type"))){
+                return sendEvents(event);
+            }
         }
+        return null;
     }
 
     private void orderProduct(String orderID, String product_name, String address) {
@@ -173,5 +186,10 @@ public class WareHouseBuilder {
 
         }
         return 0;
+    }
+    private String sendEvents(LinkedHashMap<String, String> event) {
+        String history = eventFiler.loadHistory();
+        //warehouseProxy.sendEvents(new Yamler().decodeList(history));
+        return EventSource.encodeYaml(new Yamler().decodeList(history));
     }
 }

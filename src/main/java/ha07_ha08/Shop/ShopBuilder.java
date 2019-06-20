@@ -19,7 +19,7 @@ public class ShopBuilder {
     private WarehouseProxy warehouseProxy;
     private EventFiler eventFiler;
 
-    public ShopBuilder(){
+    public ShopBuilder() throws IOException {
         eventSource=new EventSource();
         shop=new Shop()
             .setName("DerLaden");
@@ -30,13 +30,17 @@ public class ShopBuilder {
 
         String history = eventFiler.loadHistory();
         if(history!=null){
-            ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(history);
-            this.applyEvents(eventList);
+            //ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(history);
+            File file = new File("src/main/java/ha07_ha08/database/Shop.yml");
+            file.delete();
+            file.createNewFile();
+            ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(warehouseProxy.getWarehouseEvents());
+            this.applyEvents(eventList, 1);
         }
         eventFiler.startEventLogging();
     }
 
-    public void orderProduct(String product_name, String address, String orderID){
+    public void orderProduct(String product_name, String address, String orderID, int applyLocalFlag){
         LinkedHashMap<String, String> event = new LinkedHashMap<>();
         ShopProduct product = getFromProducts(product_name);
         double oldCount=product.getInStock();
@@ -49,7 +53,10 @@ public class ShopBuilder {
         eventSource.append(event);
 
         try {
-            warehouseProxy.orderProduct(event);
+            if(applyLocalFlag==0){
+                warehouseProxy.orderProduct(event);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (UnirestException e) {
@@ -58,7 +65,7 @@ public class ShopBuilder {
     }
 
 
-    public String applyEvents(ArrayList<LinkedHashMap<String, String>> events) {
+    public String applyEvents(ArrayList<LinkedHashMap<String, String>> events, int applyLocalFlag) {
         for(LinkedHashMap<String,String>event : events){
         if("add_product_to_shop".equals(event.get("event_type"))){
             String numberOfItems = event.get("itemCount");
@@ -66,7 +73,7 @@ public class ShopBuilder {
             addProductToShop(event.get("event_key"), event.get("product_name"), itemCount);
             }
         else if("delete_shop".equals(event.get("event_type"))){
-            for(ShopProduct product : shop.getProducts()){
+            /**for(ShopProduct product : shop.getProducts()){
                 product=null;
             }
             shop=new Shop();
@@ -79,10 +86,10 @@ public class ShopBuilder {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            this.applyEvents(eventList);
+            this.applyEvents(eventList, 0);**/
             }
         else if("order_product".equals(event.get("event_type"))){
-            orderProduct(event.get("product_name"), event.get("address"), event.get("orderID"));
+            orderProduct(event.get("product_name"), event.get("address"), event.get("orderID"), applyLocalFlag);
         }
         else if("getEvents".equals(event.get("event_type"))){
             return sendEvents(event);

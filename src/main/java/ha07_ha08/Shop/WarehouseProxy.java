@@ -1,11 +1,9 @@
 package ha07_ha08.Shop;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.sun.net.httpserver.HttpExchange;
 import org.fulib.yaml.EventFiler;
 import org.fulib.yaml.EventSource;
 import org.fulib.yaml.Yamler;
-import sun.awt.image.ImageWatched;
 
 import java.io.*;
 import java.net.*;
@@ -15,7 +13,6 @@ import java.util.LinkedHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class WarehouseProxy {
 
@@ -49,10 +46,14 @@ public class WarehouseProxy {
 
     }
 
-    public void getWarehouseEvents(String lastKnownWarhouseEventTime){
-        String warehouseEvents = sendRequest(GET_WAREHOUSE_EVENTS_URL, "lastKnown" + lastKnownWarhouseEventTime);
+    public String getWarehouseEvents(){
+        LinkedHashMap<String, String> event = new LinkedHashMap<>();
+        event.put("event_type", "getEvents");
+        String yaml = EventSource.encodeYaml(event);
+        String warehouseEvents = sendRequest(GET_WAREHOUSE_EVENTS_URL, yaml);
         ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(warehouseEvents);
-        executor.execute(()-> shopBuilder.applyEvents(events));
+
+        return warehouseEvents;
     }
 
     private static String sendRequest(String url, String message) {

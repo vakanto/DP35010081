@@ -27,7 +27,7 @@ public class ShopServer {
     private static Date time;
     private static String lastKnownWarhouseEventTime;
 
-    public static void main(String args[]){
+    public static void main(String args[]) throws IOException {
         HttpServer server = null;
 
         try{
@@ -51,9 +51,9 @@ public class ShopServer {
         shopBuilder.shop=new Shop();
         //LinkedHashMap <String,String> event = new ObjectMapper().readValue(message.toString(), LinkedHashMap.class);
         ArrayList<LinkedHashMap <String,String>> events = new Yamler().decodeList(body.toString());
-        String response = shopBuilder.applyEvents(events);
+        String response = shopBuilder.applyEvents(events,0);
         lastKnownWarhouseEventTime=time.toString();
-        warehouseProxy.getWarehouseEvents(lastKnownWarhouseEventTime);
+        warehouseProxy.getWarehouseEvents();
         if(!response.isEmpty()){
             writeAnswer(exchange, response);
             return;
@@ -73,7 +73,7 @@ public class ShopServer {
 
         //LinkedHashMap <String,String> event = new ObjectMapper().readValue(message.toString(), LinkedHashMap.class);
         ArrayList<LinkedHashMap <String,String>> events = new Yamler().decodeList(body.toString());
-        String response = shopBuilder.applyEvents(events);
+        String response = shopBuilder.applyEvents(events, 0);
         //lastKnownWarhouseEventTime=time.toString();
         //warehouseProxy.getWarehouseEvents(lastKnownWarhouseEventTime);
         if(!response.isEmpty()){

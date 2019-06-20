@@ -55,13 +55,13 @@ public class test_ha08 {
         Assert.assertTrue(wareHouseBuilder.getLot("lot1").getWareHouseProduct().getName().equals("Shoe 42, size 8"));
         Assert.assertTrue(wareHouseBuilder.getLot("lot1").getLotSize()==50);
 
-        shopBuilder.orderProduct("Shoe 42, size 8", "meineAdresse", "order1");
+        shopBuilder.orderProduct("Shoe 42, size 8", "meineAdresse", "order1",0);
 
         System.out.println(wareHouseBuilder.getProductCount("Shoe 42, size 8"));
 
         Assert.assertTrue(wareHouseBuilder.getProductCount("Shoe 42, size 8")==49.0);
 
-        shopBuilder.orderProduct("Shoe 42, size 8", "meineAdresse", "order1");
+        shopBuilder.orderProduct("Shoe 42, size 8", "meineAdresse", "order1",0);
 
         Assert.assertTrue(wareHouseBuilder.getProductCount("Shoe 42, size 8")==48.0);
 
@@ -69,9 +69,9 @@ public class test_ha08 {
         warehouseServer=new WarehouseServer();
         warehouseServer.wareHouseBuilder=new WareHouseBuilder();
         warehouseServer.main(null);
-        sleep(8000);
+        sleep(2000);
         wareHouseBuilder = warehouseServer.wareHouseBuilder;
-        sleep(5000);
+        sleep(2000);
 
         System.out.println(wareHouseBuilder.warehouse.getOrders().get(0).getId());
         Assert.assertTrue(wareHouseBuilder.getProductCount("Shoe 42, size 8")==48.0);
@@ -112,8 +112,10 @@ public class test_ha08 {
             System.out.println("Shop: " + shopBuilder.shop.getName());
             System.out.println("Products: ");
             for(ShopProduct product : shopBuilder.shop.getProducts()){
-                System.out.println(product.getName() + "  " + product.getId());
-                System.out.println("ProductCount  " + product.getInStock());
+
+                System.out.println("Produktname " + product.getName() + "  " + product.getId());
+                System.out.println("Anzahl der Artikel " + product.getInStock());
+
             }
         }
         System.out.println("===============================================================");
