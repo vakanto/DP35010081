@@ -12,8 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 public class ShopServer {
@@ -53,7 +51,7 @@ public class ShopServer {
         ArrayList<LinkedHashMap <String,String>> events = new Yamler().decodeList(body.toString());
         String response = shopBuilder.applyEvents(events,0);
         lastKnownWarhouseEventTime=time.toString();
-        warehouseProxy.getWarehouseEvents();
+        //warehouseProxy.getWarehouseEvents(eventSource.getLastEventTime());
         if(!response.isEmpty()){
             writeAnswer(exchange, response);
             return;

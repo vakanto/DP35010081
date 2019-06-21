@@ -17,7 +17,7 @@ import java.util.concurrent.ScheduledExecutorService;
 public class WarehouseProxy {
 
     private final String GET_REQUEST_URL = "http://127.0.0.1:5002/getShopEvents";
-    private final String GET_WAREHOUSE_EVENTS_URL="http://127.0.0.1:5002/getShopEvents";
+    private final String GET_WAREHOUSE_EVENTS_URL="http://127.0.0.1:5002/getWarehouseEvents";
     private final String ORDER_PRODUCT_URL="http://127.0.0.1:5002/orderProduct";
 
     private EventSource eventSource;
@@ -46,13 +46,13 @@ public class WarehouseProxy {
 
     }
 
-    public String getWarehouseEvents(){
+    public String getWarehouseEvents(long lastEventTime){
         LinkedHashMap<String, String> event = new LinkedHashMap<>();
         event.put("event_type", "getEvents");
+        event.put("timestamp", String.valueOf(lastEventTime));
         String yaml = EventSource.encodeYaml(event);
         String warehouseEvents = sendRequest(GET_WAREHOUSE_EVENTS_URL, yaml);
-        ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(warehouseEvents);
-
+        //ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(warehouseEvents);
         return warehouseEvents;
     }
 

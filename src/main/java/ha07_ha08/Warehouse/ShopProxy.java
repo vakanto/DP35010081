@@ -35,8 +35,8 @@ public class ShopProxy {
             eventSource.append(history);
         }
 
-        //eventFiler.storeHistory();
-        //eventFiler.startEventLogging();
+        eventFiler.storeHistory();
+        eventFiler.startEventLogging();
     }
 
     public void addProductToShop(LinkedHashMap<String,String> event) throws IOException, UnirestException {
@@ -103,9 +103,10 @@ public class ShopProxy {
         return null;
     }
 
-    public String loadEvents() throws UnirestException {
+    public String loadEvents(long lastEventTime) throws UnirestException {
         LinkedHashMap<String, String> event = new LinkedHashMap<>();
         event.put("event_type", "getEvents");
+        event.put("timestamp", String.valueOf(lastEventTime));
         String yaml = EventSource.encodeYaml(event);
         String response = sendRequest(yaml);
         return response;

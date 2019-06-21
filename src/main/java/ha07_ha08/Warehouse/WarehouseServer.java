@@ -33,6 +33,7 @@ public class WarehouseServer {
         Spark.port(5002);
         Spark.post("/orderProduct", (request, response) -> orderProduct(request, response));
         Spark.post("/getShopEvents", (request, response) -> getEvents(request, response));
+        Spark.post("/getWarehouseEvents", (request, response) -> getWarehouseEvents(request, response));
 
         try {
             wareHouseBuilder= new WareHouseBuilder();
@@ -41,6 +42,13 @@ public class WarehouseServer {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
+    }
+
+    private static String getWarehouseEvents(Request request, Response response) throws IOException, UnirestException {
+        String message = request.body();
+        ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(message);
+        String responseString = wareHouseBuilder.applyEvents(events, 1);
+        return responseString;
     }
 
     private static String getEvents(Request request, Response response) throws IOException, UnirestException {

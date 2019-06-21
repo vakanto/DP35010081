@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.SortedMap;
 
 
 public class WareHouseBuilder {
@@ -35,16 +36,17 @@ public class WareHouseBuilder {
             //LinkedHashMap<String,String>event = new LinkedHashMap<>();
             //event.put("event_type","delete_shop");
             //shopProxy.deleteShop(event);
-            //ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(history);
+
             //shopProxy.sendRequest(EventSource.encodeYaml(event));
-            //this.applyEvents(eventList);
             //eventList.remove(0);
             //shopProxy.sendLoadedEvents(eventList);
-            File file = new File("src/main/java/ha07_ha08/database/Warehouse.yml");
-            file.delete();
-            file.createNewFile();
+            //File file = new File("src/main/java/ha07_ha08/database/Warehouse.yml");
+            //file.delete();
+            //file.createNewFile();
+            ArrayList<LinkedHashMap<String,String>> warehouseEventList = new Yamler().decodeList(history);
+            this.applyEvents(warehouseEventList,1);
 
-            eventList = new Yamler().decodeList(shopProxy.loadEvents());
+            eventList = new Yamler().decodeList(shopProxy.loadEvents(eventSource.getLastEventTime()));
             this.applyEvents(eventList,1);
         }
        eventFiler.startEventLogging();
@@ -69,7 +71,8 @@ public class WareHouseBuilder {
                 shopProxy.deleteShop(event);
             }
             else if("getEvents".equals(event.get("event_type"))){
-                return sendEvents(event);
+                long lastKnownEventTimestamp = Long.parseLong(event.get("timestamp"));
+                return sendEvents(event, lastKnownEventTimestamp);
             }
         }
         return null;
@@ -137,7 +140,6 @@ public class WareHouseBuilder {
         if(oldSize==0.0 && applyLocalFlag==0){
             shopProxy.addProductToShop(event);
         }
-
         return  lot;
     }
 
@@ -187,9 +189,8 @@ public class WareHouseBuilder {
         }
         return 0;
     }
-    private String sendEvents(LinkedHashMap<String, String> event) {
-        String history = eventFiler.loadHistory();
-        //warehouseProxy.sendEvents(new Yamler().decodeList(history));
-        return EventSource.encodeYaml(new Yamler().decodeList(history));
+    private String sendEvents(LinkedHashMap<String, String> event, long lastKnownEventTimestamp) {
+        SortedMap<Long, LinkedHashMap<String,String>> eventsSince = eventSource.pull(lastKnownEventTimestamp);
+        return EventSource.encodeYaml(eventsSince);
     }
 }

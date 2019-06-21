@@ -9,8 +9,11 @@ import org.fulib.yaml.Yamler;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.SortedMap;
 
 public class ShopBuilder {
 
@@ -29,13 +32,17 @@ public class ShopBuilder {
                 .setHistoryFileName("src/main/java/ha07_ha08/database/Shop.yml");
 
         String history = eventFiler.loadHistory();
+        ArrayList<LinkedHashMap<String,String>> warehouseEventsSince=null;
         if(history!=null){
             //ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(history);
-            File file = new File("src/main/java/ha07_ha08/database/Shop.yml");
-            file.delete();
-            file.createNewFile();
-            ArrayList<LinkedHashMap<String,String>> eventList = new Yamler().decodeList(warehouseProxy.getWarehouseEvents());
-            this.applyEvents(eventList, 1);
+            //File file = new File("src/main/java/ha07_ha08/database/Shop.yml");
+            //file.delete();
+            //file.createNewFile();
+            ArrayList<LinkedHashMap<String,String>> shopEventList = new Yamler().decodeList(history);
+            this.applyEvents(shopEventList,1);
+
+            warehouseEventsSince = new Yamler().decodeList(warehouseProxy.getWarehouseEvents(eventSource.getLastEventTime()));
+            this.applyEvents(warehouseEventsSince,1);
         }
         eventFiler.startEventLogging();
     }
@@ -92,16 +99,16 @@ public class ShopBuilder {
             orderProduct(event.get("product_name"), event.get("address"), event.get("orderID"), applyLocalFlag);
         }
         else if("getEvents".equals(event.get("event_type"))){
-            return sendEvents(event);
+            long lastKnownEventTimestamp = Long.parseLong(event.get("timestamp"));
+            return sendEvents(event, lastKnownEventTimestamp);
         }
         }
         return null;
     }
 
-    private String sendEvents(LinkedHashMap<String, String> event) {
-        String history = eventFiler.loadHistory();
-        //warehouseProxy.sendEvents(new Yamler().decodeList(history));
-        return EventSource.encodeYaml(new Yamler().decodeList(history));
+    private String sendEvents(LinkedHashMap<String, String> event, long lastKnownEventTimestamp) {
+        SortedMap<Long, LinkedHashMap<String,String>> eventsSince = eventSource.pull(lastKnownEventTimestamp);
+        return EventSource.encodeYaml(eventsSince);
     }
 
     public void addProductToShop(String eventKey, String product_name, double itemCount){
