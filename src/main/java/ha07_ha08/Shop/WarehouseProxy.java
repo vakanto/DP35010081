@@ -8,6 +8,7 @@ import org.fulib.yaml.Yamler;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.concurrent.Executor;
@@ -25,6 +26,7 @@ public class WarehouseProxy {
     private ScheduledExecutorService executorService;
     private Executor executor;
     public ShopBuilder shopBuilder;
+    private static long lastResponseTime;
 
 
     public WarehouseProxy(ShopBuilder shopBuilder){
@@ -52,7 +54,6 @@ public class WarehouseProxy {
         event.put("timestamp", String.valueOf(lastEventTime));
         String yaml = EventSource.encodeYaml(event);
         String warehouseEvents = sendRequest(GET_WAREHOUSE_EVENTS_URL, yaml);
-        //ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(warehouseEvents);
         return warehouseEvents;
     }
 
@@ -79,6 +80,7 @@ public class WarehouseProxy {
             }
 
             InputStream inputStream = urlConnection.getInputStream();
+            lastResponseTime = Instant.now().toEpochMilli();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             StringBuilder response = new StringBuilder();
 
@@ -108,8 +110,8 @@ public class WarehouseProxy {
         String productOrder = EventSource.encodeYaml(event);
         sendRequest(ORDER_PRODUCT_URL, productOrder);
     }
-    public void sendEvents(ArrayList<LinkedHashMap<String,String>>events){
+    /**public void sendEvents(ArrayList<LinkedHashMap<String,String>>events){
         String eventList = EventSource.encodeYaml(events);
         sendRequest(GET_REQUEST_URL, eventList);
-    }
+    }**/
 }

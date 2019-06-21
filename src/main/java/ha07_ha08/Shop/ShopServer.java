@@ -9,6 +9,7 @@ import org.fulib.yaml.Yamler;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -18,6 +19,7 @@ public class ShopServer {
 
     public static ShopBuilder shopBuilder;
     private static WarehouseProxy warehouseProxy;
+    private static long lastConnectionTime;
     //private static Executor executor;
     public ShopServer(){
 
@@ -47,7 +49,6 @@ public class ShopServer {
     private static void handleWareHouseEvents(HttpExchange exchange) throws IOException {
         String body = getBody(exchange);
         shopBuilder.shop=new Shop();
-        //LinkedHashMap <String,String> event = new ObjectMapper().readValue(message.toString(), LinkedHashMap.class);
         ArrayList<LinkedHashMap <String,String>> events = new Yamler().decodeList(body.toString());
         String response = shopBuilder.applyEvents(events,0);
         lastKnownWarhouseEventTime=time.toString();
@@ -68,7 +69,7 @@ public class ShopServer {
 
     private static void handlePostEvent(HttpExchange exchange) throws IOException {
         String body = getBody(exchange);
-
+        lastConnectionTime = Instant.now().toEpochMilli();
         //LinkedHashMap <String,String> event = new ObjectMapper().readValue(message.toString(), LinkedHashMap.class);
         ArrayList<LinkedHashMap <String,String>> events = new Yamler().decodeList(body.toString());
         String response = shopBuilder.applyEvents(events, 0);

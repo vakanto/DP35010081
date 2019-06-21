@@ -68,13 +68,15 @@ public class test_ha08 {
         //Restart server
         warehouseServer=new WarehouseServer();
         warehouseServer.wareHouseBuilder=new WareHouseBuilder();
+        shopBuilder.orderProduct("Shoe 42, size 8", "meineAdresse", "order1",0);
         warehouseServer.main(null);
         sleep(2000);
         wareHouseBuilder = warehouseServer.wareHouseBuilder;
         sleep(2000);
 
         System.out.println(wareHouseBuilder.warehouse.getOrders().get(0).getId());
-        Assert.assertTrue(wareHouseBuilder.getProductCount("Shoe 42, size 8")==48.0);
+        System.out.println(wareHouseBuilder.getProductCount("Shoe 42, size 8"));
+        Assert.assertTrue(wareHouseBuilder.getProductCount("Shoe 42, size 8")==47.0);
         Assert.assertTrue(wareHouseBuilder.warehouse.getOrders().get(0).getId().equals("order1"));
 
         System.out.println(shopBuilder.shop.getProducts().size());
@@ -83,13 +85,12 @@ public class test_ha08 {
 
         System.out.println(shopBuilder.shop.getProducts().get(0).getInStock());
 
-        Assert.assertTrue(shopBuilder.shop.getProducts().get(0).getInStock()==48.0);
+        Assert.assertTrue(shopBuilder.shop.getProducts().get(0).getInStock()==47.0);
 
-        shopServer = new ShopServer();
-        sleep(2000);
+        shopServer = new ShopServer();;
         shopServer.main(null);
-
-        sleep(1000);
+        wareHouseBuilder.addLotToStock("lot1", "Shoe 42, size 8", 50,0);
+        sleep(2000);
         shopBuilder=shopServer.shopBuilder;
 
         printWareHouseAndShopProducts(wareHouseBuilder, shopBuilder);

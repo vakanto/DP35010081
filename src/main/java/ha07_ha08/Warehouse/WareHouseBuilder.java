@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.SortedMap;
 
 
@@ -44,9 +45,13 @@ public class WareHouseBuilder {
             //file.delete();
             //file.createNewFile();
             ArrayList<LinkedHashMap<String,String>> warehouseEventList = new Yamler().decodeList(history);
-            this.applyEvents(warehouseEventList,1);
+            for (LinkedHashMap<String,String> event:warehouseEventList) {
+                eventSource.append(event);
+            }
+            eventFiler.storeHistory();
 
             eventList = new Yamler().decodeList(shopProxy.loadEvents(eventSource.getLastEventTime()));
+            this.applyEvents(warehouseEventList,1);
             this.applyEvents(eventList,1);
         }
        eventFiler.startEventLogging();
@@ -65,7 +70,7 @@ public class WareHouseBuilder {
                 addLotToStock(event.get("lotID"),event.get("product_name"), size, applyLocalFlag);
             }
             else if ("order_product".equals(event.get("event_type"))){
-                orderProduct(event.get("event_key"),event.get("product_name"), event.get("address"));
+                orderProduct(event);
             }
             else if("delete_shop".equals(event.get("event_type"))){
                 shopProxy.deleteShop(event);
@@ -78,22 +83,16 @@ public class WareHouseBuilder {
         return null;
     }
 
-    private void orderProduct(String orderID, String product_name, String address) {
-        WarehouseOrder order = getFromOrders(orderID);
+    private void orderProduct(LinkedHashMap<String, String> event) {
+        WarehouseOrder order = getFromOrders(event.get("orderID"));
 
         if(order.getProduct()==null){
-            WarehouseProduct product = getFromProducts(product_name);
+            WarehouseProduct product = getFromProducts(event.get("product_name"));
             order.setProduct(product)
-                .setAddress(address)
-                .setId(orderID);
+                .setAddress(event.get("address"))
+                .setId(event.get("orderID"));
 
             warehouse.withOrders(order);
-
-            LinkedHashMap<String,String>event = new LinkedHashMap<>();
-            event.put("event_type","order_product");
-            event.put("event_key", orderID);
-            event.put("product_name",product_name);
-            event.put("address", address);
             eventSource.append(event);
 
             //Reallocate one lot slot.
@@ -127,7 +126,7 @@ public class WareHouseBuilder {
             }
 
         }
-        lot.setLotSize(itemCount);
+        lot.setLotSize(oldSize+itemCount);
         LinkedHashMap<String,String> event = new LinkedHashMap<>();
         event.put("event_type","add_product_to_shop");
         event.put("event_key", lotId);

@@ -1,18 +1,16 @@
 package ha07_ha08.Warehouse;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.fulib.yaml.EventFiler;
 import org.fulib.yaml.EventSource;
 import org.fulib.yaml.Yamler;
-import org.json.JSONObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.concurrent.*;
@@ -22,6 +20,7 @@ public class ShopProxy {
     private EventSource eventSource;
     private EventFiler eventFiler;
     private ScheduledExecutorService executorService;
+    private long lastConnectionTime;
 
     public ShopProxy(){
         this.eventSource=new EventSource();
@@ -76,8 +75,9 @@ public class ShopProxy {
             try(OutputStream os = http.getOutputStream()){
                 os.write(output);
             }
-
+            lastConnectionTime = Instant.now().toEpochMilli();
             InputStream inputStream = http.getInputStream();
+            lastConnectionTime = Instant.now().toEpochMilli();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             StringBuilder response = new StringBuilder();
             while(true) {

@@ -39,9 +39,12 @@ public class ShopBuilder {
             //file.delete();
             //file.createNewFile();
             ArrayList<LinkedHashMap<String,String>> shopEventList = new Yamler().decodeList(history);
-            this.applyEvents(shopEventList,1);
+            for (LinkedHashMap<String,String> event:shopEventList) {
+                eventSource.append(event);
+            }
 
             warehouseEventsSince = new Yamler().decodeList(warehouseProxy.getWarehouseEvents(eventSource.getLastEventTime()));
+            this.applyEvents(shopEventList,1);
             this.applyEvents(warehouseEventsSince,1);
         }
         eventFiler.startEventLogging();
