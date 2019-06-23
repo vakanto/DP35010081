@@ -17,14 +17,11 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class WarehouseProxy {
 
-    private final String GET_REQUEST_URL = "http://127.0.0.1:5002/getShopEvents";
     private final String GET_WAREHOUSE_EVENTS_URL="http://127.0.0.1:5002/getWarehouseEvents";
     private final String ORDER_PRODUCT_URL="http://127.0.0.1:5002/orderProduct";
 
     private EventSource eventSource;
     private EventFiler eventFiler;
-    private ScheduledExecutorService executorService;
-    private Executor executor;
     public ShopBuilder shopBuilder;
     private static long lastResponseTime;
 
@@ -34,8 +31,6 @@ public class WarehouseProxy {
         this.eventSource=new EventSource();
         this.eventFiler = new EventFiler(eventSource)
                 .setHistoryFileName("src/main/java/ha07_ha08/database/WarehouseProxy.yml");
-        executorService = Executors.newSingleThreadScheduledExecutor();
-        executor = Executors.newSingleThreadExecutor();
 
         String history = eventFiler.loadHistory();
         if(history!=null){
@@ -80,7 +75,6 @@ public class WarehouseProxy {
             }
 
             InputStream inputStream = urlConnection.getInputStream();
-            lastResponseTime = Instant.now().toEpochMilli();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             StringBuilder response = new StringBuilder();
 

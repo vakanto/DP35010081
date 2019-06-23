@@ -20,7 +20,7 @@ public class ShopServer {
     public static ShopBuilder shopBuilder;
     private static WarehouseProxy warehouseProxy;
     private static long lastConnectionTime;
-    //private static Executor executor;
+    public static HttpServer server;
     public ShopServer(){
 
     }
@@ -28,22 +28,19 @@ public class ShopServer {
     private static String lastKnownWarhouseEventTime;
 
     public static void main(String args[]) throws IOException {
-        HttpServer server = null;
-
         try{
             server=HttpServer.create(new InetSocketAddress(5001 ),0);
 
             HttpContext context = server.createContext("/postEvent");
             context.setHandler(x->handlePostEvent(x));
-            //HttpContext warhouseEventContext = server.createContext("/warhouseEvents");
-            //context.setHandler(x->handleWareHouseEvents(x));
             server.start();
 
         }catch (Exception e){
             System.out.println("Server failed during Startup");
-        }
-        shopBuilder = new ShopBuilder();
+            System.out.println(e);
 
+         }
+        shopBuilder = new ShopBuilder();
     }
 
     private static void handleWareHouseEvents(HttpExchange exchange) throws IOException {

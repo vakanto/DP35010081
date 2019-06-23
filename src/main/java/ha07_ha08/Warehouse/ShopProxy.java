@@ -92,13 +92,6 @@ public class ShopProxy {
             return response.toString();
 
         } catch (Exception e) {
-            /**executorService.schedule(()-> {
-                try {
-                    sendRequest(yaml);
-                } catch (UnirestException ex) {
-                    ex.printStackTrace();
-                }
-            }, 10, TimeUnit.SECONDS);**/
         }
         return null;
     }

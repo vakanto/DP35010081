@@ -34,40 +34,27 @@ public class WareHouseBuilder {
         ArrayList<LinkedHashMap<String,String>> eventList=null;
 
         if(history!=null){
-            //LinkedHashMap<String,String>event = new LinkedHashMap<>();
-            //event.put("event_type","delete_shop");
-            //shopProxy.deleteShop(event);
 
-            //shopProxy.sendRequest(EventSource.encodeYaml(event));
-            //eventList.remove(0);
-            //shopProxy.sendLoadedEvents(eventList);
-            //File file = new File("src/main/java/ha07_ha08/database/Warehouse.yml");
-            //file.delete();
-            //file.createNewFile();
             ArrayList<LinkedHashMap<String,String>> warehouseEventList = new Yamler().decodeList(history);
             for (LinkedHashMap<String,String> event:warehouseEventList) {
                 eventSource.append(event);
             }
             eventFiler.storeHistory();
-
+            File file = new File("src/main/java/ha07_ha08/database/Warehouse.yml");
             eventList = new Yamler().decodeList(shopProxy.loadEvents(eventSource.getLastEventTime()));
+            //file.delete();
+            //file.createNewFile();
             this.applyEvents(warehouseEventList,1);
             this.applyEvents(eventList,1);
         }
        eventFiler.startEventLogging();
-        if(eventList!=null) {
-            for (LinkedHashMap<String, String> event : eventList) {
-                eventSource.append(event);
-            }
-        }
-
     }
 
     public String applyEvents(ArrayList<LinkedHashMap<String, String>> eventList, int applyLocalFlag) throws IOException, UnirestException {
         for(LinkedHashMap<String, String> event : eventList){
             if("add_product_to_shop".equals(event.get("event_type"))){
                 double size = Double.valueOf(event.get("itemCount"));
-                addLotToStock(event.get("lotID"),event.get("product_name"), size, applyLocalFlag);
+                addLotToStock(event, event.get("lotID"),event.get("product_name"), size, applyLocalFlag);
             }
             else if ("order_product".equals(event.get("event_type"))){
                 orderProduct(event);
@@ -76,8 +63,7 @@ public class WareHouseBuilder {
                 shopProxy.deleteShop(event);
             }
             else if("getEvents".equals(event.get("event_type"))){
-                long lastKnownEventTimestamp = Long.parseLong(event.get("timestamp"));
-                return sendEvents(event, lastKnownEventTimestamp);
+                return sendEvents(event, Long.parseLong(event.get("timestamp")));
             }
         }
         return null;
@@ -103,10 +89,15 @@ public class WareHouseBuilder {
     }
 
     private WarehouseOrder getFromOrders(String orderID) {
+        for(WarehouseOrder order : warehouse.getOrders())
+        if(order.getId().equals(orderID)){
+            return order;
+        }
+
         return new WarehouseOrder();
     }
 
-    public Lot addLotToStock(String lotId, String product_name, double itemCount, int applyLocalFlag) throws IOException, UnirestException {
+    public Lot addLotToStock(LinkedHashMap<String,String> event, String lotId, String product_name, double itemCount, int applyLocalFlag) throws IOException, UnirestException {
 
         Lot lot = getLot(lotId);
         double oldSize = lot.getLotSize();
@@ -127,14 +118,16 @@ public class WareHouseBuilder {
 
         }
         lot.setLotSize(oldSize+itemCount);
-        LinkedHashMap<String,String> event = new LinkedHashMap<>();
-        event.put("event_type","add_product_to_shop");
-        event.put("event_key", lotId);
-        event.put("lotID", lotId);
-        event.put("product_name", product_name);
-        event.put("itemCount","" + itemCount);
-        event.put("old_size", ""+oldSize);
-        eventSource.append(event);
+        if(event==null) {
+            event = new LinkedHashMap<>();
+            event.put("event_type", "add_product_to_shop");
+            event.put("event_key", lotId);
+            event.put("lotID", lotId);
+            event.put("product_name", product_name);
+            event.put("itemCount", "" + itemCount);
+            event.put("old_size", "" + oldSize);
+            eventSource.append(event);
+        }
 
         if(oldSize==0.0 && applyLocalFlag==0){
             shopProxy.addProductToShop(event);
