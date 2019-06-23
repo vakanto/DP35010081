@@ -22,6 +22,7 @@ public class ShopBuilder {
     public Shop shop;
     private WarehouseProxy warehouseProxy;
     private EventFiler eventFiler;
+    private ArrayList<String> eventList;
 
     public ShopBuilder() throws IOException {
         eventSource=new EventSource();
@@ -50,6 +51,7 @@ public class ShopBuilder {
 
         }
         eventFiler.startEventLogging();
+        eventList=new ArrayList<>();
     }
 
     public void orderProduct(LinkedHashMap<String, String> event, String product_name, String address, String orderID, int applyLocalFlag){
@@ -63,7 +65,7 @@ public class ShopBuilder {
         else{
             order =  new ShopOrder()
                     .setId(orderID);
-            ShopProduct product = getFromProducts(product_name);
+            ShopProduct product = checkProducts(product_name);
             double oldCount = product.getInStock();
             product.setInStock(oldCount - 1);
             order.withProducts(product);
@@ -95,7 +97,7 @@ public class ShopBuilder {
         if("add_product_to_shop".equals(event.get("event_type"))){
             String numberOfItems = event.get("itemCount");
             double itemCount = Double.parseDouble(numberOfItems);
-            addProductToShop(event.get("event_key"), event.get("product_name"), itemCount);
+            addProductToShop(event.get(".eventKey"), event.get("product_name"), itemCount);
             }
         else if("order_product".equals(event.get("event_type"))){
             orderProduct(event, event.get("product_name"), event.get("address"), event.get("orderID"), applyLocalFlag);
@@ -115,13 +117,26 @@ public class ShopBuilder {
 
     public void addProductToShop(String eventKey, String product_name, double itemCount){
         LinkedHashMap<String, String> event = eventSource.getEvent(eventKey);
+        ShopProduct shopProduct = checkProducts(product_name);
 
         if(event!=null){
-            //event allready exists
             return;
         }
 
-        ShopProduct shopProduct = getFromProducts(product_name);
+        if(shopProduct!=null){
+            //product already exists
+            double inStock = shopProduct.getInStock();
+            shopProduct.setInStock(itemCount+inStock);
+            event = new LinkedHashMap<>();
+            event.put("event_type","add_product_to_shop");
+            event.put(".eventKey", eventKey);
+            event.put("product_name", product_name);
+            event.put("itemCount","" + itemCount);
+            eventSource.append(event);
+            return;
+        }
+
+        shopProduct = getFromProducts(product_name);
         double inStock = shopProduct.getInStock();
 
         shopProduct.setInStock(itemCount+inStock);
@@ -129,7 +144,7 @@ public class ShopBuilder {
 
         event = new LinkedHashMap<>();
         event.put("event_type","add_product_to_shop");
-        event.put("event_key", eventKey);
+        event.put(".eventKey", eventKey);
         event.put("product_name", product_name);
         event.put("itemCount","" + itemCount);
         eventSource.append(event);
@@ -137,11 +152,6 @@ public class ShopBuilder {
 
     public ShopProduct getFromProducts(String productName) {
         String productId = productName.replaceAll("\\W","");
-        for(ShopProduct product : shop.getProducts()){
-            if(product.getName().equals(productName)){
-                return product;
-            }
-        }
         ShopProduct shopProduct = new ShopProduct()
                 .setName(productName)
                 .setId(productId)
@@ -157,6 +167,15 @@ public class ShopBuilder {
         for (ShopOrder order : shop.getOrders()) {
             if (order.getId().equals(orderID)) {
                 return order;
+            }
+        }
+        return null;
+    }
+
+    private ShopProduct checkProducts(String productName) {
+        for(ShopProduct product : shop.getProducts()){
+            if(product.getName().equals(productName)){
+                return product;
             }
         }
         return null;

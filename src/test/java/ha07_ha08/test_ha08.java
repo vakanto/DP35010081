@@ -87,7 +87,7 @@ public class test_ha08 {
 
         Assert.assertTrue(shopBuilder.shop.getProducts().get(0).getInStock()==47.0);
 
-        wareHouseBuilder.addLotToStock(null,"lot1", "Shoe 42, size 8", 50,0);
+        wareHouseBuilder.addLotToStock(null,"lot2", "Shoe 42, size 8", 50,0);
         shopServer.server.stop(1);
         shopServer = new ShopServer();;
         shopServer.main(null);

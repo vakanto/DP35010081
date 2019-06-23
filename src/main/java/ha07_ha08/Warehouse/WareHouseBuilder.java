@@ -121,7 +121,7 @@ public class WareHouseBuilder {
         if(event==null) {
             event = new LinkedHashMap<>();
             event.put("event_type", "add_product_to_shop");
-            event.put("event_key", lotId);
+            event.put(".eventKey", lotId);
             event.put("lotID", lotId);
             event.put("product_name", product_name);
             event.put("itemCount", "" + itemCount);
