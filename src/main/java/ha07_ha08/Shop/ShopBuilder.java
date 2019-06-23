@@ -7,12 +7,8 @@ import ha07_ha08.Shop.Model.ShopProduct;
 import org.fulib.yaml.EventFiler;
 import org.fulib.yaml.EventSource;
 import org.fulib.yaml.Yamler;
-
-import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.SortedMap;
 
@@ -22,7 +18,6 @@ public class ShopBuilder {
     public Shop shop;
     private WarehouseProxy warehouseProxy;
     private EventFiler eventFiler;
-    private ArrayList<String> eventList;
 
     public ShopBuilder() throws IOException {
         eventSource=new EventSource();
@@ -38,20 +33,14 @@ public class ShopBuilder {
 
         if(history!=null){
             ArrayList<LinkedHashMap<String,String>> shopEventList = new Yamler().decodeList(history);
-
             eventFiler.storeHistory();
-            //File file = new File("src/main/java/ha07_ha08/database/Shop.yml");
             String whEvents = warehouseProxy.getWarehouseEvents(eventSource.getLastEventTime()+1);
             warehouseEventsSince = new Yamler().decodeList(whEvents);
             this.applyEvents(shopEventList,1);
-            //for (LinkedHashMap<String,String> event:shopEventList) {
-            //    eventSource.append(event);
-            //}
             this.applyEvents(warehouseEventsSince,1);
 
         }
         eventFiler.startEventLogging();
-        eventList=new ArrayList<>();
     }
 
     public void orderProduct(LinkedHashMap<String, String> event, String product_name, String address, String orderID, int applyLocalFlag){
@@ -65,7 +54,7 @@ public class ShopBuilder {
         else{
             order =  new ShopOrder()
                     .setId(orderID);
-            ShopProduct product = checkProducts(product_name);
+            ShopProduct product = getFromProducts(product_name);
             double oldCount = product.getInStock();
             product.setInStock(oldCount - 1);
             order.withProducts(product);
@@ -117,7 +106,7 @@ public class ShopBuilder {
 
     public void addProductToShop(String eventKey, String product_name, double itemCount){
         LinkedHashMap<String, String> event = eventSource.getEvent(eventKey);
-        ShopProduct shopProduct = checkProducts(product_name);
+        ShopProduct shopProduct = getFromProducts(product_name);
 
         if(event!=null){
             return;
@@ -136,9 +125,12 @@ public class ShopBuilder {
             return;
         }
 
-        shopProduct = getFromProducts(product_name);
+        String productId = product_name.replaceAll("\\W","");
+        shopProduct = new ShopProduct()
+                .setName(product_name)
+                .setId(productId)
+                .setShop(this.shop);
         double inStock = shopProduct.getInStock();
-
         shopProduct.setInStock(itemCount+inStock);
         shop.withProducts(shopProduct);
 
@@ -151,15 +143,16 @@ public class ShopBuilder {
     }
 
     public ShopProduct getFromProducts(String productName) {
-        String productId = productName.replaceAll("\\W","");
-        ShopProduct shopProduct = new ShopProduct()
-                .setName(productName)
-                .setId(productId)
-                .setShop(this.shop);
-        return shopProduct;
+        for(ShopProduct product : shop.getProducts()){
+            if(product.getName().equals(productName)){
+                return product;
+            }
+        }
+        return null;
     }
 
     public WarehouseProxy getWarehouseProxy() {
+
         return warehouseProxy;
     }
 
@@ -167,15 +160,6 @@ public class ShopBuilder {
         for (ShopOrder order : shop.getOrders()) {
             if (order.getId().equals(orderID)) {
                 return order;
-            }
-        }
-        return null;
-    }
-
-    private ShopProduct checkProducts(String productName) {
-        for(ShopProduct product : shop.getProducts()){
-            if(product.getName().equals(productName)){
-                return product;
             }
         }
         return null;

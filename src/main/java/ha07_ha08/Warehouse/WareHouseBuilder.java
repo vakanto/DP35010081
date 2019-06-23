@@ -1,7 +1,6 @@
 package ha07_ha08.Warehouse;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import ha07_ha08.Shop.ShopBuilder;
 import ha07_ha08.Warehouse.Model.*;
 import org.fulib.yaml.EventFiler;
 import org.fulib.yaml.EventSource;
@@ -11,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.SortedMap;
 
 
@@ -42,8 +40,6 @@ public class WareHouseBuilder {
             eventFiler.storeHistory();
             File file = new File("src/main/java/ha07_ha08/database/Warehouse.yml");
             eventList = new Yamler().decodeList(shopProxy.loadEvents(eventSource.getLastEventTime()));
-            //file.delete();
-            //file.createNewFile();
             this.applyEvents(warehouseEventList,1);
             this.applyEvents(eventList,1);
         }

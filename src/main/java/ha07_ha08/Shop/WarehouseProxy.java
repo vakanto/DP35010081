@@ -8,22 +8,16 @@ import org.fulib.yaml.Yamler;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class WarehouseProxy {
 
     private final String GET_WAREHOUSE_EVENTS_URL="http://127.0.0.1:5002/getWarehouseEvents";
     private final String ORDER_PRODUCT_URL="http://127.0.0.1:5002/orderProduct";
-
     private EventSource eventSource;
     private EventFiler eventFiler;
     public ShopBuilder shopBuilder;
-    private static long lastResponseTime;
 
 
     public WarehouseProxy(ShopBuilder shopBuilder){
@@ -37,10 +31,8 @@ public class WarehouseProxy {
             ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(history);
             eventSource.append(history);
         }
-
         eventFiler.storeHistory();
         eventFiler.startEventLogging();
-
     }
 
     public String getWarehouseEvents(long lastEventTime){
@@ -104,8 +96,4 @@ public class WarehouseProxy {
         String productOrder = EventSource.encodeYaml(event);
         sendRequest(ORDER_PRODUCT_URL, productOrder);
     }
-    /**public void sendEvents(ArrayList<LinkedHashMap<String,String>>events){
-        String eventList = EventSource.encodeYaml(events);
-        sendRequest(GET_REQUEST_URL, eventList);
-    }**/
 }
