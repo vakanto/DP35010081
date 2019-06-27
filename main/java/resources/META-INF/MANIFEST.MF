@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: ha07_ha08.Shop.ShopServer
+
