@@ -1,4 +1,4 @@
-FROM gradle:jdk8 as builder
-COPY --chown=gradle:gradle . /shop
+FROM openjdk:8-jre-alpine
+COPY . /shop
 WORKDIR /shop
-RUN gradle build
+CMD ["/usr/bin/java", "-jar","shopserver.jar"]
