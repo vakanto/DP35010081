@@ -17,15 +17,15 @@ import static java.lang.Thread.sleep;
 
 public class test_ha09 {
 
-    /**public static DockerComposeContainer compose =
+    public static DockerComposeContainer compose =
             new DockerComposeContainer(new File("src/main/java/ha09/docker-compose.yml"))
                     .withExposedService("shopserver", 5001)
                     .withExposedService("warehouseserver", 5002)
-                    .withLocalCompose(true);**/
+                    .withLocalCompose(true);
 
     @Test
     public void createContainer() throws IOException, InterruptedException {
-        //compose.start();
+        compose.start();
         File composeFile = new File("src/main/java/ha09/docker-compose.yml");
         Assert.assertTrue(composeFile.exists());
         sleep(2000);
@@ -33,9 +33,7 @@ public class test_ha09 {
         String warehouseHeartbeat = sendGetRequest("heartbeat",  "GET");
         System.out.println(warehouseHeartbeat);
         Assert.assertTrue(warehouseHeartbeat.contains("pretty_damn_well"));
-        //String ip = compose.getServiceHost("shopserver", 5001);
-        //Assert.assertEquals("localhost", ip);
-        //String address = "http://" + compose.getServiceHost("warehouseserver", 5002) + ":" + compose.getServicePort("warehouseserver", 5002);
+
         LinkedHashMap<String,String> event = new LinkedHashMap<>();
         event.put("event_type", "add_product_to_shop");
         event.put(".eventKey", "lot1");
@@ -44,20 +42,20 @@ public class test_ha09 {
         event.put("itemCount", "" + "20");
 
         String response = sendPostRequest(EventSource.encodeYaml(event), "addLot", 5002);
-        //Assert.assertEquals("");
-        event=new LinkedHashMap<>(atus);
+        event=new LinkedHashMap<>();
         event.put("event_type", "getEvents");
         event.put("timestamp", "1");
         String shopEvents = sendPostRequest(EventSource.encodeYaml(event), "postEvent", 5001);
+        System.out.println(shopEvents);
+        Assert.assertTrue(shopEvents.contains("add_product_to_shop"));
+        Assert.assertTrue(shopEvents.contains("Schuhe"));
+        Assert.assertTrue(shopEvents.contains("20"));
 
 
 
         event.put("event_type", "getEvents");
         event.put("timestamp", String.valueOf(1));
-        //String response = sendRequest(EventSource.encodeYaml(event), "getWarehouseEvents", "","POST");
-        //System.out.println(response);
-        //String response = simpleGetRequest(address);
-        //compose.stop();
+        compose.stop();
     }
 
     public String sendGetRequest(String targetUrl, String HTTP_TYPE){
@@ -97,7 +95,7 @@ public class test_ha09 {
     public String sendPostRequest(String yaml, String targetUrl, int servicePort){
 
         try {
-            URL url = new URL("http://127.0.0.1:" + 5002 + "/" + targetUrl);
+            URL url = new URL("http://127.0.0.1:" + servicePort + "/" + targetUrl);
             //URL url = new URL(address + targetUrl);
             URLConnection connection = url.openConnection();
             HttpURLConnection http =(HttpURLConnection)connection;
