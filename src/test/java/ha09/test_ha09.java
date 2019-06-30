@@ -4,7 +4,6 @@ import org.fulib.yaml.EventSource;
 import org.junit.Assert;
 import org.junit.Test;
 import org.testcontainers.containers.DockerComposeContainer;
-import org.testcontainers.containers.wait.strategy.WaitStrategy;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -33,7 +32,6 @@ public class test_ha09 {
         sleep(2000);
 
         String warehouseHeartbeat = sendGetRequest("heartbeat",  5002);
-        System.out.println(warehouseHeartbeat);
         Assert.assertTrue(warehouseHeartbeat.contains("pretty_damn_well"));
         event.put("event_type", "heartbeat");
         String shopHeartbeat = sendPostRequest(EventSource.encodeYaml(event), "postEvent", 5001);
@@ -54,13 +52,11 @@ public class test_ha09 {
         event.put("event_type", "getEvents");
         event.put("timestamp", "1");
         String shopEvents = sendPostRequest(EventSource.encodeYaml(event), "postEvent", 5001);
-        System.out.println(shopEvents);
+
         Assert.assertTrue(shopEvents.contains("add_product_to_shop"));
         Assert.assertTrue(shopEvents.contains("Schuhe"));
         Assert.assertTrue(shopEvents.contains("20"));
 
-        event.put("event_type", "getEvents");
-        event.put("timestamp", String.valueOf(1));
         compose.stop();
     }
 
