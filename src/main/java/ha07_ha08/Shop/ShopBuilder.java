@@ -36,10 +36,11 @@ public class ShopBuilder {
             ArrayList<LinkedHashMap<String,String>> shopEventList = new Yamler().decodeList(history);
             eventFiler.storeHistory();
             String whEvents = warehouseProxy.getWarehouseEvents(eventSource.getLastEventTime()+1);
-            warehouseEventsSince = new Yamler().decodeList(whEvents);
-            this.applyEvents(shopEventList,1);
-            this.applyEvents(warehouseEventsSince,1);
-
+            if(!whEvents.isEmpty()){
+                warehouseEventsSince = new Yamler().decodeList(whEvents);
+                this.applyEvents(shopEventList,1);
+                this.applyEvents(warehouseEventsSince,1);
+            }
         }
         eventFiler.startEventLogging();
     }
@@ -102,11 +103,13 @@ public class ShopBuilder {
     }
 
     private String sendEvents(long lastKnownEventTimestamp) {
+        System.out.println("Shop received getEvents request.");
         SortedMap<Long, LinkedHashMap<String,String>> eventsSince = eventSource.pull(lastKnownEventTimestamp);
         return EventSource.encodeYaml(eventsSince);
     }
 
     public void addProductToShop(String eventKey, String product_name, double itemCount){
+        System.out.println("ShopBuilder adds new product.");
         LinkedHashMap<String, String> event = eventSource.getEvent(eventKey);
         ShopProduct shopProduct = getFromProducts(product_name);
 
@@ -141,6 +144,7 @@ public class ShopBuilder {
         event.put(".eventKey", eventKey);
         event.put("product_name", product_name);
         event.put("itemCount","" + itemCount);
+        System.out.println("ShopBuilder has added product successfully.");
         eventSource.append(event);
     }
 

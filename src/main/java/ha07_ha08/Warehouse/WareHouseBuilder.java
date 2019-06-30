@@ -50,7 +50,8 @@ public class WareHouseBuilder {
             if("add_product_to_shop".equals(event.get("event_type"))){
                 System.out.println("Warehouse will add product to shop");
                 double size = Double.valueOf(event.get("itemCount"));
-                addLotToStock(event, event.get("lotID"),event.get("product_name"), size, applyLocalFlag);
+                String response = addLotToStock(event, event.get("lotID"),event.get("product_name"), size, applyLocalFlag);
+                return response;
             }
             else if ("order_product".equals(event.get("event_type"))){
                 System.out.println("Warehouse will order product");
@@ -95,7 +96,7 @@ public class WareHouseBuilder {
         return new WarehouseOrder();
     }
 
-    public Lot addLotToStock(LinkedHashMap<String,String> event, String lotId, String product_name, double itemCount, int applyLocalFlag) throws IOException{
+    public String addLotToStock(LinkedHashMap<String,String> event, String lotId, String product_name, double itemCount, int applyLocalFlag) throws IOException{
 
         Lot lot = getLot(lotId);
         double oldSize = lot.getLotSize();
@@ -130,7 +131,8 @@ public class WareHouseBuilder {
         if(oldSize==0.0 && applyLocalFlag==0){
             shopProxy.addProductToShop(event);
         }
-        return  lot;
+        String response = "Lot " + lotId + "with product " + product_name + " has been added.";
+        return response;
     }
 
     private WarehouseProduct getFromProducts(String product_name) {

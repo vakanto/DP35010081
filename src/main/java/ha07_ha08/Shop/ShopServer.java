@@ -39,6 +39,7 @@ public class ShopServer {
     }
 
     private static void handlePostEvent(HttpExchange exchange) throws IOException {
+        System.out.println("Shop Server received event.");
         String body = getBody(exchange);
         ArrayList<LinkedHashMap <String,String>> events = new Yamler().decodeList(body.toString());
         String response = shopBuilder.applyEvents(events, 0);

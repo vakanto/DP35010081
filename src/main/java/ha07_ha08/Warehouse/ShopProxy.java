@@ -16,7 +16,6 @@ import java.util.concurrent.*;
 
 public class ShopProxy {
 
-    private EventSource eventSource;
     private EventFiler eventFiler;
     private ScheduledExecutorService executorService;
     private long lastConnectionTime;
@@ -26,8 +25,8 @@ public class ShopProxy {
     }
 
     public void addProductToShop(LinkedHashMap<String,String> event) throws IOException {
+        System.out.println("Warehouse will contact Shop about new products.");
         String yaml = EventSource.encodeYaml(event);
-        eventSource.append(event);
         sendRequest(yaml);
     }
 

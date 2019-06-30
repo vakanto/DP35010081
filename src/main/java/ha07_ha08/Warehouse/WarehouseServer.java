@@ -56,6 +56,7 @@ public class WarehouseServer {
         String message = request.body();
         ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(message);
         String responseString = wareHouseBuilder.applyEvents(events, 0);
+        System.out.println("WarehouseServer answers with " + responseString);
         return responseString;
     }
 

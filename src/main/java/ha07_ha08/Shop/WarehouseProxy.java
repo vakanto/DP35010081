@@ -15,8 +15,8 @@ public class WarehouseProxy {
 
     //private final String GET_WAREHOUSE_EVENTS_URL="http://127.0.0.1:5002/getWarehouseEvents";
     //private final String ORDER_PRODUCT_URL="http://127.0.0.1:5002/orderProduct";
-    private final String GET_WAREHOUSE_EVENTS_URL="http://shopserver:5002/getWarehouseEvents";
-    private final String ORDER_PRODUCT_URL="http://shopserver:5002/orderProduct";
+    private final String GET_WAREHOUSE_EVENTS_URL="http://warehouseserver:5002/getWarehouseEvents";
+    private final String ORDER_PRODUCT_URL="http://warehouseserver:5002/orderProduct";
 
     public WarehouseProxy(ShopBuilder shopBuilder){
 
