@@ -26,7 +26,8 @@ public class ShopBuilder {
         warehouseProxy=new WarehouseProxy(this);
 
         eventFiler = new EventFiler(eventSource)
-                .setHistoryFileName("src/main/java/ha07_ha08/database/Shop.yml");
+                //.setHistoryFileName("src/main/java/ha07_ha08/database/Shop.yml");
+                .setHistoryFileName("/server/Shop.yml");
 
         String history = eventFiler.loadHistory();
         ArrayList<LinkedHashMap<String,String>> warehouseEventsSince=null;
@@ -79,6 +80,7 @@ public class ShopBuilder {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
+        System.out.println("Shop got order " + event.toString());
     }
 
     public String applyEvents(ArrayList<LinkedHashMap<String, String>> events, int applyLocalFlag) {

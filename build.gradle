@@ -14,11 +14,13 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile(group: "org.testfx", name: "testfx-core", version: "4.0.13-alpha")
-    testCompile(group: "org.testfx", name: "testfx-junit", version: "4.0.13-alpha")
+    //testCompile group: 'junit', name: 'junit', version: '4.12'
+    //testCompile(group: "org.testfx", name: "testfx-core", version: "4.0.13-alpha")
+    //testCompile(group: "org.testfx", name: "testfx-junit", version: "4.0.13-alpha")
     testCompile(group: "org.fulib", name: "fulib", version:"1.0.+")
     testCompile 'org.fulib:fulib:1.0.+'
+    testCompile "org.testcontainers:testcontainers:1.11.3"
+    compile group:'org.fulib', name: 'fulib', version: '1.0.+'
     compile group: 'org.json', name: 'json', version: '20090211'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     compile group: 'org.eclipse.paho', name: 'org.eclipse.paho.client.mqttv3', version: '1.2.0'
@@ -28,3 +30,47 @@ dependencies {
 
     implementation 'org.fulib:fulibYaml:1.0.+'
 }
+
+task(runWarehouse, dependsOn: 'classes', type: JavaExec){
+    main='ha07_ha08.Warehouse.WarehouseServer'
+    classpath=sourceSets.main.runtimeClasspath
+}
+task(runShop, dependsOn: 'classes', type: JavaExec){
+    main='ha07_ha08.Shop.ShopServer'
+    classpath=sourceSets.main.runtimeClasspath
+}
+
+jar {
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA'
+    manifest {
+        attributes 'Main-Class': 'ha07_ha08.Shop.ShopServer'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task shopserver(type: Jar) {
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA'
+    manifest {
+        attributes 'Implementation-Title': 'shopserver',
+                'Implementation-Version': 1,
+                'Main-Class': 'ha07_ha08.Shop.ShopServer'
+    }
+    baseName = 'shopserver'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task warehouseserver(type: Jar) {
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA'
+    manifest {
+        attributes 'Main-Class': 'ha07_ha08.Warehouse.WarehouseServer'
+    }
+    baseName = 'warehouseserver'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+
+

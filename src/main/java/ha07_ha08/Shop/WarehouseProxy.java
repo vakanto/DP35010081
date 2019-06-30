@@ -13,26 +13,13 @@ import java.util.LinkedHashMap;
 
 public class WarehouseProxy {
 
-    private final String GET_WAREHOUSE_EVENTS_URL="http://127.0.0.1:5002/getWarehouseEvents";
-    private final String ORDER_PRODUCT_URL="http://127.0.0.1:5002/orderProduct";
-    private EventSource eventSource;
-    private EventFiler eventFiler;
-    public ShopBuilder shopBuilder;
-
+    //private final String GET_WAREHOUSE_EVENTS_URL="http://127.0.0.1:5002/getWarehouseEvents";
+    //private final String ORDER_PRODUCT_URL="http://127.0.0.1:5002/orderProduct";
+    private final String GET_WAREHOUSE_EVENTS_URL="http://shopserver:5002/getWarehouseEvents";
+    private final String ORDER_PRODUCT_URL="http://shopserver:5002/orderProduct";
 
     public WarehouseProxy(ShopBuilder shopBuilder){
-        this.shopBuilder=shopBuilder;
-        this.eventSource=new EventSource();
-        this.eventFiler = new EventFiler(eventSource)
-                .setHistoryFileName("src/main/java/ha07_ha08/database/WarehouseProxy.yml");
 
-        String history = eventFiler.loadHistory();
-        if(history!=null){
-            ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(history);
-            eventSource.append(history);
-        }
-        eventFiler.storeHistory();
-        eventFiler.startEventLogging();
     }
 
     public String getWarehouseEvents(long lastEventTime){

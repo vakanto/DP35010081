@@ -1,6 +1,5 @@
 package ha07_ha08.Warehouse;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import ha07_ha08.Warehouse.Model.*;
 import org.fulib.yaml.EventFiler;
 import org.fulib.yaml.EventSource;
@@ -20,13 +19,13 @@ public class WareHouseBuilder {
     private EventSource eventSource;
     private EventFiler eventFiler;
 
-    public WareHouseBuilder() throws IOException, UnirestException {
+    public WareHouseBuilder() throws IOException{
         warehouse = new Warehouse()
             .setName("DasWarenhaus");
         shopProxy = new ShopProxy();
         eventSource = new EventSource();
         eventFiler = new EventFiler(eventSource)
-            .setHistoryFileName("src/main/java/ha07_ha08/database/Warehouse.yml");
+            .setHistoryFileName("/server/Warehouse.yml");
 
         String history = eventFiler.loadHistory();
         ArrayList<LinkedHashMap<String,String>> eventList=null;
@@ -38,7 +37,7 @@ public class WareHouseBuilder {
                 eventSource.append(event);
             }
             eventFiler.storeHistory();
-            File file = new File("src/main/java/ha07_ha08/database/Warehouse.yml");
+            File file = new File("/server/Warehouse.yml");
             eventList = new Yamler().decodeList(shopProxy.loadEvents(eventSource.getLastEventTime()));
             this.applyEvents(warehouseEventList,1);
             this.applyEvents(eventList,1);
@@ -46,19 +45,22 @@ public class WareHouseBuilder {
        eventFiler.startEventLogging();
     }
 
-    public String applyEvents(ArrayList<LinkedHashMap<String, String>> eventList, int applyLocalFlag) throws IOException, UnirestException {
+    public String applyEvents(ArrayList<LinkedHashMap<String, String>> eventList, int applyLocalFlag) throws IOException{
         for(LinkedHashMap<String, String> event : eventList){
             if("add_product_to_shop".equals(event.get("event_type"))){
+                System.out.println("Warehouse will add product to shop");
                 double size = Double.valueOf(event.get("itemCount"));
                 addLotToStock(event, event.get("lotID"),event.get("product_name"), size, applyLocalFlag);
             }
             else if ("order_product".equals(event.get("event_type"))){
+                System.out.println("Warehouse will order product");
                 orderProduct(event);
             }
             else if("delete_shop".equals(event.get("event_type"))){
                 shopProxy.deleteShop(event);
             }
             else if("getEvents".equals(event.get("event_type"))){
+                System.out.println("Warehouse will send events");
                 return sendEvents(event, Long.parseLong(event.get("timestamp")));
             }
         }
@@ -93,7 +95,7 @@ public class WareHouseBuilder {
         return new WarehouseOrder();
     }
 
-    public Lot addLotToStock(LinkedHashMap<String,String> event, String lotId, String product_name, double itemCount, int applyLocalFlag) throws IOException, UnirestException {
+    public Lot addLotToStock(LinkedHashMap<String,String> event, String lotId, String product_name, double itemCount, int applyLocalFlag) throws IOException{
 
         Lot lot = getLot(lotId);
         double oldSize = lot.getLotSize();
@@ -178,6 +180,7 @@ public class WareHouseBuilder {
         return 0;
     }
     private String sendEvents(LinkedHashMap<String, String> event, long lastKnownEventTimestamp) {
+        System.out.println("sendEvents called");
         SortedMap<Long, LinkedHashMap<String,String>> eventsSince = eventSource.pull(lastKnownEventTimestamp);
         return EventSource.encodeYaml(eventsSince);
     }

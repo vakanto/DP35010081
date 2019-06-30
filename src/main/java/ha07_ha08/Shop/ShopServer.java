@@ -3,6 +3,7 @@ package ha07_ha08.Shop;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import org.fulib.yaml.EventSource;
 import org.fulib.yaml.Yamler;
 
 import java.io.*;
@@ -26,6 +27,7 @@ public class ShopServer {
             HttpContext context = server.createContext("/postEvent");
             context.setHandler(x->handlePostEvent(x));
             server.start();
+            System.out.println("Server started.");
 
         }catch (Exception e){
             System.out.println("Server failed during Startup");
@@ -33,6 +35,7 @@ public class ShopServer {
 
          }
         shopBuilder = new ShopBuilder();
+        System.out.println("Created ShopBuilder.");
     }
 
     private static void handlePostEvent(HttpExchange exchange) throws IOException {

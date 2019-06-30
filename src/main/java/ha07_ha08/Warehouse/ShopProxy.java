@@ -1,6 +1,5 @@
 package ha07_ha08.Warehouse;
 
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.fulib.yaml.EventFiler;
 import org.fulib.yaml.EventSource;
 import org.fulib.yaml.Yamler;
@@ -23,43 +22,31 @@ public class ShopProxy {
     private long lastConnectionTime;
 
     public ShopProxy(){
-        this.eventSource=new EventSource();
-        this.eventFiler = new EventFiler(eventSource)
-            .setHistoryFileName("src/main/java/ha07_ha08/database/ShopProxy.yml");
-        executorService = Executors.newSingleThreadScheduledExecutor();
 
-        String history = eventFiler.loadHistory();
-        if(history!=null){
-            ArrayList<LinkedHashMap<String,String>> events = new Yamler().decodeList(history);
-            eventSource.append(history);
-        }
-
-        eventFiler.storeHistory();
-        eventFiler.startEventLogging();
     }
 
-    public void addProductToShop(LinkedHashMap<String,String> event) throws IOException, UnirestException {
+    public void addProductToShop(LinkedHashMap<String,String> event) throws IOException {
         String yaml = EventSource.encodeYaml(event);
         eventSource.append(event);
         sendRequest(yaml);
     }
 
-    public void sendLoadedEvents(ArrayList<LinkedHashMap<String,String>> eventList) throws UnirestException {
+    public void sendLoadedEvents(ArrayList<LinkedHashMap<String,String>> eventList)  {
         for(LinkedHashMap<String,String>event:eventList){
             String yaml = EventSource.encodeYaml(event);
             sendRequest(yaml);
         }
     }
 
-    public void deleteShop(LinkedHashMap<String,String> event) throws UnirestException {
+    public void deleteShop(LinkedHashMap<String,String> event) {
         String yaml = EventSource.encodeYaml(event);
         sendRequest(yaml);
     }
 
-    public String sendRequest(String yaml) throws UnirestException {
+    public String sendRequest(String yaml){
 
         try {
-            URL url = new URL("http://127.0.0.1:5001/postEvent");
+            URL url = new URL("http://shopserver:5001/postEvent");
             URLConnection connection = url.openConnection();
             HttpURLConnection http =(HttpURLConnection)connection;
             http.setRequestMethod("POST");
@@ -96,7 +83,7 @@ public class ShopProxy {
         return null;
     }
 
-    public String loadEvents(long lastEventTime) throws UnirestException {
+    public String loadEvents(long lastEventTime){
         LinkedHashMap<String, String> event = new LinkedHashMap<>();
         event.put("event_type", "getEvents");
         event.put("timestamp", String.valueOf(lastEventTime));

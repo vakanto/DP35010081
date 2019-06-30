@@ -1,10 +1,9 @@
-package main.java;
-
 import ha07_ha08.Shop.ShopServer;
 import ha07_ha08.Warehouse.WarehouseServer;
 
 import java.io.IOException;
-
+import org.fulib.*;
+import org.fulib.yaml.EventSource;
 public class Main {
     public static void main (String args[]) throws IOException {
         System.out.println(args[0]);
