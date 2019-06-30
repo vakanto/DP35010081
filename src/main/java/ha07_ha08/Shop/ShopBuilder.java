@@ -98,6 +98,10 @@ public class ShopBuilder {
             long lastKnownEventTimestamp = Long.parseLong(event.get("timestamp"));
             return sendEvents(lastKnownEventTimestamp);
             }
+        else if("heartbeat".equals(event.get("event_type"))){
+            System.out.println("Shop received heartbeat request.");
+            return "The_shop_feels_very_good";
+        }
         }
         return null;
     }

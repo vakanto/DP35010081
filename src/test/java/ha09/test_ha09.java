@@ -25,16 +25,20 @@ public class test_ha09 {
 
     @Test
     public void createContainer() throws IOException, InterruptedException {
-        compose.start();
+        //compose.start();
+        LinkedHashMap<String,String> event = new LinkedHashMap<>();
         File composeFile = new File("src/main/java/ha09/docker-compose.yml");
         Assert.assertTrue(composeFile.exists());
         sleep(2000);
 
-        String warehouseHeartbeat = sendGetRequest("heartbeat",  "GET");
+        String warehouseHeartbeat = sendGetRequest("heartbeat",  5002);
         System.out.println(warehouseHeartbeat);
         Assert.assertTrue(warehouseHeartbeat.contains("pretty_damn_well"));
+        event.put("event_type", "heartbeat");
+        String shopHeartbeat = sendPostRequest(EventSource.encodeYaml(event), "postEvent", 5001);
+        Assert.assertTrue(shopHeartbeat.contains("The_shop_feels_very_good"));
 
-        LinkedHashMap<String,String> event = new LinkedHashMap<>();
+        event = new LinkedHashMap<>();
         event.put("event_type", "add_product_to_shop");
         event.put(".eventKey", "lot1");
         event.put("lotID", "lot1");
@@ -42,6 +46,9 @@ public class test_ha09 {
         event.put("itemCount", "" + "20");
 
         String response = sendPostRequest(EventSource.encodeYaml(event), "addLot", 5002);
+        Assert.assertTrue(response.contains("Schuhe"));
+        Assert.assertTrue(response.contains("lot1"));
+
         event=new LinkedHashMap<>();
         event.put("event_type", "getEvents");
         event.put("timestamp", "1");
@@ -51,26 +58,21 @@ public class test_ha09 {
         Assert.assertTrue(shopEvents.contains("Schuhe"));
         Assert.assertTrue(shopEvents.contains("20"));
 
-
-
         event.put("event_type", "getEvents");
         event.put("timestamp", String.valueOf(1));
-        compose.stop();
+        //compose.stop();
     }
 
-    public String sendGetRequest(String targetUrl, String HTTP_TYPE){
+    public String sendGetRequest(String targetUrl, int targetService){
 
         try {
-            URL url = new URL("http://127.0.0.1:" + 5002 + "/" + targetUrl);
-            //URL url = new URL(address + targetUrl);
+            URL url = new URL("http://127.0.0.1:" + targetService + "/" + targetUrl);
             URLConnection connection = url.openConnection();
             HttpURLConnection http =(HttpURLConnection)connection;
-            http.setRequestMethod(HTTP_TYPE);
+            http.setRequestMethod("GET");
             http.setDoOutput(true);
 
             http.connect();
-
-            sleep(2000);
 
             InputStream inputStream = http.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));

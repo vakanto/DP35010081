@@ -70,6 +70,7 @@ public class ShopServer {
 
     private static void writeAnswer(HttpExchange exchange, String response){
         try {
+            System.out.println("Shopserver responses with" + response);
             byte[] bytes = response.getBytes(StandardCharsets.UTF_8);
             exchange.sendResponseHeaders(200,bytes.length);
             OutputStream os = exchange.getResponseBody();
