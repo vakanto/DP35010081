@@ -29,7 +29,6 @@ public class test_ha09 {
         LinkedHashMap<String,String> event = new LinkedHashMap<>();
         File composeFile = new File("src/main/java/ha09/docker-compose.yml");
         Assert.assertTrue(composeFile.exists());
-        sleep(2000);
 
         String warehouseHeartbeat = sendGetRequest("heartbeat",  5002);
         Assert.assertTrue(warehouseHeartbeat.contains("pretty_damn_well"));

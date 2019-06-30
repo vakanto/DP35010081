@@ -22,6 +22,9 @@ import static java.lang.Thread.sleep;
 
 public class test_ha08 {
 
+
+    //wont work with updates from ha09
+
     @Test
     public void testCommunication() throws IOException, UnirestException, InterruptedException {
         org.apache.log4j.BasicConfigurator.configure();
