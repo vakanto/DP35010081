@@ -25,7 +25,8 @@ public class test_ha09 {
 
     @Test
     public void createContainer() throws IOException, InterruptedException {
-        //compose.start();
+        compose.start();
+
         LinkedHashMap<String,String> event = new LinkedHashMap<>();
         File composeFile = new File("src/main/java/ha09/docker-compose.yml");
         Assert.assertTrue(composeFile.exists());
@@ -60,7 +61,7 @@ public class test_ha09 {
 
         event.put("event_type", "getEvents");
         event.put("timestamp", String.valueOf(1));
-        //compose.stop();
+        compose.stop();
     }
 
     public String sendGetRequest(String targetUrl, int targetService){
