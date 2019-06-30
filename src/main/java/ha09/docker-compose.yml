@@ -1,0 +1,32 @@
+---
+
+version: "3.2"
+
+services:
+
+  shopserver:
+    build: ./Shop
+    image: shopserver
+    networks:
+      - shopnet
+    ports:
+      - "5001:5001"
+    volumes:
+      - "dp_35010081:/server"
+
+  warehouseserver:
+    build: ./Warehouse
+    image: warehouseserver
+    networks:
+      - shopnet
+    ports:
+      - "5002:5002"
+    volumes:
+      - "dp_35010081:/server"
+
+volumes:
+  dp_35010081:
+
+networks:
+  shopnet:
+    driver: bridge
