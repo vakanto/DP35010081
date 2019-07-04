@@ -23,40 +23,47 @@ public class test_ha09 {
                     .withLocalCompose(true);
 
     @Test
-    public void createContainer() throws IOException, InterruptedException {
+    public void testContainer() throws IOException, InterruptedException {
         compose.start();
 
-        LinkedHashMap<String,String> event = new LinkedHashMap<>();
-        File composeFile = new File("src/main/java/ha09/docker-compose.yml");
-        Assert.assertTrue(composeFile.exists());
+        sleep(2000);
 
-        String warehouseHeartbeat = sendGetRequest("heartbeat",  5002);
-        Assert.assertTrue(warehouseHeartbeat.contains("pretty_damn_well"));
-        event.put("event_type", "heartbeat");
-        String shopHeartbeat = sendPostRequest(EventSource.encodeYaml(event), "postEvent", 5001);
-        Assert.assertTrue(shopHeartbeat.contains("The_shop_feels_very_good"));
+        try {
+            LinkedHashMap<String,String> event = new LinkedHashMap<>();
+            File composeFile = new File("src/main/java/ha09/docker-compose.yml");
+            Assert.assertTrue(composeFile.exists());
 
-        event = new LinkedHashMap<>();
-        event.put("event_type", "add_product_to_shop");
-        event.put(".eventKey", "lot1");
-        event.put("lotID", "lot1");
-        event.put("product_name", "Schuhe");
-        event.put("itemCount", "" + "20");
+            String warehouseHeartbeat = sendGetRequest("heartbeat",  5002);
+            Assert.assertTrue(warehouseHeartbeat.contains("pretty_damn_well"));
+            event.put("event_type", "heartbeat");
+            String shopHeartbeat = sendPostRequest(EventSource.encodeYaml(event), "postEvent", 5001);
+            Assert.assertTrue(shopHeartbeat.contains("The_shop_feels_very_good"));
 
-        String response = sendPostRequest(EventSource.encodeYaml(event), "addLot", 5002);
-        Assert.assertTrue(response.contains("Schuhe"));
-        Assert.assertTrue(response.contains("lot1"));
+            event = new LinkedHashMap<>();
+            event.put("event_type", "add_product_to_shop");
+            event.put(".eventKey", "lot1");
+            event.put("lotID", "lot1");
+            event.put("product_name", "Schuhe");
+            event.put("itemCount", "" + "20");
 
-        event=new LinkedHashMap<>();
-        event.put("event_type", "getEvents");
-        event.put("timestamp", "1");
-        String shopEvents = sendPostRequest(EventSource.encodeYaml(event), "postEvent", 5001);
+            String response = sendPostRequest(EventSource.encodeYaml(event), "addLot", 5002);
+            Assert.assertTrue(response.contains("Schuhe"));
+            Assert.assertTrue(response.contains("lot1"));
 
-        Assert.assertTrue(shopEvents.contains("add_product_to_shop"));
-        Assert.assertTrue(shopEvents.contains("Schuhe"));
-        Assert.assertTrue(shopEvents.contains("20"));
+            event=new LinkedHashMap<>();
+            event.put("event_type", "getEvents");
+            event.put("timestamp", "1");
+            String shopEvents = sendPostRequest(EventSource.encodeYaml(event), "postEvent", 5001);
 
-        compose.stop();
+            Assert.assertTrue(shopEvents.contains("add_product_to_shop"));
+            Assert.assertTrue(shopEvents.contains("Schuhe"));
+            Assert.assertTrue(shopEvents.contains("20"));
+
+            compose.stop();
+
+        } catch (Exception e) {
+            compose.stop();
+        }
     }
 
     public String sendGetRequest(String targetUrl, int targetService){

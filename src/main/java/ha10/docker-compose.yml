@@ -1,0 +1,35 @@
+---
+
+version: "3.2"
+
+services:
+
+  shopserver:
+    build: ./Shop
+    image: shopserver
+    container_name: shopserver
+    networks:
+      - shopnet
+    ports:
+      - "5001:5001"
+    volumes:
+      - "shopVolume:/server"
+
+  warehouseserver:
+    build: ./Warehouse
+    image: warehouseserver
+    container_name: warehouseserver
+    networks:
+      - shopnet
+    ports:
+      - "5002:5002"
+    volumes:
+      - "warehouseVolume:/server"
+
+volumes:
+  warehouseVolume:
+  shopVolume:
+
+networks:
+  shopnet:
+    driver: bridge

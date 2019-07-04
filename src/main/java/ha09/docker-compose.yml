@@ -12,7 +12,7 @@ services:
     ports:
       - "5001:5001"
     volumes:
-      - "dp_35010081:/server"
+      - "shopVolume:/server"
 
   warehouseserver:
     build: ./Warehouse
@@ -22,10 +22,11 @@ services:
     ports:
       - "5002:5002"
     volumes:
-      - "dp_35010081:/server"
+      - "warehouseVolume:/server"
 
 volumes:
-  dp_35010081:
+  warehouseVolume:
+  shopVolume:
 
 networks:
   shopnet:
