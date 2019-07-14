@@ -20,6 +20,9 @@ import org.fulib.*;
 
 import static java.lang.Thread.sleep;
 
+// HA08: 10/10
+// HA09: 10/10
+// HA10: 10/10
 public class test_ha08 {
 
 
